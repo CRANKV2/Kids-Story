@@ -5,9 +5,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.gigo.kidsstorys.R
 import com.gigo.kidsstorys.data.Story
 import com.gigo.kidsstorys.ui.theme.*
 
@@ -52,7 +54,7 @@ fun StoryOptionsDialog(
                         containerColor = AccentPurple
                     )
                 ) {
-                    Text("Bearbeiten ✏️", fontSize = 18.sp)
+                    Text(stringResource(R.string.bearbeiten), fontSize = 18.sp)
                 }
 
                 // Löschen Button
@@ -69,7 +71,7 @@ fun StoryOptionsDialog(
                         containerColor = AccentPurple
                     )
                 ) {
-                    Text("Löschen 🗑️", fontSize = 18.sp)
+                    Text(stringResource(R.string.l_schen), fontSize = 18.sp)
                 }
 
                 // Schließen Button
@@ -80,7 +82,8 @@ fun StoryOptionsDialog(
                         .padding(vertical = 8.dp),
                     shape = RoundedCornerShape(16.dp)
                 ) {
-                    Text("Schließen ✖️", 
+                    Text(
+                        stringResource(R.string.schliessen),
                         fontSize = 18.sp,
                         color = TextLight
                     )

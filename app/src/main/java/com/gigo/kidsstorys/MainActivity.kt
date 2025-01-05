@@ -13,7 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.gigo.kidsstorys.ui.screens.*
-import com.gigo.kidsstorys.ui.theme.TestappTheme
+import com.gigo.kidsstorys.ui.theme.KidsStorysTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
 fun MainContent() {
     var isDarkMode by remember { mutableStateOf(true) }
     
-    TestappTheme {
+    KidsStorysTheme {
         val navController = rememberNavController()
         NavHost(
             modifier = Modifier.background(Color(0xFF1E1E2A)),

@@ -27,6 +27,8 @@ import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
 import com.gigo.kidsstorys.ui.components.*
 import com.gigo.kidsstorys.ui.theme.*
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.gigo.kidsstorys.R
 import com.gigo.kidsstorys.data.SettingsManager
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -102,13 +104,13 @@ fun StoryScreen(
                             IconButton(
                                 onClick = { showTutorial = true }
                             ) {
-                                Text("ℹ️", fontSize = 24.sp)
+                                Text(stringResource(R.string.tipps_info_emoji), fontSize = 24.sp)
                             }
                             
                             IconButton(
                                 onClick = { navController.navigate("settings") }
                             ) {
-                                Text("⚙️", fontSize = 24.sp)
+                                Text(stringResource(R.string.settings_emoji), fontSize = 24.sp)
                             }
                         }
                     }
@@ -121,7 +123,7 @@ fun StoryScreen(
                 containerColor = AccentPurple,
                 shape = CircleShape
             ) {
-                Text("+", fontSize = 24.sp, color = Color.White)
+                Text(stringResource(R.string.fab_button_inner), fontSize = 24.sp, color = Color.White)
             }
         },
         containerColor = if (isDarkTheme) Color(0xFF1E1E2E) else Color(0xFFF5F5F5)
@@ -189,8 +191,7 @@ fun StoryScreen(
                 onConfirm = { title, content ->
                     viewModel.addStory(title, content)
                     showAddDialog = false
-                },
-                isDarkTheme = isDarkTheme
+                }
             )
         }
 

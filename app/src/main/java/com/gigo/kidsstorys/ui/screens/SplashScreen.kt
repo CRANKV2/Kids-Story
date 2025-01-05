@@ -9,9 +9,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.gigo.kidsstorys.R
 import com.gigo.kidsstorys.ui.theme.AccentPurple
 import com.gigo.kidsstorys.ui.theme.TextLight
 import kotlinx.coroutines.delay
@@ -47,13 +49,13 @@ fun SplashScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "📚",
+                text = stringResource(R.string.books),
                 fontSize = 72.sp,
                 modifier = Modifier.alpha(alphaAnim.value)
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Geschichten App",
+                text = stringResource(R.string.geschichten_app),
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = if (isDarkTheme) TextLight else AccentPurple,

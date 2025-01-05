@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -26,6 +27,7 @@ import com.gigo.kidsstorys.data.SettingsManager
 import com.gigo.kidsstorys.ui.theme.*
 import com.gigo.kidsstorys.ui.components.HorizontalDivider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.gigo.kidsstorys.R
 import com.gigo.kidsstorys.ui.components.ColorPicker
 import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
 
@@ -73,7 +75,7 @@ fun SettingsScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigateUp() }) {
-                        Text("⬅️", fontSize = 24.sp)
+                        Text(stringResource(R.string.tipps_left_emoji), fontSize = 24.sp)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -159,7 +161,7 @@ fun SettingsScreen(
                         )
                     }
 
-                    HorizontalDivider(color = Color(0xFF353545))
+                    HorizontalDivider(color = Color(0xFF9575CD))
 
                     // Vorschau-Schriftgröße
                     Column {
@@ -183,7 +185,7 @@ fun SettingsScreen(
                             steps = 7
                         )
                         Text(
-                            "Beispiel Text ✨",
+                            stringResource(R.string.beispiel_text),
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontSize = previewSize.sp
                             ),
@@ -199,7 +201,7 @@ fun SettingsScreen(
 
             // Leseansicht Sektion
             Text(
-                "Leseansicht",
+                stringResource(R.string.leseansicht),
                 style = MaterialTheme.typography.headlineMedium,
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
@@ -220,7 +222,7 @@ fun SettingsScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     Text(
-                        "🎨 Leseansicht",
+                        stringResource(R.string.leseansicht_h2),
                         style = MaterialTheme.typography.titleLarge,
                         color = Color(0xFF9575CD)
                     )
@@ -228,12 +230,12 @@ fun SettingsScreen(
                     // Schriftgröße für Leseansicht
                     Column {
                         Text(
-                            "Schriftgröße beim Lesen",
+                            stringResource(R.string.schriftgroese_beim_lesen),
                             style = MaterialTheme.typography.titleMedium,
                             color = TextLight
                         )
                         Text(
-                            "Betrifft nur die Schriftgröße beim Lesen einer Geschichte",
+                            stringResource(R.string.schriftgroese_beim_lesen_context),
                             style = MaterialTheme.typography.bodyMedium,
                             color = TextLight.copy(alpha = 0.7f)
                         )
@@ -247,7 +249,7 @@ fun SettingsScreen(
                             steps = 11
                         )
                         Text(
-                            "Beispiel-Text ✨",
+                            stringResource(R.string.beispiel_text),
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontSize = fontSize.sp
                             ),
@@ -255,17 +257,17 @@ fun SettingsScreen(
                         )
                     }
 
-                    HorizontalDivider(color = Color(0xFF353545))
+                    HorizontalDivider(color = Color(0xFF9575CD))
 
                     // Zeilenumbruch
                     Column {
                         Text(
-                            "Zeilenumbruch (empfohlen)",
+                            stringResource(R.string.zeilenumbruch_empfohlen),
                             style = MaterialTheme.typography.titleMedium,
                             color = TextLight
                         )
                         Text(
-                            "Automatischer Zeilenumbruch beim Lesen",
+                            stringResource(R.string.automatischer_zeilenumbruch_beim_lesen),
                             style = MaterialTheme.typography.bodyMedium,
                             color = TextLight.copy(alpha = 0.7f)
                         )
@@ -288,7 +290,7 @@ fun SettingsScreen(
 
             // Farbeinstellungen Sektion
             Text(
-                "Farbeinstellungen",
+                stringResource(R.string.farbeinstellungen),
                 style = MaterialTheme.typography.headlineMedium,
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
@@ -309,16 +311,18 @@ fun SettingsScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     Text(
-                        "🎨 Farbeinstellungen",
+                        stringResource(R.string.farbeinstellungen_h2),
                         style = MaterialTheme.typography.titleLarge,
                         color = Color(0xFF9575CD)
                     )
                     
                     // Hauptbildschirm Farben
                     Text(
-                        "Hauptbildschirm",
+                        stringResource(R.string.hauptbildschirm),
                         style = MaterialTheme.typography.titleMedium,
-                        color = TextLight
+                        color = Color(0xFF9575CD),
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold
                     )
                     
                     // Vorschau der Karte
@@ -333,12 +337,12 @@ fun SettingsScreen(
                             modifier = Modifier.padding(16.dp)
                         ) {
                             Text(
-                                "Beispiel Titel",
+                                stringResource(R.string.beispiel_titel),
                                 style = MaterialTheme.typography.titleLarge,
                                 color = cardTitleColor
                             )
                             Text(
-                                "Beispiel Vorschautext der Geschichte...",
+                                stringResource(R.string.beispiel_vorschautext_der_geschichte),
                                 color = cardPreviewColor
                             )
                         }
@@ -346,7 +350,7 @@ fun SettingsScreen(
                     
                     // Farbauswahl für Kartentitel
                     ColorPicker(
-                        title = "Titel-Farbe",
+                        title = stringResource(R.string.titel_farbe),
                         currentColor = cardTitleColor,
                         onColorSelected = { newColor: Color ->
                             cardTitleColor = newColor
@@ -356,7 +360,7 @@ fun SettingsScreen(
                     
                     // Farbauswahl für Kartenvorschau
                     ColorPicker(
-                        title = "Vorschau-Farbe",
+                        title = stringResource(R.string.vorschau_farbe),
                         currentColor = cardPreviewColor,
                         onColorSelected = { newColor: Color ->
                             cardPreviewColor = newColor
@@ -364,13 +368,15 @@ fun SettingsScreen(
                         }
                     )
                     
-                    Divider(color = Color(0xFF353545))
+                    Divider(color = Color(0xFF9575CD))
                     
                     // Leseansicht Farben
                     Text(
-                        "Leseansicht",
+                        stringResource(R.string.leseansicht),
                         style = MaterialTheme.typography.titleMedium,
-                        color = TextLight
+                        color = Color(0xFF9575CD),
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold
                     )
                     
                     // Vorschau der Leseansicht
@@ -385,12 +391,12 @@ fun SettingsScreen(
                             modifier = Modifier.padding(16.dp)
                         ) {
                             Text(
-                                "Beispiel Titel",
+                                stringResource(R.string.beispiel_titel),
                                 style = MaterialTheme.typography.titleLarge,
                                 color = storyTitleColor
                             )
                             Text(
-                                "Beispiel Geschichtentext...",
+                                stringResource(R.string.beispiel_geschichtentext),
                                 color = storyTextColor
                             )
                         }
@@ -398,7 +404,7 @@ fun SettingsScreen(
                     
                     // Farbauswahl für Leseansicht Titel
                     ColorPicker(
-                        title = "Geschichte Titel-Farbe",
+                        title = stringResource(R.string.geschichte_titel_farbe),
                         currentColor = storyTitleColor,
                         onColorSelected = { newColor: Color ->
                             storyTitleColor = newColor
@@ -408,7 +414,7 @@ fun SettingsScreen(
                     
                     // Farbauswahl für Leseansicht Text
                     ColorPicker(
-                        title = "Geschichte Text-Farbe",
+                        title = stringResource(R.string.geschichte_text_farbe),
                         currentColor = storyTextColor,
                         onColorSelected = { newColor: Color ->
                             storyTextColor = newColor

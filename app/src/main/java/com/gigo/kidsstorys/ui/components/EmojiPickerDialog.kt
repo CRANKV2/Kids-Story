@@ -9,9 +9,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.gigo.kidsstorys.R
 
 @Composable
 fun EmojiPickerDialog(
@@ -36,7 +38,7 @@ fun EmojiPickerDialog(
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    text = "Emoji auswählen",
+                    text = stringResource(R.string.emoji_auswaehlen),
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
@@ -63,7 +65,7 @@ fun EmojiPickerDialog(
                         .fillMaxWidth()
                         .padding(top = 16.dp)
                 ) {
-                    Text("Abbrechen")
+                    Text(text = stringResource(R.string.abbrechen))
                 }
             }
         }

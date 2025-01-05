@@ -9,11 +9,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.gigo.kidsstorys.R
 
 @Composable
 fun ReadStoryDialog(
@@ -68,7 +70,7 @@ fun ReadStoryDialog(
                     shape = RoundedCornerShape(16.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Schließen 🚪", fontSize = 18.sp)
+                    Text(text = stringResource(R.string.schliessen), fontSize = 18.sp)
                 }
             }
         }

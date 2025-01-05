@@ -11,7 +11,10 @@ import androidx.compose.ui.window.Dialog
 import com.gigo.kidsstorys.ui.theme.*
 import androidx.compose.material3.Text
 import androidx.compose.material3.Switch
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.gigo.kidsstorys.R
 import com.gigo.kidsstorys.data.SettingsManager
 
 @Composable
@@ -23,7 +26,7 @@ fun SettingsDialog(
 ) {
     val context = LocalContext.current
     val settingsManager = remember { SettingsManager.getInstance(context) }
-    
+
     var wrapText by remember { mutableStateOf(settingsManager.wrapText) }
 
     Dialog(onDismissRequest = onDismiss) {
@@ -39,7 +42,7 @@ fun SettingsDialog(
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = "Einstellungen ⚙️",
+                    text = stringResource(R.string.einstellungen),
                     style = MaterialTheme.typography.headlineSmall,
                     color = if (isDarkTheme) TextLight else AccentPurple
                 )
@@ -59,7 +62,7 @@ fun SettingsDialog(
                             color = if (isDarkTheme) TextLight else AccentPurple
                         )
                         Text(
-                            "Text am Bildschirmrand umbrechen",
+                            stringResource(R.string.zeilenumbruch_setting),
                             style = MaterialTheme.typography.bodyMedium,
                             color = if (isDarkTheme) TextLight.copy(alpha = 0.7f) else AccentPurple.copy(alpha = 0.7f)
                         )
@@ -130,7 +133,7 @@ fun SettingsDialog(
                         .padding(top = 16.dp),
                     shape = RoundedCornerShape(16.dp)
                 ) {
-                    Text("Schließen 🚪")
+                    Text(stringResource(R.string.schliessen))
                 }
             }
         }
@@ -141,6 +144,6 @@ fun SettingsDialog(
 fun HorizontalDivider() {
     Divider(
         modifier = Modifier.padding(vertical = 8.dp),
-        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.12f)
+        color = Color.Red // Changed to Color.Red
     )
-} 
+}

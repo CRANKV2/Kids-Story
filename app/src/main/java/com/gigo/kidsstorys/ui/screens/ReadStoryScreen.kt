@@ -23,6 +23,8 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.stringResource
+import com.gigo.kidsstorys.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,12 +75,12 @@ fun ReadStoryScreen(
                         title = { },
                         navigationIcon = {
                             IconButton(onClick = onBack) {
-                                Text("⬅️", fontSize = 24.sp)
+                                Text(stringResource(R.string.navigation_left), fontSize = 24.sp)
                             }
                         },
                         actions = {
                             IconButton(onClick = { showEditDialog = true }) {
-                                Text("✏️", fontSize = 24.sp)
+                                Text(stringResource(R.string.aendern), fontSize = 24.sp)
                             }
                         },
                         colors = TopAppBarDefaults.topAppBarColors(
@@ -119,7 +121,7 @@ fun ReadStoryScreen(
                             Spacer(modifier = Modifier.height(16.dp))
                             AssistChip(
                                 onClick = { },
-                                label = { Text("📚 Geschichte") },
+                                label = { Text(stringResource(R.string.read_story_screen_geschichte)) },
                                 colors = AssistChipDefaults.assistChipColors(
                                     containerColor = Color(0xFF353545),
                                     labelColor = Color(0xFF9575CD)
@@ -164,7 +166,7 @@ fun ReadStoryScreen(
                                     maxLines = Int.MAX_VALUE,
                                     overflow = TextOverflow.Visible,
                                     modifier = Modifier.pointerInput(Unit) {
-                                        detectTransformGestures { _, pan, zoom, _ ->
+                                        detectTransformGestures { _, _, zoom, _ ->
                                             fontSize = (fontSize * zoom).coerceIn(12f, 30f)
                                         }
                                     }
@@ -180,7 +182,7 @@ fun ReadStoryScreen(
                                         color = textColor,
                                         overflow = TextOverflow.Visible,
                                         modifier = Modifier.pointerInput(Unit) {
-                                            detectTransformGestures { _, pan, zoom, _ ->
+                                            detectTransformGestures { _, _, zoom, _ ->
                                                 fontSize = (fontSize * zoom).coerceIn(12f, 30f)
                                             }
                                         }
@@ -205,7 +207,7 @@ fun ReadStoryScreen(
                         confirmButton = {},
                         dismissButton = {
                             TextButton(onClick = { showEditDialog = false }) {
-                                Text("Abbrechen", color = TextLight)
+                                Text(stringResource(R.string.abbrechen), color = TextLight)
                             }
                         },
                         text = {
@@ -223,7 +225,7 @@ fun ReadStoryScreen(
                                         containerColor = AccentPurple
                                     )
                                 ) {
-                                    Text("Geschichte bearbeiten 📝")
+                                    Text(stringResource(R.string.geschichte_bearbeiten))
                                 }
                                 Button(
                                     onClick = { 
@@ -235,7 +237,7 @@ fun ReadStoryScreen(
                                         containerColor = AccentPurple
                                     )
                                 ) {
-                                    Text("Titel bearbeiten ✏️")
+                                    Text(stringResource(R.string.titel_bearbeiten))
                                 }
                             }
                         }
@@ -246,13 +248,13 @@ fun ReadStoryScreen(
                 if (showContentEditDialog) {
                     AlertDialog(
                         onDismissRequest = { showContentEditDialog = false },
-                        title = { Text("Geschichte bearbeiten", color = TextLight) },
+                        title = { Text(stringResource(R.string.geschichte_bearbeiten), color = TextLight) },
                         containerColor = if (isDarkTheme) CardDark else CardLight,
                         text = {
                             OutlinedTextField(
                                 value = currentContent,
                                 onValueChange = { currentContent = it },
-                                label = { Text("Geschichte", color = TextLight) },
+                                label = { Text(stringResource(R.string.geschichte), color = TextLight) },
                                 colors = OutlinedTextFieldDefaults.colors(
                                     focusedBorderColor = TextLight,
                                     unfocusedBorderColor = TextLight.copy(alpha = 0.5f),
@@ -270,12 +272,12 @@ fun ReadStoryScreen(
                                     showContentEditDialog = false
                                 }
                             ) {
-                                Text("Speichern")
+                                Text(stringResource(R.string.speichern))
                             }
                         },
                         dismissButton = {
                             TextButton(onClick = { showContentEditDialog = false }) {
-                                Text("Abbrechen", color = TextLight)
+                                Text(stringResource(R.string.abbrechen), color = TextLight)
                             }
                         }
                     )
@@ -297,7 +299,7 @@ fun ReadStoryScreen(
                                 modifier = Modifier.padding(16.dp)
                             ) {
                                 Text(
-                                    "Titel ändern",
+                                    stringResource(R.string.titel_bearbeiten),
                                     style = MaterialTheme.typography.titleLarge,
                                     color = TextLight
                                 )
@@ -321,7 +323,7 @@ fun ReadStoryScreen(
                                     TextButton(
                                         onClick = { showTitleEditDialog = false }
                                     ) {
-                                        Text("Abbrechen", color = TextLight)
+                                        Text(stringResource(R.string.abbrechen), color = TextLight)
                                     }
                                     Spacer(modifier = Modifier.width(8.dp))
                                     Button(
@@ -332,7 +334,7 @@ fun ReadStoryScreen(
                                             showTitleEditDialog = false
                                         }
                                     ) {
-                                        Text("Speichern")
+                                        Text(stringResource(R.string.speichern))
                                     }
                                 }
                             }

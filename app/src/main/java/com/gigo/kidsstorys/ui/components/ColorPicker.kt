@@ -15,8 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.gigo.kidsstorys.R
 import com.gigo.kidsstorys.ui.theme.TextLight
 
 @Composable
@@ -63,7 +65,7 @@ fun ColorPicker(
                 ) {
                     if (color == currentColor) {
                         Text(
-                            text = "✔️",
+                            text = stringResource(R.string.color_picker_check),
                             fontSize = 20.sp,
                             color = if (color.luminance() > 0.5f) Color.Black else Color.White
                         )

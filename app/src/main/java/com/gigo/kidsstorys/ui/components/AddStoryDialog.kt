@@ -4,14 +4,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.gigo.kidsstorys.R
 import com.gigo.kidsstorys.ui.theme.*
 
 @Composable
 fun AddStoryDialog(
     onDismissRequest: () -> Unit,
-    onConfirm: (String, String) -> Unit,
-    isDarkTheme: Boolean
+    onConfirm: (String, String) -> Unit
 ) {
     var title by remember { mutableStateOf("") }
     var story by remember { mutableStateOf("") }
@@ -20,7 +21,7 @@ fun AddStoryDialog(
         onDismissRequest = onDismissRequest,
         title = {
             Text(
-                text = "Neue Geschichte",
+                text = stringResource(R.string.neue_geschichte),
                 style = MaterialTheme.typography.titleLarge,
                 color = TextLight
             )
@@ -30,7 +31,7 @@ fun AddStoryDialog(
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
-                    label = { Text("Titel", color = TextLight) },
+                    label = { Text(stringResource(R.string.titel), color = TextLight) },
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = TextLight,
                         unfocusedBorderColor = TextLight.copy(alpha = 0.5f),
@@ -42,7 +43,7 @@ fun AddStoryDialog(
                 OutlinedTextField(
                     value = story,
                     onValueChange = { story = it },
-                    label = { Text("Geschichte", color = TextLight) },
+                    label = { Text(stringResource(R.string.geschichte), color = TextLight) },
                     minLines = 3,
                     maxLines = 5,
                     colors = OutlinedTextFieldDefaults.colors(
@@ -62,12 +63,12 @@ fun AddStoryDialog(
                     containerColor = AccentPurple
                 )
             ) {
-                Text("Speichern")
+                Text(stringResource(R.string.speichern))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text("Abbrechen", color = TextLight)
+                Text(stringResource(R.string.abbrechen), color = TextLight)
             }
         }
     )

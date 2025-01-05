@@ -1,3 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="speichern">Speichern</string>
+    <string name="abbrechen">Abbrechen</string>
+    <string name="geschichte">Geschichte</string>
+    <string name="titel">Titel</string>
+    <string name="neue_geschichte">Neue Geschichte</string>
+    <string name="bearbeiten">Bearbeiten ✏️</string>
+    <string name="l_schen">Löschen 🗑️</string>
+    <string name="schliessen">Schließen ✖️</string>
+    <string name="books">📚</string>
+    <string name="geschichten_app">Geschichten App</string>
+    <string name="emoji_auswaehlen">Emoji auswählen</string>
+    <string name="color_picker_check">✔️</string>
+    <string name="einstellungen">Einstellungen ⚙️</string>
+    <string name="tipps_left_emoji">⬅️</string>
+    <string name="tipps_info_emoji">ℹ️</string>
+    <string name="settings_emoji">⚙️</string>
+    <string name="fab_button_inner">+</string>
+    <string name="zeilenumbruch_setting">Text am Bildschirmrand umbrechen</string>
+    <string name="navigation_left">⬅️</string>
+    <string name="aendern">✏️</string>
+    <string name="fertig">Fertig! ✨</string>
+    <string name="weiter">Weiter ➡️</string>
+    <string name="zurueck">⬅️ Zurück</string>
+    <string name="read_story_screen_geschichte">📚 Geschichte</string>
+    <string name="geschichte_bearbeiten">Geschichte bearbeiten 📝</string>
+    <string name="titel_bearbeiten">Titel bearbeiten ✏️</string>
+    <string name="beispiel_text">Beispiel Text ✨</string>
+    <string name="leseansicht">Leseansicht</string>
+    <string name="leseansicht_h2">🎨 Leseansicht</string>
+    <string name="schriftgroese_beim_lesen">Schriftgröße beim Lesen</string>
+    <string name="schriftgroese_beim_lesen_context">Betrifft nur die Schriftgröße beim Lesen einer Geschichte</string>
+    <string name="zeilenumbruch_empfohlen">Zeilenumbruch (empfohlen)</string>
+    <string name="automatischer_zeilenumbruch_beim_lesen">Automatischer Zeilenumbruch beim Lesen</string>
+    <string name="farbeinstellungen">Farbeinstellungen</string>
+    <string name="farbeinstellungen_h2">🎨 Farbeinstellungen</string>
+    <string name="hauptbildschirm">Hauptbildschirm</string>
+    <string name="beispiel_titel">Beispiel Titel</string>
+    <string name="beispiel_vorschautext_der_geschichte">Beispiel Vorschautext der Geschichte...</string>
+    <string name="titel_farbe">Titel-Farbe</string>
+    <string name="vorschau_farbe">Vorschau-Farbe</string>
+    <string name="beispiel_geschichtentext">Beispiel Geschichtentext...</string>
+    <string name="geschichte_titel_farbe">Geschichte Titel-Farbe</string>
+    <string name="geschichte_text_farbe">Geschichte Text-Farbe</string>
 </resources>

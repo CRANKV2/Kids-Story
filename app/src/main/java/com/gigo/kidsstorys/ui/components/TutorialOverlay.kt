@@ -8,7 +8,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.gigo.kidsstorys.R
 import com.gigo.kidsstorys.ui.theme.AccentPurple
 import com.gigo.kidsstorys.ui.theme.TextLight
 
@@ -72,7 +74,7 @@ fun TutorialOverlay(
                             containerColor = Color(0xFF353545)
                         )
                     ) {
-                        Text("⬅️ Zurück", color = TextLight)
+                        Text(stringResource(R.string.zurueck), color = TextLight)
                     }
                 }
                 
@@ -83,7 +85,7 @@ fun TutorialOverlay(
                             containerColor = Color(0xFF353545)
                         )
                     ) {
-                        Text("Weiter ➡️", color = TextLight)
+                        Text(stringResource(R.string.weiter), color = TextLight)
                     }
                 } else {
                     Button(
@@ -92,7 +94,7 @@ fun TutorialOverlay(
                             containerColor = AccentPurple
                         )
                     ) {
-                        Text("Fertig! ✨")
+                        Text(stringResource(R.string.fertig))
                     }
                 }
             }
