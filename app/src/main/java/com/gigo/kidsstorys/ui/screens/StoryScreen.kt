@@ -9,8 +9,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -162,40 +165,71 @@ fun StoryScreen(
                 EmptyStateView()
             } else {
                 if (!isCompactView) {
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(2),
+                    val scrollState = rememberScrollState()
+                    val context = LocalContext.current
+                    val titleSize = SettingsManager.getInstance(context).titleSize  // Korrigierte Version
+                    
+                    Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(horizontal = 12.dp),
-                        horizontalArrangement = Arrangement.Start,
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                        contentPadding = PaddingValues(vertical = 12.dp)
+                            .verticalScroll(scrollState)
+                            .padding(horizontal = 12.dp)
                     ) {
-                        items(
-                            items = stories,
-                            key = { it.id }
-                        ) { story ->
-                            val titleColor = Color(userPreferences.cardTitleColor.toInt())
-                            val previewColor = Color(userPreferences.cardPreviewColor.toInt())
-                            
-                            Box(
-                                modifier = Modifier
-                                    .padding(end = 12.dp)
-                                    .fillMaxWidth(0.5f)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            // Linke Spalte
+                            Column(
+                                modifier = Modifier.weight(1f),
+                                verticalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
-                                ModernStoryCard(
-                                    story = story,
-                                    onCardClick = { navController.navigate("readStory/${story.id}") },
-                                    onOptionsClick = { selectedStory = story },
-                                    titleColor = titleColor,
-                                    previewColor = previewColor,
-                                    previewSize = settingsManager.previewSize,
-                                    isCompactView = isCompactView,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                )
+                                stories
+                                    .filterIndexed { index, _ -> index % 2 == 0 }
+                                    .forEach { story ->
+                                        val titleColor = Color(userPreferences.cardTitleColor.toInt())
+                                        val previewColor = Color(userPreferences.cardPreviewColor.toInt())
+                                        
+                                        ModernStoryCard(
+                                            story = story,
+                                            onCardClick = { navController.navigate("readStory/${story.id}") },
+                                            onOptionsClick = { selectedStory = story },
+                                            titleColor = titleColor,
+                                            previewColor = previewColor,
+                                            previewSize = settingsManager.previewSize,
+                                            titleSize = titleSize,
+                                            isCompactView = isCompactView,
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
+                                    }
+                            }
+
+                            // Rechte Spalte
+                            Column(
+                                modifier = Modifier.weight(1f),
+                                verticalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                stories
+                                    .filterIndexed { index, _ -> index % 2 == 1 }
+                                    .forEach { story ->
+                                        val titleColor = Color(userPreferences.cardTitleColor.toInt())
+                                        val previewColor = Color(userPreferences.cardPreviewColor.toInt())
+                                        
+                                        ModernStoryCard(
+                                            story = story,
+                                            onCardClick = { navController.navigate("readStory/${story.id}") },
+                                            onOptionsClick = { selectedStory = story },
+                                            titleColor = titleColor,
+                                            previewColor = previewColor,
+                                            previewSize = settingsManager.previewSize,
+                                            titleSize = titleSize,
+                                            isCompactView = isCompactView,
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
+                                    }
                             }
                         }
+                        Spacer(modifier = Modifier.height(80.dp))
                     }
                 } else {
                     // Einzelne Spalte für die Preview-Ansicht
@@ -209,6 +243,7 @@ fun StoryScreen(
                         items(stories) { story ->
                             val titleColor = Color(userPreferences.cardTitleColor.toInt())
                             val previewColor = Color(userPreferences.cardPreviewColor.toInt())
+                            val titleSize = SettingsManager.getInstance(context).titleSize  // Auch hier hinzugefügt
                             
                             ModernStoryCard(
                                 story = story,
@@ -217,7 +252,9 @@ fun StoryScreen(
                                 titleColor = titleColor,
                                 previewColor = previewColor,
                                 previewSize = settingsManager.previewSize,
-                                isCompactView = isCompactView
+                                titleSize = titleSize,
+                                isCompactView = isCompactView,
+                                modifier = Modifier.fillMaxWidth()
                             )
                         }
                     }
@@ -478,6 +515,7 @@ fun ModernStoryCard(
     titleColor: Color,
     previewColor: Color,
     previewSize: Int,
+    titleSize: Int,
     isCompactView: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -507,7 +545,7 @@ fun ModernStoryCard(
                     text = story.title,
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold,
-                        fontSize = if (!isCompactView) 24.sp else 22.sp
+                        fontSize = titleSize.sp
                     ),
                     color = titleColor,
                     modifier = if (isCompactView) Modifier.weight(1f) else Modifier,

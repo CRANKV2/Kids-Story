@@ -28,7 +28,9 @@ fun ModernStoryCard(
     titleColor: Color,
     previewColor: Color,
     previewSize: Int,
-    isCompactView: Boolean
+    titleSize: Int,
+    isCompactView: Boolean,
+    modifier: Modifier = Modifier
 ) {
     Surface(
         modifier = Modifier
@@ -46,30 +48,41 @@ fun ModernStoryCard(
     ) {
         Column(
             modifier = Modifier
-                .padding(if (isCompactView) 20.dp else 16.dp)
-                .wrapContentHeight(),
-            horizontalAlignment = if (!isCompactView) Alignment.CenterHorizontally else Alignment.Start
+                .padding(12.dp)
+                .wrapContentHeight()
+                .defaultMinSize(minHeight = if (!isCompactView) 80.dp else 120.dp),
+            horizontalAlignment = if (!isCompactView) Alignment.CenterHorizontally else Alignment.Start,
+            verticalArrangement = Arrangement.Top
         ) {
             Text(
                 text = story.title,
                 style = MaterialTheme.typography.titleLarge.copy(
                     fontWeight = FontWeight.Bold,
-                    fontSize = if (!isCompactView) 20.sp else 22.sp
+                    fontSize = titleSize.sp
                 ),
                 color = titleColor,
                 textAlign = if (!isCompactView) TextAlign.Center else TextAlign.Start,
-                modifier = Modifier.padding(vertical = 8.dp)
+                modifier = Modifier.padding(bottom = if (!isCompactView) 4.dp else 8.dp)
             )
             
-            if (!isCompactView) {
-                Spacer(modifier = Modifier.height(8.dp))
+            if (isCompactView) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = story.content,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = previewColor,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis,
+                    fontSize = previewSize.sp
+                )
+            } else {
                 IconButton(
                     onClick = onOptionsClick,
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(32.dp)
                         .background(Color(0xFF353545), CircleShape)
                 ) {
-                    Text("⋮", fontSize = 24.sp, color = TextLight)
+                    Text("⋮", fontSize = 20.sp, color = TextLight)
                 }
             }
         }
