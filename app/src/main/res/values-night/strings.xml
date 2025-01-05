@@ -43,4 +43,17 @@
     <string name="beispiel_geschichtentext">Beispiel Geschichtentext...</string>
     <string name="geschichte_titel_farbe">Geschichte Titel-Farbe</string>
     <string name="geschichte_text_farbe">Geschichte Text-Farbe</string>
+    <string name="geschichte_loeschen">Geschichte löschen</string>
+    <string name="frage_wirklich_loeschen">Möchtest du diese Geschichte wirklich löschen?</string>
+    <string name="loeschen">Löschen</string>
+    <string name="tipps_tricks"><![CDATA[Tipps & Tricks]]></string>
+    <string name="tipps_tricks_back">⬅️</string>
+    <string name="tipps_tricks_forward">➡️</string>
+    <string name="verstanden">Verstanden</string>
+    <string name="schriftgroee_der_geschichten_vorschau">Schriftgröße der Geschichten-Vorschau</string>
+    <string name="vorschau_schriftgroesse">Vorschau-Schriftgröße</string>
+    <string name="schriftgroesse_der_titel_in_der_bersicht">Schriftgröße der Titel in der Übersicht</string>
+    <string name="titel_schriftgroesse">Titel-Schriftgröße</string>
+    <string name="hauptbildschirm_h1">Hauptbildschirm</string>
+    <string name="color_picker_checked">✔️</string>
 </resources>

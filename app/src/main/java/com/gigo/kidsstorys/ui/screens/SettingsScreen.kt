@@ -68,7 +68,7 @@ fun SettingsScreen(
             TopAppBar(
                 title = { 
                     Text(
-                        "Einstellungen",
+                        stringResource(R.string.einstellungen),
                         color = Color.White,
                         fontWeight = FontWeight.Bold
                     ) 
@@ -104,12 +104,15 @@ fun SettingsScreen(
         ) {
             // Hauptbildschirm Sektion
             Text(
-                "Hauptbildschirm",
+                stringResource(R.string.hauptbildschirm_h1),
                 style = MaterialTheme.typography.headlineMedium,
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = TextLight,
-                modifier = Modifier.padding(vertical = 16.dp)
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
+                    .fillMaxWidth()
+                    .wrapContentWidth(Alignment.CenterHorizontally)
             )
             
             // Hauptbildschirm Einstellungen
@@ -125,7 +128,7 @@ fun SettingsScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     Text(
-                        "📱 Hauptbildschirm",
+                        stringResource(R.string.hauptbildschirm),
                         style = MaterialTheme.typography.titleLarge,
                         color = Color(0xFF9575CD)
                     )
@@ -133,12 +136,12 @@ fun SettingsScreen(
                     // Titel-Schriftgröße
                     Column {
                         Text(
-                            "Titel-Schriftgröße",
+                            stringResource(R.string.titel_schriftgroesse),
                             style = MaterialTheme.typography.titleMedium,
                             color = TextLight
                         )
                         Text(
-                            "Schriftgröße der Titel in der Übersicht",
+                            stringResource(R.string.schriftgroesse_der_titel_in_der_bersicht),
                             style = MaterialTheme.typography.bodyMedium,
                             color = TextLight.copy(alpha = 0.7f)
                         )
@@ -152,7 +155,7 @@ fun SettingsScreen(
                             steps = 7
                         )
                         Text(
-                            "Beispiel-Titel 📚",
+                            stringResource(R.string.beispiel_titel),
                             style = MaterialTheme.typography.titleLarge.copy(
                                 fontSize = titleSize.sp,
                                 fontWeight = FontWeight.Bold
@@ -166,12 +169,12 @@ fun SettingsScreen(
                     // Vorschau-Schriftgröße
                     Column {
                         Text(
-                            "Vorschau-Schriftgröße",
+                            stringResource(R.string.vorschau_schriftgroesse),
                             style = MaterialTheme.typography.titleMedium,
                             color = TextLight
                         )
                         Text(
-                            "Schriftgröße der Geschichten-Vorschau",
+                            stringResource(R.string.schriftgroee_der_geschichten_vorschau),
                             style = MaterialTheme.typography.bodyMedium,
                             color = TextLight.copy(alpha = 0.7f)
                         )
@@ -197,6 +200,7 @@ fun SettingsScreen(
                 }
             }
 
+            
             Spacer(modifier = Modifier.height(32.dp))
 
             // Leseansicht Sektion
@@ -206,7 +210,10 @@ fun SettingsScreen(
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = TextLight,
-                modifier = Modifier.padding(vertical = 16.dp)
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
+                    .fillMaxWidth()
+                    .wrapContentWidth(Alignment.CenterHorizontally)
             )
 
             // Leseansicht Einstellungen
@@ -295,8 +302,12 @@ fun SettingsScreen(
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = TextLight,
-                modifier = Modifier.padding(vertical = 16.dp)
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
+                    .fillMaxWidth()
+                    .wrapContentWidth(Alignment.CenterHorizontally)
             )
+            
 
             // Neue Karte für Farbeinstellungen
             Card(
@@ -368,7 +379,9 @@ fun SettingsScreen(
                         }
                     )
                     
+                    Spacer(modifier = Modifier.height(16.dp))
                     Divider(color = Color(0xFF9575CD))
+                    Spacer(modifier = Modifier.height(16.dp))
                     
                     // Leseansicht Farben
                     Text(
@@ -449,7 +462,7 @@ fun ColorButton(
     ) {
         if (isSelected) {
             Text(
-                text = "✔️",
+                text = stringResource(R.string.color_picker_checked),
                 fontSize = 20.sp,
                 color = if (color.luminance() > 0.5f) Color.Black else Color.White
             )

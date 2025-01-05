@@ -217,10 +217,10 @@ fun StoryScreen(
                     showDeleteDialog = false
                     storyToDelete = null
                 },
-                title = { Text("Geschichte löschen", color = TextLight) },
+                title = { Text(stringResource(R.string.geschichte_loeschen), color = TextLight) },
                 text = { 
                     Text(
-                        "Möchtest du diese Geschichte wirklich löschen?",
+                        stringResource(R.string.frage_wirklich_loeschen),
                         color = TextLight
                     ) 
                 },
@@ -234,7 +234,7 @@ fun StoryScreen(
                             storyToDelete = null
                         }
                     ) {
-                        Text("Löschen", color = Color.Red)
+                        Text(stringResource(R.string.loeschen), color = Color.Red)
                     }
                 },
                 dismissButton = {
@@ -244,7 +244,7 @@ fun StoryScreen(
                             storyToDelete = null
                         }
                     ) {
-                        Text("Abbrechen", color = TextLight)
+                        Text(stringResource(R.string.abbrechen), color = TextLight)
                     }
                 },
                 containerColor = if (isDarkTheme) CardDark else CardLight
@@ -287,7 +287,7 @@ fun StoryScreen(
                 ) {
                     // Titel
                     Text(
-                        "Tipps & Tricks",
+                        stringResource(R.string.tipps_tricks),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 24.dp),
@@ -324,7 +324,7 @@ fun StoryScreen(
                                 )
                         ) {
                             Text(
-                                "⬅️",
+                                stringResource(R.string.tipps_tricks_back),
                                 fontSize = 32.sp
                             )
                         }
@@ -347,7 +347,7 @@ fun StoryScreen(
                                 )
                         ) {
                             Text(
-                                "➡️",
+                                stringResource(R.string.tipps_tricks_forward),
                                 fontSize = 32.sp
                             )
                         }
@@ -372,7 +372,7 @@ fun StoryScreen(
                             )
                     ) {
                         Text(
-                            "Verstanden",
+                            stringResource(R.string.verstanden),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold
                         )

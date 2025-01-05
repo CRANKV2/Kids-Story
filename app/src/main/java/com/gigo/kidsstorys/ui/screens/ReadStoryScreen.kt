@@ -307,7 +307,7 @@ fun ReadStoryScreen(
                                 OutlinedTextField(
                                     value = newTitle,
                                     onValueChange = { newTitle = it },
-                                    label = { Text("Titel") },
+                                    label = { Text(stringResource(R.string.titel)) },
                                     colors = OutlinedTextFieldDefaults.colors(
                                         focusedBorderColor = TextLight,
                                         unfocusedBorderColor = TextLight.copy(alpha = 0.5f),
