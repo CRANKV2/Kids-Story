@@ -114,13 +114,13 @@ fun StoryScreen(
                         }
 
                         IconButton(
-                            onClick = { showTutorial = true },
+                            onClick = { navController.navigate("chat") },
                             modifier = Modifier
                                 .size(48.dp)
                                 .shadow(8.dp, CircleShape, spotColor = AccentPurple)
                                 .background(Color(0xFF353545), CircleShape)
                         ) {
-                            Text("❓", fontSize = 24.sp)
+                            Text("🤖", fontSize = 24.sp)
                         }
                         
                         IconButton(

@@ -22,6 +22,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.material3.Text
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.foundation.gestures.detectTransformGestures
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import com.gigo.kidsstorys.R
@@ -103,24 +104,27 @@ fun ReadStoryScreen(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp),
+                            .padding(16.dp)
+                            .shadow(
+                                elevation = 16.dp,
+                                shape = RoundedCornerShape(24.dp),
+                                spotColor = AccentPurple,
+                                ambientColor = AccentPurple
+                            ),
                         colors = CardDefaults.cardColors(
                             containerColor = Color(0xFF2D2D3A)
                         ),
-                        shape = RoundedCornerShape(16.dp),
-                        elevation = CardDefaults.cardElevation(
-                            defaultElevation = 4.dp
-                        )
+                        shape = RoundedCornerShape(24.dp)
                     ) {
                         Column(
-                            modifier = Modifier.padding(16.dp)
+                            modifier = Modifier.padding(20.dp)
                         ) {
                             Text(
                                 text = currentTitle,
                                 style = MaterialTheme.typography.headlineMedium.copy(
                                     fontWeight = FontWeight.Bold
                                 ),
-                                color = Color(userPreferences.storyTitleColor)
+                                color = titleColor
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                             AssistChip(
@@ -128,7 +132,7 @@ fun ReadStoryScreen(
                                 label = { Text(stringResource(R.string.read_story_screen_geschichte)) },
                                 colors = AssistChipDefaults.assistChipColors(
                                     containerColor = Color(0xFF353545),
-                                    labelColor = Color(0xFF9575CD)
+                                    labelColor = AccentPurple
                                 )
                             )
                         }
@@ -139,56 +143,46 @@ fun ReadStoryScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                            .padding(16.dp)
+                            .shadow(
+                                elevation = 16.dp,
+                                shape = RoundedCornerShape(24.dp),
+                                spotColor = AccentPurple,
+                                ambientColor = AccentPurple
+                            ),
                         colors = CardDefaults.cardColors(
                             containerColor = Color(0xFF2D2D3A)
                         ),
-                        shape = RoundedCornerShape(24.dp),
-                        elevation = CardDefaults.cardElevation(
-                            defaultElevation = 4.dp
-                        )
+                        shape = RoundedCornerShape(24.dp)
                     ) {
-                        Column(
-                            modifier = Modifier
-                                .padding(20.dp)
-                                .verticalScroll(verticalScrollState)
-                        ) {
-                            Text(
-                                text = story?.title ?: "",
-                                style = MaterialTheme.typography.headlineMedium,
-                                color = titleColor,
-                                fontSize = fontSize.sp
-                            )
-                            
-                            Spacer(modifier = Modifier.height(16.dp))
-                            
-                            if (wrapText) {
+                        if (wrapText) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .verticalScroll(verticalScrollState)
+                                    .padding(20.dp)
+                            ) {
                                 Text(
                                     text = story?.content ?: "",
                                     style = MaterialTheme.typography.bodyLarge.copy(
                                         fontSize = fontSize.sp
                                     ),
-                                    color = textColor,
-                                    maxLines = Int.MAX_VALUE,
-                                    overflow = TextOverflow.Visible,
-                                    modifier = Modifier.pointerInput(Unit) {
-                                        detectTransformGestures { _, _, zoom, _ ->
-                                            fontSize = (fontSize * zoom).coerceIn(12f, 30f)
-                                        }
-                                    }
+                                    color = textColor
                                 )
-                            } else {
-                                Row(
-                                    modifier = Modifier.horizontalScroll(horizontalScrollState)
-                                ) {
-                                    Text(
-                                        text = story?.content ?: "",
-                                        style = MaterialTheme.typography.bodyLarge.copy(
-                                            fontSize = fontSize.sp
-                                        ),
-                                        color = textColor
-                                    )
-                                }
+                            }
+                        } else {
+                            Row(
+                                modifier = Modifier
+                                    .horizontalScroll(horizontalScrollState)
+                                    .padding(20.dp)
+                            ) {
+                                Text(
+                                    text = story?.content ?: "",
+                                    style = MaterialTheme.typography.bodyLarge.copy(
+                                        fontSize = fontSize.sp
+                                    ),
+                                    color = textColor
+                                )
                             }
                         }
                     }
