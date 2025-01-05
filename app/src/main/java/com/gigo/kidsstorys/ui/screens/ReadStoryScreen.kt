@@ -59,6 +59,10 @@ fun ReadStoryScreen(
         viewModel.loadStory(storyId)
     }
 
+    LaunchedEffect(userPreferences.fontSize) {
+        fontSize = userPreferences.fontSize.toFloat()
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -161,7 +165,9 @@ fun ReadStoryScreen(
                             if (wrapText) {
                                 Text(
                                     text = story?.content ?: "",
-                                    style = MaterialTheme.typography.bodyLarge,
+                                    style = MaterialTheme.typography.bodyLarge.copy(
+                                        fontSize = fontSize.sp
+                                    ),
                                     color = textColor,
                                     maxLines = Int.MAX_VALUE,
                                     overflow = TextOverflow.Visible,
@@ -172,20 +178,15 @@ fun ReadStoryScreen(
                                     }
                                 )
                             } else {
-                                // Horizontal Scroll für den Text
                                 Row(
                                     modifier = Modifier.horizontalScroll(horizontalScrollState)
                                 ) {
                                     Text(
                                         text = story?.content ?: "",
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        color = textColor,
-                                        overflow = TextOverflow.Visible,
-                                        modifier = Modifier.pointerInput(Unit) {
-                                            detectTransformGestures { _, _, zoom, _ ->
-                                                fontSize = (fontSize * zoom).coerceIn(12f, 30f)
-                                            }
-                                        }
+                                        style = MaterialTheme.typography.bodyLarge.copy(
+                                            fontSize = fontSize.sp
+                                        ),
+                                        color = textColor
                                     )
                                 }
                             }

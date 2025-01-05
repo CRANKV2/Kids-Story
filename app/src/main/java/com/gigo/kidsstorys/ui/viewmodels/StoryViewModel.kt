@@ -100,6 +100,12 @@ class StoryViewModel(
         }
     }
 
+    fun updateFontSize(newSize: Float) {
+        viewModelScope.launch {
+            userPreferencesRepository.updateFontSize(newSize)
+        }
+    }
+
     companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")

@@ -44,7 +44,7 @@ fun SettingsScreen(
     val scrollState = rememberScrollState()
     
     // Initialisiere die State-Variablen mit den gespeicherten Werten
-    var fontSize by remember { mutableStateOf(settingsManager.fontSize.toFloat()) }
+    var fontSize by remember(userPreferences.fontSize) { mutableStateOf(userPreferences.fontSize) }
     var wrapText by remember { mutableStateOf(settingsManager.wrapText) }
     var titleSize by remember { mutableStateOf(settingsManager.titleSize.toFloat()) }
     var previewSize by remember { mutableStateOf(settingsManager.previewSize.toFloat()) }
@@ -250,7 +250,8 @@ fun SettingsScreen(
                             value = fontSize,
                             onValueChange = {
                                 fontSize = it
-                                settingsManager.fontSize = it.toInt()
+                                settingsManager.updateFontSize(it.toInt())
+                                viewModel.updateFontSize(it)
                             },
                             valueRange = 12f..24f,
                             steps = 11
