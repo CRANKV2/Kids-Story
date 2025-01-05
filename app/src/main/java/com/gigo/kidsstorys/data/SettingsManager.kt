@@ -21,12 +21,17 @@ class SettingsManager private constructor(context: Context) {
         get() = sharedPreferences.getInt(KEY_PREVIEW_SIZE, DEFAULT_PREVIEW_SIZE)
         set(value) = sharedPreferences.edit().putInt(KEY_PREVIEW_SIZE, value).apply()
 
+    var isCompactView: Boolean
+        get() = sharedPreferences.getBoolean(KEY_COMPACT_VIEW, true)
+        set(value) = sharedPreferences.edit().putBoolean(KEY_COMPACT_VIEW, value).apply()
+
     companion object {
         private const val PREFS_NAME = "story_settings"
         private const val KEY_FONT_SIZE = "font_size"
         private const val KEY_WRAP_TEXT = "wrap_text"
         private const val KEY_TITLE_SIZE = "title_size"
         private const val KEY_PREVIEW_SIZE = "preview_size"
+        private const val KEY_COMPACT_VIEW = "compact_view"
         
         private const val DEFAULT_FONT_SIZE = 16
         private const val DEFAULT_WRAP_TEXT = true

@@ -2,36 +2,39 @@ package com.gigo.kidsstorys.ui.screens
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.gigo.kidsstorys.data.Story
+import com.gigo.kidsstorys.ui.theme.*
 import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
 import com.gigo.kidsstorys.ui.components.*
-import com.gigo.kidsstorys.ui.theme.*
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import com.gigo.kidsstorys.R
 import com.gigo.kidsstorys.data.SettingsManager
+import com.gigo.kidsstorys.R
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun StoryScreen(
     navController: NavController,
@@ -47,71 +50,84 @@ fun StoryScreen(
     var showDeleteDialog by remember { mutableStateOf(false) }
     var storyToDelete by remember { mutableStateOf<Story?>(null) }
     var showTutorial by remember { mutableStateOf(false) }
-
-    Log.d("StoryScreen", "CardTitleColor: ${userPreferences.cardTitleColor}")
-    Log.d("StoryScreen", "CardPreviewColor: ${userPreferences.cardPreviewColor}")
+    
+    // Verwende den gespeicherten Wert als Initial-State
+    var isCompactView by remember { mutableStateOf(settingsManager.isCompactView) }
 
     Scaffold(
         topBar = {
-            Box(
+            Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .padding(16.dp)
+                    .shadow(
+                        elevation = 16.dp,
+                        spotColor = AccentPurple,
+                        ambientColor = AccentPurple,
+                        shape = RoundedCornerShape(24.dp)
+                    ),
+                color = Color(0xFF2D2D3A),
+                shape = RoundedCornerShape(24.dp)
             ) {
-                // Blur-Hintergrund
-                Box(
-                    modifier = Modifier
-                        .matchParentSize()
-                        .background(
-                            color = AccentPurple.copy(alpha = 0.7f),
-                            shape = RoundedCornerShape(24.dp)
-                        )
-                        .blur(radius = 20.dp)
-                )
-                
-                // Inhalt
-                Column(
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(24.dp))
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Column {
+                        Text(
+                            "Geschichten",
+                            fontSize = 28.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                        Text(
+                            "${stories.size} Geschichten",
+                            fontSize = 16.sp,
+                            color = Color.White.copy(alpha = 0.7f)
+                        )
+                    }
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        Column {
+                        // Neuer Button zum Umschalten der Ansicht
+                        IconButton(
+                            onClick = { 
+                                isCompactView = !isCompactView
+                                settingsManager.isCompactView = isCompactView  // Speichere die neue Einstellung
+                            },
+                            modifier = Modifier
+                                .size(48.dp)
+                                .shadow(8.dp, CircleShape, spotColor = AccentPurple)
+                                .background(Color(0xFF353545), CircleShape)
+                        ) {
                             Text(
-                                "Geschichten",
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 20.sp
-                            )
-                            Spacer(modifier = Modifier.height(2.dp))
-                            Text(
-                                "${stories.size} Geschichten",
-                                color = Color.White.copy(alpha = 0.8f),
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Normal
+                                if (isCompactView) "⋮⋮" else "⋮", 
+                                fontSize = 24.sp,
+                                color = TextLight
                             )
                         }
-                        
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalAlignment = Alignment.CenterVertically
+
+                        IconButton(
+                            onClick = { showTutorial = true },
+                            modifier = Modifier
+                                .size(48.dp)
+                                .shadow(8.dp, CircleShape, spotColor = AccentPurple)
+                                .background(Color(0xFF353545), CircleShape)
                         ) {
-                            IconButton(
-                                onClick = { showTutorial = true }
-                            ) {
-                                Text(stringResource(R.string.tipps_info_emoji), fontSize = 24.sp)
-                            }
-                            
-                            IconButton(
-                                onClick = { navController.navigate("settings") }
-                            ) {
-                                Text(stringResource(R.string.settings_emoji), fontSize = 24.sp)
-                            }
+                            Text("❓", fontSize = 24.sp)
+                        }
+                        
+                        IconButton(
+                            onClick = { navController.navigate("settings") },
+                            modifier = Modifier
+                                .size(48.dp)
+                                .shadow(8.dp, CircleShape, spotColor = AccentPurple)
+                                .background(Color(0xFF353545), CircleShape)
+                        ) {
+                            Text("⚙️", fontSize = 24.sp)
                         }
                     }
                 }
@@ -120,13 +136,22 @@ fun StoryScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { showAddDialog = true },
+                modifier = Modifier
+                    .padding(16.dp)
+                    .size(64.dp)
+                    .shadow(
+                        elevation = 16.dp,
+                        shape = CircleShape,
+                        spotColor = AccentPurple,
+                        ambientColor = AccentPurple
+                    ),
                 containerColor = AccentPurple,
                 shape = CircleShape
             ) {
-                Text(stringResource(R.string.fab_button_inner), fontSize = 24.sp, color = Color.White)
+                Text("+", fontSize = 32.sp, color = Color.White)
             }
         },
-        containerColor = if (isDarkTheme) Color(0xFF1E1E2E) else Color(0xFFF5F5F5)
+        floatingActionButtonPosition = FabPosition.Center
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -134,52 +159,67 @@ fun StoryScreen(
                 .padding(paddingValues)
         ) {
             if (stories.isEmpty()) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(32.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        "📚",
-                        fontSize = 48.sp,
-                        color = Color(0xFF9575CD).copy(alpha = 0.6f)
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        "Keine Geschichten vorhanden",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Color(0xFFE2E2E2).copy(alpha = 0.6f)
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        "Tippe auf + um eine neue Geschichte zu erstellen",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color(0xFFBBBBBB).copy(alpha = 0.6f),
-                        textAlign = TextAlign.Center
-                    )
-                }
+                EmptyStateView()
             } else {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    contentPadding = PaddingValues(vertical = 16.dp)
-                ) {
-                    items(stories) { story ->
-                        val titleColor = Color(userPreferences.cardTitleColor.toInt())
-                        val previewColor = Color(userPreferences.cardPreviewColor.toInt())
-                        
-                        StoryCard(
-                            story = story,
-                            onCardClick = { navController.navigate("readStory/${story.id}") },
-                            onOptionsClick = { selectedStory = story },
-                            titleColor = titleColor,
-                            previewColor = previewColor,
-                            previewSize = settingsManager.previewSize
-                        )
+                if (!isCompactView) {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 12.dp),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        contentPadding = PaddingValues(vertical = 12.dp)
+                    ) {
+                        items(
+                            items = stories,
+                            key = { it.id }
+                        ) { story ->
+                            val titleColor = Color(userPreferences.cardTitleColor.toInt())
+                            val previewColor = Color(userPreferences.cardPreviewColor.toInt())
+                            
+                            Box(
+                                modifier = Modifier
+                                    .padding(end = 12.dp)
+                                    .fillMaxWidth(0.5f)
+                            ) {
+                                ModernStoryCard(
+                                    story = story,
+                                    onCardClick = { navController.navigate("readStory/${story.id}") },
+                                    onOptionsClick = { selectedStory = story },
+                                    titleColor = titleColor,
+                                    previewColor = previewColor,
+                                    previewSize = settingsManager.previewSize,
+                                    isCompactView = isCompactView,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                )
+                            }
+                        }
+                    }
+                } else {
+                    // Einzelne Spalte für die Preview-Ansicht
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        contentPadding = PaddingValues(vertical = 16.dp)
+                    ) {
+                        items(stories) { story ->
+                            val titleColor = Color(userPreferences.cardTitleColor.toInt())
+                            val previewColor = Color(userPreferences.cardPreviewColor.toInt())
+                            
+                            ModernStoryCard(
+                                story = story,
+                                onCardClick = { navController.navigate("readStory/${story.id}") },
+                                onOptionsClick = { selectedStory = story },
+                                titleColor = titleColor,
+                                previewColor = previewColor,
+                                previewSize = settingsManager.previewSize,
+                                isCompactView = isCompactView
+                            )
+                        }
                     }
                 }
             }
@@ -377,6 +417,137 @@ fun StoryScreen(
                             fontWeight = FontWeight.Bold
                         )
                     }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun EmptyStateView() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Surface(
+            modifier = Modifier
+                .size(120.dp)
+                .shadow(
+                    elevation = 16.dp,
+                    shape = CircleShape,
+                    spotColor = AccentPurple.copy(alpha = 0.5f)
+                ),
+            color = Color(0xFF2D2D3A),
+            shape = CircleShape
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    "📚",
+                    fontSize = 48.sp
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            "Keine Geschichten vorhanden",
+            style = MaterialTheme.typography.titleLarge,
+            color = TextLight,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            "Tippe auf + um eine neue Geschichte zu erstellen",
+            style = MaterialTheme.typography.bodyLarge,
+            color = TextLight.copy(alpha = 0.7f),
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+fun ModernStoryCard(
+    story: Story,
+    onCardClick: () -> Unit,
+    onOptionsClick: () -> Unit,
+    titleColor: Color,
+    previewColor: Color,
+    previewSize: Int,
+    isCompactView: Boolean,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onCardClick)
+            .shadow(
+                elevation = 16.dp,
+                shape = RoundedCornerShape(24.dp),
+                spotColor = AccentPurple.copy(alpha = 0.5f),
+                ambientColor = AccentPurple.copy(alpha = 0.3f)
+            ),
+        color = Color(0xFF2D2D3A),
+        shape = RoundedCornerShape(24.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(if (isCompactView) 20.dp else 16.dp),
+            horizontalAlignment = if (!isCompactView) Alignment.CenterHorizontally else Alignment.Start
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = if (!isCompactView) Arrangement.Center else Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = story.title,
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = if (!isCompactView) 24.sp else 22.sp
+                    ),
+                    color = titleColor,
+                    modifier = if (isCompactView) Modifier.weight(1f) else Modifier,
+                    textAlign = if (!isCompactView) TextAlign.Center else TextAlign.Start
+                )
+                
+                if (isCompactView) {
+                    IconButton(
+                        onClick = onOptionsClick,
+                        modifier = Modifier
+                            .size(40.dp)
+                            .background(Color(0xFF353545), CircleShape)
+                    ) {
+                        Text("⋮", fontSize = 24.sp, color = TextLight)
+                    }
+                }
+            }
+            
+            if (isCompactView) {
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = story.content,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = previewColor,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis,
+                    fontSize = previewSize.sp,
+                    lineHeight = (previewSize * 1.5).sp
+                )
+            }
+            
+            if (!isCompactView) {
+                Spacer(modifier = Modifier.height(8.dp))
+                IconButton(
+                    onClick = onOptionsClick,
+                    modifier = Modifier
+                        .size(40.dp)
+                        .background(Color(0xFF353545), CircleShape)
+                ) {
+                    Text("⋮", fontSize = 24.sp, color = TextLight)
                 }
             }
         }
