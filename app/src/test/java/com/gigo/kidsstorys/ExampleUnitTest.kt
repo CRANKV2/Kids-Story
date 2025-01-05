@@ -1,4 +1,4 @@
-package com.gigo.testapp
+package com.gigo.kidsstorys
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package com.gigo.testapp.ui.components
+package com.gigo.kidsstorys.ui.components
 
 import androidx.compose.material3.Divider
 import androidx.compose.foundation.layout.padding

@@ -1,26 +1,19 @@
-package com.gigo.testapp.ui.viewmodels
+package com.gigo.kidsstorys.ui.viewmodels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.gigo.testapp.MyApplication
-import com.gigo.testapp.data.Story
-import com.gigo.testapp.data.StoryDao
-import com.gigo.testapp.data.StoryDatabase
-import com.gigo.testapp.data.UserPreferences
-import com.gigo.testapp.data.UserPreferencesRepository
-import kotlinx.coroutines.flow.Flow
+import com.gigo.kidsstorys.MyApplication
+import com.gigo.kidsstorys.data.Story
+import com.gigo.kidsstorys.data.StoryDao
+import com.gigo.kidsstorys.data.UserPreferences
+import com.gigo.kidsstorys.data.UserPreferencesRepository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import androidx.compose.ui.graphics.Color
-import android.util.Log
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 
 class StoryViewModel(
     private val storyDao: StoryDao,

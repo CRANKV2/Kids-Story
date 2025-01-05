@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.gigo.testapp"
+    namespace = "com.gigo.kidsstorys"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.gigo.testapp"
+        applicationId = "com.gigo.kidsstorys"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

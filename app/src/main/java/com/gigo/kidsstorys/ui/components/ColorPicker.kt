@@ -1,4 +1,4 @@
-package com.gigo.testapp.ui.components
+package com.gigo.kidsstorys.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gigo.testapp.ui.theme.TextLight
+import com.gigo.kidsstorys.ui.theme.TextLight
 
 @Composable
 fun ColorPicker(

@@ -1,4 +1,4 @@
-package com.gigo.testapp.ui.screens
+package com.gigo.kidsstorys.ui.screens
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -22,12 +22,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.gigo.testapp.data.Story
-import com.gigo.testapp.ui.viewmodels.StoryViewModel
-import com.gigo.testapp.ui.components.*
-import com.gigo.testapp.ui.theme.*
+import com.gigo.kidsstorys.data.Story
+import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
+import com.gigo.kidsstorys.ui.components.*
+import com.gigo.kidsstorys.ui.theme.*
 import androidx.compose.ui.platform.LocalContext
-import com.gigo.testapp.data.SettingsManager
+import com.gigo.kidsstorys.data.SettingsManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

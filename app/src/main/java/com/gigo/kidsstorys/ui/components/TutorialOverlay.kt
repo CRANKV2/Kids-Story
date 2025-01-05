@@ -1,4 +1,4 @@
-package com.gigo.testapp.ui.components
+package com.gigo.kidsstorys.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -7,13 +7,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.gigo.testapp.ui.theme.AccentPurple
-import com.gigo.testapp.ui.theme.TextLight
+import com.gigo.kidsstorys.ui.theme.AccentPurple
+import com.gigo.kidsstorys.ui.theme.TextLight
 
 @Composable
 fun TutorialOverlay(

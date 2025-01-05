@@ -1,4 +1,4 @@
-package com.gigo.testapp.ui.components
+package com.gigo.kidsstorys.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,8 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.gigo.testapp.data.Story
-import com.gigo.testapp.ui.theme.*
+import com.gigo.kidsstorys.data.Story
+import com.gigo.kidsstorys.ui.theme.*
 
 @Composable
 fun StoryOptionsDialog(

@@ -1,4 +1,4 @@
-package com.gigo.testapp.data
+package com.gigo.kidsstorys.data
 
 import kotlinx.coroutines.flow.Flow
 

@@ -1,4 +1,4 @@
-package com.gigo.testapp.ui.screens
+package com.gigo.kidsstorys.ui.screens
 
 import android.app.Activity
 import androidx.compose.animation.core.animateDpAsState
@@ -23,7 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gigo.testapp.R
+import com.gigo.kidsstorys.R
 import kotlinx.coroutines.launch
 
 data class OnboardingPage(

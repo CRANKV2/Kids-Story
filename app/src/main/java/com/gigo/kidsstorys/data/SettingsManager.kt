@@ -1,10 +1,6 @@
-package com.gigo.testapp.data
+package com.gigo.kidsstorys.data
 
 import android.content.Context
-import android.content.SharedPreferences
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 
 class SettingsManager private constructor(context: Context) {
     private val sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)

@@ -1,16 +1,10 @@
-package com.gigo.testapp
+package com.gigo.kidsstorys
 
 import android.app.Application
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.gigo.testapp.data.StoryDatabase
-import com.gigo.testapp.data.UserPreferencesRepository
+import com.gigo.kidsstorys.data.StoryDatabase
+import com.gigo.kidsstorys.data.UserPreferencesRepository
 import androidx.room.Room
-import androidx.datastore.core.DataStoreFactory
-import androidx.datastore.preferences.core.PreferencesSerializer
-import java.io.File
-import java.util.prefs.PreferencesFactory
 
 class MyApplication : Application() {
     lateinit var database: StoryDatabase

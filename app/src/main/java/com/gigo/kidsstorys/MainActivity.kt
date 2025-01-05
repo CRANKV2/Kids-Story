@@ -1,4 +1,4 @@
-package com.gigo.testapp
+package com.gigo.kidsstorys
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -6,15 +6,14 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.gigo.testapp.ui.screens.*
-import com.gigo.testapp.ui.theme.TestappTheme
+import com.gigo.kidsstorys.ui.screens.*
+import com.gigo.kidsstorys.ui.theme.TestappTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

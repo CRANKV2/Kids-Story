@@ -1,4 +1,4 @@
-package com.gigo.testapp.ui.screens
+package com.gigo.kidsstorys.ui.screens
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -12,8 +12,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gigo.testapp.ui.theme.AccentPurple
-import com.gigo.testapp.ui.theme.TextLight
+import com.gigo.kidsstorys.ui.theme.AccentPurple
+import com.gigo.kidsstorys.ui.theme.TextLight
 import kotlinx.coroutines.delay
 
 @Composable

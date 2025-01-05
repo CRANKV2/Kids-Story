@@ -1,4 +1,4 @@
-package com.gigo.testapp.ui.theme
+package com.gigo.kidsstorys.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

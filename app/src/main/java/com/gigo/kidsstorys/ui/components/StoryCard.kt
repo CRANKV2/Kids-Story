@@ -1,6 +1,5 @@
-package com.gigo.testapp.ui.components
+package com.gigo.kidsstorys.ui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -15,10 +14,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.gigo.testapp.data.Story
-import com.gigo.testapp.ui.theme.CardDark
-import com.gigo.testapp.ui.theme.CardLight
-import com.gigo.testapp.ui.theme.TextLight
+import com.gigo.kidsstorys.data.Story
+import com.gigo.kidsstorys.ui.theme.CardDark
+import com.gigo.kidsstorys.ui.theme.CardLight
+import com.gigo.kidsstorys.ui.theme.TextLight
 
 @Composable
 fun StoryCard(

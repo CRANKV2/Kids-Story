@@ -1,4 +1,4 @@
-package com.gigo.testapp.data
+package com.gigo.kidsstorys.data
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
