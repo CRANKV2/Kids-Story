@@ -2,12 +2,14 @@ package com.gigo.kidsstorys.ui.screens
 
 import LoadingDots
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.*
@@ -277,39 +279,37 @@ fun ChatInputBox(
 
 @Composable
 fun ChatMessageItem(message: ChatMessage) {
-    Column(
+    val isUserMessage = message.isUser
+    val backgroundColor = if (isUserMessage) {
+        Color(0xFF353545)
+    } else {
+        Color(0xFF42424E)
+    }
+
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        horizontalAlignment = if (message.isUser) Alignment.End else Alignment.Start
+            .padding(
+                start = if (isUserMessage) 40.dp else 8.dp,
+                end = if (isUserMessage) 8.dp else 40.dp,
+                top = 4.dp,
+                bottom = 4.dp
+            )
     ) {
         Surface(
+            shape = RoundedCornerShape(12.dp),
+            color = backgroundColor,
             modifier = Modifier
-                .widthIn(max = 340.dp)
-                .shadow(
-                    elevation = 8.dp,
-                    spotColor = if (message.isUser) AccentPurple else Color(0xFF353545),
-                    shape = RoundedCornerShape(
-                        topStart = 16.dp,
-                        topEnd = 16.dp,
-                        bottomStart = if (message.isUser) 16.dp else 4.dp,
-                        bottomEnd = if (message.isUser) 4.dp else 16.dp
-                    )
-                ),
-            color = if (message.isUser) AccentPurple else Color(0xFF353545),
-            shape = RoundedCornerShape(
-                topStart = 16.dp,
-                topEnd = 16.dp,
-                bottomStart = if (message.isUser) 16.dp else 4.dp,
-                bottomEnd = if (message.isUser) 4.dp else 16.dp
-            )
+                .align(if (isUserMessage) Alignment.CenterEnd else Alignment.CenterStart)
         ) {
-            Text(
-                text = message.content,
-                modifier = Modifier.padding(12.dp),
-                color = Color.White,
-                style = MaterialTheme.typography.bodyLarge
-            )
+            SelectionContainer {  // Macht den Text selektierbar
+                Text(
+                    text = message.content,
+                    modifier = Modifier.padding(12.dp),
+                    color = Color.White,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
         }
     }
 }
@@ -319,3 +319,44 @@ data class ChatMessage(
     val isUser: Boolean,
     val timestamp: Long = System.currentTimeMillis()
 ) 
+
+@Composable
+fun ChatMessage(
+    message: ChatMessage,
+    modifier: Modifier = Modifier
+) {
+    val isUserMessage = message.isUser
+    val backgroundColor = if (isUserMessage) {
+        MaterialTheme.colorScheme.primaryContainer
+    } else {
+        MaterialTheme.colorScheme.secondaryContainer
+    }
+    
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(
+                start = if (isUserMessage) 40.dp else 8.dp,
+                end = if (isUserMessage) 8.dp else 40.dp,
+                top = 4.dp,
+                bottom = 4.dp
+            )
+    ) {
+        Surface(
+            shape = RoundedCornerShape(12.dp),
+            color = backgroundColor,
+            modifier = Modifier
+                .align(if (isUserMessage) Alignment.CenterEnd else Alignment.CenterStart)
+                .clickable { } // Macht die Box klickbar für Copy-Funktion
+        ) {
+            SelectionContainer { // Dies macht den Text selektierbar
+                Text(
+                    text = message.content,
+                    modifier = Modifier.padding(12.dp),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+        }
+    }
+} 
