@@ -4,7 +4,6 @@ import LoadingDots
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -17,6 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -27,6 +28,7 @@ import com.gigo.kidsstorys.ui.theme.AccentPurple
 import com.gigo.kidsstorys.data.models.ChatMessage
 import com.gigo.kidsstorys.ui.viewmodels.ChatViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,13 +42,14 @@ fun ChatScreen(
     var messageText by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
 
     // Effekt zum automatischen Scrollen
     LaunchedEffect(messages) {
         if (messages.isNotEmpty()) {
-            coroutineScope.launch {
-                listState.animateScrollToItem(index = messages.lastIndex)
-            }
+            delay(100) // Kleine Verzögerung für smoother Scroll
+            listState.animateScrollToItem(index = messages.lastIndex)
         }
     }
 
@@ -57,6 +60,11 @@ fun ChatScreen(
             viewModel.clearError()
         }
     }
+
+    // WindowInsets für Keyboard-Anpassung
+    val windowInsets = WindowInsets.ime
+        .add(WindowInsets.navigationBars)
+        .asPaddingValues()
 
     Scaffold(
         topBar = {
@@ -111,6 +119,7 @@ fun ChatScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
+                .imePadding() // Wichtig für Keyboard-Handling
         ) {
             if (messages.isEmpty()) {
                 Column(
@@ -155,6 +164,7 @@ fun ChatScreen(
                         .fillMaxSize()
                         .padding(horizontal = 16.dp)
                         .padding(bottom = 80.dp)
+                        .windowInsetsPadding(WindowInsets.ime) // Keyboard-Anpassung
                 ) {
                     items(messages) { message ->
                         ChatMessageItem(message)
@@ -192,7 +202,7 @@ fun ChatScreen(
                 }
             }
 
-            // Chat Input Box mit festem Abstand
+            // Chat Input Box
             ChatInputBox(
                 messageText = messageText,
                 onMessageChange = { messageText = it },
@@ -200,11 +210,14 @@ fun ChatScreen(
                     if (messageText.isNotBlank()) {
                         viewModel.sendMessage(messageText)
                         messageText = ""
+                        keyboardController?.hide() // Keyboard verstecken nach Senden
+                        focusManager.clearFocus() // Focus entfernen
                     }
                 },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .background(Color(0xFF2D2D3A))
+                    .navigationBarsPadding() // Navigation Bar Padding
             )
         }
     }
