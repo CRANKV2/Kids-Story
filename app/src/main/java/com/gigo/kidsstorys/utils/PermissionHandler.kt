@@ -56,6 +56,7 @@ fun RequestStoragePermission(
             PermissionDialog(
                 onDismiss = { 
                     showPermissionDialog = false
+                    onPermissionDenied()
                     onExit()
                 },
                 onConfirm = { launcher.launch(permissions) }

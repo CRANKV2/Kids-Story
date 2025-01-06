@@ -32,19 +32,13 @@ fun ModernStoryCard(
     isCompactView: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .clickable(onClick = onCardClick)
-            .shadow(
-                elevation = 16.dp,
-                shape = RoundedCornerShape(24.dp),
-                spotColor = AccentPurple.copy(alpha = 0.5f),
-                ambientColor = AccentPurple.copy(alpha = 0.3f)
-            ),
-        color = Color(0xFF2D2D3A),
-        shape = RoundedCornerShape(24.dp)
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color(0xFF2D2D3A),
+            contentColor = Color.White
+        )
     ) {
         Column(
             modifier = Modifier

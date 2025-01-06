@@ -44,8 +44,8 @@ fun StoryScreen(
     isDarkTheme: Boolean,
     viewModel: StoryViewModel = viewModel(factory = StoryViewModel.Factory)
 ) {
-    val context = LocalContext.current
-    val settingsManager = remember { SettingsManager.getInstance(context) }
+    val localContext = LocalContext.current
+    val settingsManager = remember { SettingsManager.getInstance(localContext) }
     val stories by viewModel.allStories.collectAsState(initial = emptyList())
     val userPreferences by viewModel.userPreferences.collectAsState()
     var showAddDialog by remember { mutableStateOf(false) }
@@ -163,8 +163,8 @@ fun StoryScreen(
             } else {
                 if (!isCompactView) {
                     val scrollState = rememberScrollState()
-                    val context = LocalContext.current
-                    val titleSize = SettingsManager.getInstance(context).titleSize  // Korrigierte Version
+                    val currentContext = localContext
+                    val titleSize = SettingsManager.getInstance(currentContext).titleSize  // Korrigierte Version
                     
                     Column(
                         modifier = Modifier
@@ -240,7 +240,7 @@ fun StoryScreen(
                         items(stories) { story ->
                             val titleColor = Color(userPreferences.cardTitleColor.toInt())
                             val previewColor = Color(userPreferences.cardPreviewColor.toInt())
-                            val titleSize = SettingsManager.getInstance(context).titleSize  // Auch hier hinzugefügt
+                            val titleSize = SettingsManager.getInstance(localContext).titleSize  // Auch hier hinzugefügt
                             
                             ModernStoryCard(
                                 story = story,

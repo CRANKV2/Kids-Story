@@ -176,7 +176,7 @@ fun SettingsScreen(
                         )
                     }
 
-                    HorizontalDivider(color = Color(0xFF9575CD))
+                    HorizontalDivider()
 
                     // Vorschau-Schriftgröße
                     Column {
@@ -299,7 +299,7 @@ fun SettingsScreen(
                         )
                     }
 
-                    HorizontalDivider(color = Color(0xFF9575CD))
+                    HorizontalDivider()
 
                     // Zeilenumbruch
                     Column {
@@ -415,7 +415,7 @@ fun SettingsScreen(
                     )
                     
                     Spacer(modifier = Modifier.height(16.dp))
-                    Divider(color = Color(0xFF9575CD))
+                    HorizontalDivider()
                     Spacer(modifier = Modifier.height(16.dp))
                     
                     // Leseansicht Farben

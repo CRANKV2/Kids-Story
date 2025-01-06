@@ -20,14 +20,14 @@ import com.gigo.kidsstorys.data.SettingsManager
 @Composable
 fun SettingsDialog(
     onDismiss: () -> Unit,
-    wrapText: Boolean,
-    onWrapTextChanged: (Boolean) -> Unit,
-    isDarkTheme: Boolean
+    isDarkTheme: Boolean,
+    initialWrapText: Boolean,
+    onWrapTextChanged: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
     val settingsManager = remember { SettingsManager.getInstance(context) }
 
-    var wrapText by remember { mutableStateOf(settingsManager.wrapText) }
+    var currentWrapText by remember { mutableStateOf(initialWrapText) }
 
     Dialog(onDismissRequest = onDismiss) {
         Card(
@@ -68,9 +68,9 @@ fun SettingsDialog(
                         )
                     }
                     Switch(
-                        checked = wrapText,
+                        checked = currentWrapText,
                         onCheckedChange = { newValue ->
-                            wrapText = newValue
+                            currentWrapText = newValue
                             settingsManager.wrapText = newValue
                         }
                     )
