@@ -91,29 +91,3 @@ fun MainContent() {
         }
     }
 }
-
-@Composable
-fun MainScreen() {
-    val context = LocalContext.current
-    val activity = (context as? Activity)
-    
-    RequestStoragePermission(
-        context = context,
-        onPermissionGranted = {
-            // App startet normal weiter
-        },
-        onPermissionDenied = {
-            // Optional: Toast anzeigen
-            Toast.makeText(
-                context,
-                "Ohne Berechtigungen kann die App nicht funktionieren",
-                Toast.LENGTH_LONG
-            ).show()
-        },
-        onExit = {
-            activity?.finish()
-        }
-    )
-    
-    // Rest der App-Navigation/UI
-}
