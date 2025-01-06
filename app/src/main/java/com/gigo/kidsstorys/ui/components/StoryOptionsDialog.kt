@@ -15,7 +15,7 @@ import com.gigo.kidsstorys.ui.theme.*
 
 @Composable
 fun StoryOptionsDialog(
-    story: Story,
+    story: com.gigo.kidsstorys.data.models.Story,
     onDismiss: () -> Unit,
     onEdit: () -> Unit,
     onDelete: () -> Unit,

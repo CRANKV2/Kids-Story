@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.gigo.kidsstorys.data.Story
+import com.gigo.kidsstorys.data.models.Story
 import com.gigo.kidsstorys.ui.theme.*
 import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
 import com.gigo.kidsstorys.ui.components.*
@@ -99,28 +99,25 @@ fun StoryScreen(
                         IconButton(
                             onClick = { 
                                 isCompactView = !isCompactView
-                                settingsManager.isCompactView = isCompactView  // Speichere die neue Einstellung
+                                settingsManager.isCompactView = isCompactView
                             },
                             modifier = Modifier
                                 .size(48.dp)
                                 .shadow(8.dp, CircleShape, spotColor = AccentPurple)
-                                .background(Color(0xFF353545), CircleShape)
+                                .background(AccentPurple, CircleShape)
                         ) {
-                            Text(
-                                if (isCompactView) "⋮⋮" else "⋮", 
-                                fontSize = 24.sp,
-                                color = TextLight
-                            )
+                            Text(if (isCompactView) "📑" else "📋", fontSize = 24.sp, color = Color.White)
                         }
-
+                        
+                        // Neuer Bot-Button
                         IconButton(
                             onClick = { navController.navigate("chat") },
                             modifier = Modifier
                                 .size(48.dp)
                                 .shadow(8.dp, CircleShape, spotColor = AccentPurple)
-                                .background(Color(0xFF353545), CircleShape)
+                                .background(AccentPurple, CircleShape)
                         ) {
-                            Text("🤖", fontSize = 24.sp)
+                            Text("🤖", fontSize = 24.sp, color = Color.White)
                         }
                         
                         IconButton(

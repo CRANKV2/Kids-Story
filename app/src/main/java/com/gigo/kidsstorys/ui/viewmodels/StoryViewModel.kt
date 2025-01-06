@@ -1,17 +1,19 @@
 package com.gigo.kidsstorys.ui.viewmodels
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.gigo.kidsstorys.MyApplication
-import com.gigo.kidsstorys.data.Story
-import com.gigo.kidsstorys.data.StoryDao
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.gigo.kidsstorys.KidsStorysApp
+import com.gigo.kidsstorys.data.models.Story
+import com.gigo.kidsstorys.data.dao.StoryDao
 import com.gigo.kidsstorys.data.UserPreferences
 import com.gigo.kidsstorys.data.UserPreferencesRepository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
-import androidx.compose.ui.graphics.Color
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -107,14 +109,13 @@ class StoryViewModel(
     }
 
     companion object {
-        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                val application = MyApplication.instance
-                return StoryViewModel(
-                    application.database.storyDao(),
-                    application.userPreferencesRepository
-                ) as T
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = KidsStorysApp.getInstance()
+                StoryViewModel(
+                    storyDao = application.database.storyDao(),
+                    userPreferencesRepository = application.userPreferencesRepository
+                )
             }
         }
     }

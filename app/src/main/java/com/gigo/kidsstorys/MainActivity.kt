@@ -12,15 +12,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.gigo.kidsstorys.navigation.AppNavigation
 import com.gigo.kidsstorys.ui.screens.*
 import com.gigo.kidsstorys.ui.theme.KidsStorysTheme
+import com.gigo.kidsstorys.data.SettingsManager
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setBackgroundDrawableResource(android.R.color.black)
+        
         setContent {
-            MainContent()
+            var isDarkTheme by remember { mutableStateOf(true) }
+            
+            KidsStorysTheme {
+                val navController = rememberNavController()
+                AppNavigation(
+                    navController = navController,
+                    isDarkTheme = isDarkTheme
+                )
+            }
         }
     }
 }

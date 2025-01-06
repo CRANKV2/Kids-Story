@@ -3,6 +3,7 @@ package com.gigo.kidsstorys.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.rememberScrollState
@@ -44,7 +45,7 @@ fun SettingsScreen(
     val scrollState = rememberScrollState()
     
     // Initialisiere die State-Variablen mit den gespeicherten Werten
-    var fontSize by remember(userPreferences.fontSize) { mutableStateOf(userPreferences.fontSize) }
+    var fontSize by remember { mutableStateOf(settingsManager.fontSize.toFloat()) }
     var wrapText by remember { mutableStateOf(settingsManager.wrapText) }
     var titleSize by remember { mutableStateOf(settingsManager.titleSize.toFloat()) }
     var previewSize by remember { mutableStateOf(settingsManager.previewSize.toFloat()) }
@@ -151,16 +152,27 @@ fun SettingsScreen(
                                 titleSize = it
                                 settingsManager.updateTitleSize(it.toInt())
                             },
-                            valueRange = 16f..24f,
-                            steps = 7
+                            valueRange = 12f..32f,
+                            steps = 19,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentSize()
+                                .heightIn(min = 16.dp),
+                            colors = SliderDefaults.colors(
+                                thumbColor = AccentPurple,
+                                activeTrackColor = AccentPurple,
+                                inactiveTrackColor = AccentPurple.copy(alpha = 0.3f)
+                            )
                         )
                         Text(
-                            stringResource(R.string.beispiel_titel),
-                            style = MaterialTheme.typography.titleLarge.copy(
-                                fontSize = titleSize.sp,
-                                fontWeight = FontWeight.Bold
+                            stringResource(R.string.beispiel_text),
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                fontSize = titleSize.sp
                             ),
-                            color = TextLight
+                            color = TextLight,
+                            modifier = Modifier
+                                .fillMaxWidth() // Occupy the full width of the Column
+                                .wrapContentSize(Alignment.Center) // Center content within itself
                         )
                     }
 
@@ -184,8 +196,17 @@ fun SettingsScreen(
                                 previewSize = it
                                 settingsManager.updatePreviewSize(it.toInt())
                             },
-                            valueRange = 12f..20f,
-                            steps = 7
+                            valueRange = 12f..32f,
+                            steps = 19,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentSize()
+                                .heightIn(min = 16.dp),
+                            colors = SliderDefaults.colors(
+                                thumbColor = AccentPurple,
+                                activeTrackColor = AccentPurple,
+                                inactiveTrackColor = AccentPurple.copy(alpha = 0.3f)
+                            )
                         )
                         Text(
                             stringResource(R.string.beispiel_text),
@@ -193,8 +214,9 @@ fun SettingsScreen(
                                 fontSize = previewSize.sp
                             ),
                             color = TextLight,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis
+                            modifier = Modifier
+                                .fillMaxWidth() // Occupy the full width of the Column
+                                .wrapContentSize(Alignment.Center) // Center content within itself
                         )
                     }
                 }
@@ -248,20 +270,32 @@ fun SettingsScreen(
                         )
                         Slider(
                             value = fontSize,
-                            onValueChange = {
+                            onValueChange = { 
                                 fontSize = it
                                 settingsManager.updateFontSize(it.toInt())
                                 viewModel.updateFontSize(it)
                             },
-                            valueRange = 12f..24f,
-                            steps = 11
+                            valueRange = 12f..32f,
+                            steps = 19,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentSize()
+                                .heightIn(min = 16.dp),
+                            colors = SliderDefaults.colors(
+                                thumbColor = AccentPurple,
+                                activeTrackColor = AccentPurple,
+                                inactiveTrackColor = AccentPurple.copy(alpha = 0.3f)
+                            )
                         )
                         Text(
                             stringResource(R.string.beispiel_text),
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontSize = fontSize.sp
                             ),
-                            color = TextLight
+                            color = TextLight,
+                            modifier = Modifier
+                                .fillMaxWidth() // Occupy the full width of the Column
+                                .wrapContentSize(Alignment.Center) // Center content within itself
                         )
                     }
 

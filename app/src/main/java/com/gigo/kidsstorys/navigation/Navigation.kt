@@ -13,9 +13,9 @@ fun AppNavigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = "story"
+        startDestination = "stories"
     ) {
-        composable("story") {
+        composable("stories") {
             StoryScreen(
                 navController = navController,
                 isDarkTheme = isDarkTheme
