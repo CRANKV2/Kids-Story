@@ -471,6 +471,10 @@ fun SettingsScreen(
                     )
                 }
             }
+
+            Spacer(modifier = Modifier.height(32.dp))
+            SettingsFooter()
+            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }
@@ -522,5 +526,70 @@ fun ColorPicker(
                 onClick = { onColorSelected(color) }
             )
         }
+    }
+}
+
+@Composable
+fun SettingsFooter() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Divider(
+            color = AccentPurple.copy(alpha = 0.5f),
+            thickness = 2.dp,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+        
+        Text(
+            "© 2025-2026",
+            color = AccentPurple,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Bold
+        )
+        
+        Spacer(modifier = Modifier.height(8.dp))
+        
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                "Made with ",
+                color = AccentPurple,
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Text(
+                "❤️",
+                fontSize = 18.sp,
+                modifier = Modifier.padding(horizontal = 4.dp)
+            )
+            Text(
+                "Francesco De Martino",
+                color = AccentPurple,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        
+        Spacer(modifier = Modifier.height(8.dp))
+        
+        Text(
+            "CRANKV2",
+            color = AccentPurple,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold
+        )
+        
+        Text(
+            "@https://github.com/CRANKV2",
+            color = AccentPurple.copy(alpha = 0.8f),
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.clickable {
+                // Optional: URL öffnen
+            }
+        )
     }
 } 

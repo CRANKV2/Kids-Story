@@ -29,13 +29,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gigo.kidsstorys.ui.theme.AccentPurple
 import com.gigo.kidsstorys.data.models.ChatMessage
 import com.gigo.kidsstorys.ui.viewmodels.ChatViewModel
+import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.window.Dialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatScreen(
     viewModel: ChatViewModel = viewModel(),
+    storyViewModel: StoryViewModel = viewModel(factory = StoryViewModel.Factory),
     navController: NavController
 ) {
     val messages by viewModel.messages.collectAsState()
@@ -46,7 +51,7 @@ fun ChatScreen(
     val coroutineScope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
-
+    val context = LocalContext.current
     // Effekt zum automatischen Scrollen
     LaunchedEffect(messages) {
         if (messages.isNotEmpty()) {
@@ -169,7 +174,20 @@ fun ChatScreen(
                         .windowInsetsPadding(WindowInsets.ime) // Keyboard-Anpassung
                 ) {
                     items(messages) { message ->
-                        ChatMessageItem(message)
+                        ChatMessageItem(
+                            message = message,
+                            onSaveStory = { title, content ->
+                                storyViewModel.addStory(
+                                    title = title,
+                                    content = content
+                                )
+                                Toast.makeText(
+                                    context,
+                                    "Geschichte wurde gespeichert!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        )
                     }
                     
                     if (isLoading) {
@@ -278,14 +296,15 @@ fun ChatInputBox(
 }
 
 @Composable
-fun ChatMessageItem(message: ChatMessage) {
+fun ChatMessageItem(
+    message: ChatMessage,
+    onSaveStory: (String, String) -> Unit
+) {
     val isUserMessage = message.isUser
-    val backgroundColor = if (isUserMessage) {
-        Color(0xFF353545)
-    } else {
-        Color(0xFF42424E)
-    }
-
+    var showPopup by remember { mutableStateOf(false) }
+    var showTitleDialog by remember { mutableStateOf(false) }
+    var title by remember { mutableStateOf("") }
+    
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -296,19 +315,127 @@ fun ChatMessageItem(message: ChatMessage) {
                 bottom = 4.dp
             )
     ) {
+        // Message-Box
         Surface(
-            shape = RoundedCornerShape(12.dp),
-            color = backgroundColor,
+            shape = RoundedCornerShape(16.dp),
+            color = if (isUserMessage) Color(0xFF353545) else Color(0xFF42424E),
             modifier = Modifier
                 .align(if (isUserMessage) Alignment.CenterEnd else Alignment.CenterStart)
+                .clickable(enabled = !isUserMessage) { showPopup = true }
         ) {
-            SelectionContainer {  // Macht den Text selektierbar
-                Text(
-                    text = message.content,
-                    modifier = Modifier.padding(12.dp),
-                    color = Color.White,
-                    style = MaterialTheme.typography.bodyLarge
-                )
+            Text(
+                text = message.content,
+                modifier = Modifier.padding(12.dp),
+                color = Color.White
+            )
+        }
+
+        // Erstes Popup (Speichern?)
+        if (showPopup && !isUserMessage) {
+            Dialog(onDismissRequest = { showPopup = false }) {
+                Surface(
+                    modifier = Modifier
+                        .width(280.dp)
+                        .shadow(8.dp, RoundedCornerShape(16.dp)),
+                    shape = RoundedCornerShape(16.dp),
+                    color = Color(0xFF2D2D3A)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            "Geschichte speichern?",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color.White
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            TextButton(onClick = { showPopup = false }) {
+                                Text("Nein", color = Color.White)
+                            }
+                            Button(
+                                onClick = {
+                                    showPopup = false
+                                    showTitleDialog = true  // Öffne Titel-Dialog
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = AccentPurple
+                                )
+                            ) {
+                                Text("Ja")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Zweites Popup (Titel eingeben)
+        if (showTitleDialog) {
+            Dialog(onDismissRequest = { showTitleDialog = false }) {
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    color = Color(0xFF2D2D3A)
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(
+                            "Titel für die Geschichte",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color.White
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        OutlinedTextField(
+                            value = title,
+                            onValueChange = { title = it },
+                            label = { Text("Titel eingeben", color = Color.White.copy(alpha = 0.7f)) },
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = AccentPurple,
+                                unfocusedBorderColor = Color.White.copy(alpha = 0.5f),
+                                focusedTextColor = Color.White,
+                                unfocusedTextColor = Color.White,
+                                focusedLabelColor = AccentPurple,
+                                unfocusedLabelColor = Color.White.copy(alpha = 0.7f),
+                                cursorColor = AccentPurple
+                            ),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            TextButton(onClick = { 
+                                showTitleDialog = false
+                                title = ""
+                            }) {
+                                Text("Abbrechen", color = Color.White)
+                            }
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Button(
+                                onClick = {
+                                    if (title.isNotBlank()) {
+                                        onSaveStory(title, message.content)  // Hier übergeben wir beide Parameter
+                                        showTitleDialog = false
+                                        title = ""
+                                    }
+                                },
+                                enabled = title.isNotBlank(),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = AccentPurple
+                                )
+                            ) {
+                                Text("Speichern")
+                            }
+                        }
+                    }
+                }
             }
         }
     }
