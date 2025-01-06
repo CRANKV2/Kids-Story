@@ -4,6 +4,7 @@ import LoadingDots
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -25,6 +26,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gigo.kidsstorys.ui.theme.AccentPurple
 import com.gigo.kidsstorys.data.models.ChatMessage
 import com.gigo.kidsstorys.ui.viewmodels.ChatViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,12 +39,14 @@ fun ChatScreen(
     val error by viewModel.error.collectAsState()
     var messageText by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
-    val scope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
 
-    // Automatisches Scrollen zur neuesten Nachricht
-    LaunchedEffect(messages.size) {
+    // Effekt zum automatischen Scrollen
+    LaunchedEffect(messages) {
         if (messages.isNotEmpty()) {
-            listState.animateScrollToItem(messages.size - 1)
+            coroutineScope.launch {
+                listState.animateScrollToItem(index = messages.lastIndex)
+            }
         }
     }
 
@@ -150,28 +154,15 @@ fun ChatScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(horizontal = 16.dp)
-                        .padding(bottom = if (messages.isNotEmpty()) 100.dp else 80.dp)
+                        .padding(bottom = 80.dp)
                 ) {
                     items(messages) { message ->
                         ChatMessageItem(message)
                     }
-
-                    // Loading-Dots als separate "Nachricht"
+                    
                     if (isLoading) {
                         item {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(end = 64.dp),  // Gleicher Abstand wie Bot-Nachrichten
-                                contentAlignment = Alignment.CenterStart
-                            ) {
-                                Surface(
-                                    shape = RoundedCornerShape(12.dp),
-                                    color = Color(0xFF42424E)
-                                ) {
-                                    LoadingDots()
-                                }
-                            }
+                            LoadingDots()
                         }
                     }
                 }
