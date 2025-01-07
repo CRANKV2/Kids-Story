@@ -15,7 +15,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -31,6 +33,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gigo.kidsstorys.R
 import com.gigo.kidsstorys.ui.components.ColorPicker
 import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
+import androidx.compose.ui.geometry.Offset
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -176,7 +179,20 @@ fun SettingsScreen(
                         )
                     }
 
-                    HorizontalDivider()
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(2.dp)
+                            .background(
+                                brush = androidx.compose.ui.graphics.Brush.horizontalGradient(
+                                    colors = listOf(
+                                        AccentPurple.copy(alpha = 0.0f),
+                                        AccentPurple.copy(alpha = 0.7f),
+                                        AccentPurple.copy(alpha = 0.0f)
+                                    )
+                                )
+                            )
+                    )
 
                     // Vorschau-Schriftgröße
                     Column {
@@ -225,7 +241,7 @@ fun SettingsScreen(
             
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Leseansicht Sektion
+            // Leseansicht Titel
             Text(
                 stringResource(R.string.leseansicht),
                 style = MaterialTheme.typography.headlineMedium,
@@ -238,7 +254,7 @@ fun SettingsScreen(
                     .wrapContentWidth(Alignment.CenterHorizontally)
             )
 
-            // Leseansicht Einstellungen
+            // Leseansicht Card
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
@@ -251,77 +267,38 @@ fun SettingsScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     Text(
-                        stringResource(R.string.leseansicht_h2),
+                        stringResource(R.string.leseansicht),
                         style = MaterialTheme.typography.titleLarge,
                         color = Color(0xFF9575CD)
                     )
                     
-                    // Schriftgröße für Leseansicht
-                    Column {
-                        Text(
-                            stringResource(R.string.schriftgroese_beim_lesen),
-                            style = MaterialTheme.typography.titleMedium,
-                            color = TextLight
-                        )
-                        Text(
-                            stringResource(R.string.schriftgroese_beim_lesen_context),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = TextLight.copy(alpha = 0.7f)
-                        )
-                        Slider(
-                            value = fontSize,
-                            onValueChange = { 
-                                fontSize = it
-                                settingsManager.updateFontSize(it.toInt())
-                                viewModel.updateFontSize(it)
-                            },
-                            valueRange = 12f..32f,
-                            steps = 19,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentSize()
-                                .heightIn(min = 16.dp),
-                            colors = SliderDefaults.colors(
-                                thumbColor = AccentPurple,
-                                activeTrackColor = AccentPurple,
-                                inactiveTrackColor = AccentPurple.copy(alpha = 0.3f)
+                    // Nur noch Zeilenumbruch-Option
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text(
+                                stringResource(R.string.zeilenumbruch_empfohlen),
+                                style = MaterialTheme.typography.titleMedium,
+                                color = TextLight
                             )
-                        )
-                        Text(
-                            stringResource(R.string.beispiel_text),
-                            style = MaterialTheme.typography.bodyLarge.copy(
-                                fontSize = fontSize.sp
-                            ),
-                            color = TextLight,
-                            modifier = Modifier
-                                .fillMaxWidth() // Occupy the full width of the Column
-                                .wrapContentSize(Alignment.Center) // Center content within itself
-                        )
-                    }
-
-                    HorizontalDivider()
-
-                    // Zeilenumbruch
-                    Column {
-                        Text(
-                            stringResource(R.string.zeilenumbruch_empfohlen),
-                            style = MaterialTheme.typography.titleMedium,
-                            color = TextLight
-                        )
-                        Text(
-                            stringResource(R.string.automatischer_zeilenumbruch_beim_lesen),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = TextLight.copy(alpha = 0.7f)
-                        )
+                            Text(
+                                stringResource(R.string.automatischer_zeilenumbruch_beim_lesen),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = TextLight.copy(alpha = 0.7f)
+                            )
+                        }
                         Switch(
                             checked = wrapText,
-                            onCheckedChange = {
+                            onCheckedChange = { 
                                 wrapText = it
                                 settingsManager.wrapText = it
                             },
                             colors = SwitchDefaults.colors(
-                                checkedThumbColor = Color(0xFF9575CD),
-                                checkedTrackColor = Color(0xFF353545)
+                                checkedThumbColor = AccentPurple,
+                                checkedTrackColor = AccentPurple.copy(alpha = 0.5f)
                             )
                         )
                     }
@@ -415,7 +392,20 @@ fun SettingsScreen(
                     )
                     
                     Spacer(modifier = Modifier.height(16.dp))
-                    HorizontalDivider()
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(2.dp)
+                            .background(
+                                brush = androidx.compose.ui.graphics.Brush.horizontalGradient(
+                                    colors = listOf(
+                                        AccentPurple.copy(alpha = 0.0f),
+                                        AccentPurple.copy(alpha = 0.7f),
+                                        AccentPurple.copy(alpha = 0.0f)
+                                    )
+                                )
+                            )
+                    )
                     Spacer(modifier = Modifier.height(16.dp))
                     
                     // Leseansicht Farben
@@ -531,65 +521,126 @@ fun ColorPicker(
 
 @Composable
 fun SettingsFooter() {
-    Column(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(horizontal = 16.dp)
+            .shadow(
+                elevation = 8.dp,
+                spotColor = AccentPurple,
+                shape = RoundedCornerShape(24.dp)
+            ),
+        colors = CardDefaults.cardColors(
+            containerColor = Color(0xFF2D2D3A)
+        ),
+        shape = RoundedCornerShape(24.dp)
     ) {
-        Divider(
-            color = AccentPurple.copy(alpha = 0.5f),
-            thickness = 2.dp,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-        
-        Text(
-            "© 2025-2026",
-            color = AccentPurple,
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Bold
-        )
-        
-        Spacer(modifier = Modifier.height(8.dp))
-        
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text(
-                "Made with ",
-                color = AccentPurple,
-                style = MaterialTheme.typography.bodyMedium
+            // Oberer Gradient-Divider
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(2.dp)
+                    .background(
+                        brush = androidx.compose.ui.graphics.Brush.horizontalGradient(
+                            colors = listOf(
+                                AccentPurple.copy(alpha = 0.0f),
+                                AccentPurple.copy(alpha = 0.7f),
+                                AccentPurple.copy(alpha = 0.0f)
+                            )
+                        )
+                    )
             )
+            
             Text(
-                "❤️",
-                fontSize = 18.sp,
-                modifier = Modifier.padding(horizontal = 4.dp)
+                "© 2025-2026",
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 0.5.sp,
+                    shadow = Shadow(
+                        color = AccentPurple.copy(alpha = 0.5f),
+                        offset = Offset(0f, 2f),
+                        blurRadius = 4f
+                    )
+                ),
+                color = AccentPurple
             )
-            Text(
-                "Francesco De Martino",
-                color = AccentPurple,
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Bold
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            // Zentrierte Spalte für "Made with ❤️" und Namen
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    "Made with",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        shadow = Shadow(
+                            color = AccentPurple.copy(alpha = 0.5f),
+                            offset = Offset(0f, 2f),
+                            blurRadius = 3f
+                        )
+                    ),
+                    color = TextLight.copy(alpha = 0.9f)
+                )
+                
+                Text(
+                    "❤️",
+                    fontSize = 28.sp,
+                    modifier = Modifier.shadow(
+                        elevation = 8.dp,
+                        spotColor = AccentPurple
+                    )
+                )
+                
+                Text(
+                    "Francesco De Martino",
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 0.5.sp,
+                        shadow = Shadow(
+                            color = AccentPurple.copy(alpha = 0.6f),
+                            offset = Offset(0f, 2f),
+                            blurRadius = 5f
+                        )
+                    ),
+                    modifier = Modifier
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    AccentPurple,
+                                    AccentPurple.copy(alpha = 0.7f)
+                                )
+                            ),
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    color = Color.White
+                )
+            }
+            
+            // Unterer Gradient-Divider
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(2.dp)
+                    .background(
+                        brush = androidx.compose.ui.graphics.Brush.horizontalGradient(
+                            colors = listOf(
+                                AccentPurple.copy(alpha = 0.0f),
+                                AccentPurple.copy(alpha = 0.7f),
+                                AccentPurple.copy(alpha = 0.0f)
+                            )
+                        )
+                    )
             )
         }
-        
-        Spacer(modifier = Modifier.height(8.dp))
-        
-        Text(
-            "CRANKV2",
-            color = AccentPurple,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold
-        )
-        
-        Text(
-            "@https://github.com/CRANKV2",
-            color = AccentPurple.copy(alpha = 0.8f),
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.clickable {
-                // Optional: URL öffnen
-            }
-        )
     }
 } 

@@ -26,6 +26,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import com.gigo.kidsstorys.R
+import androidx.compose.foundation.gestures.rememberTransformableState
+import androidx.compose.foundation.gestures.transformable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,7 +45,7 @@ fun ReadStoryScreen(
     
     val context = LocalContext.current
     val settingsManager = remember { SettingsManager.getInstance(context) }
-    var fontSize by remember { mutableStateOf(userPreferences.fontSize.toFloat()) }
+    val fontSize = remember { mutableStateOf(settingsManager.fontSize.toFloat()) }
     val wrapText = settingsManager.wrapText
     val verticalScrollState = rememberScrollState()
     val horizontalScrollState = rememberScrollState()
@@ -56,12 +58,18 @@ fun ReadStoryScreen(
         Color(userPreferences.storyTextColor.toInt())
     }
 
+    // Neuer Scale-State für Zoom
+    var scale by remember { mutableStateOf(1f) }
+    val scaleState = rememberTransformableState { zoomChange, _, _ ->
+        scale = (scale * zoomChange).coerceIn(0.5f..3f)
+    }
+
     LaunchedEffect(storyId) {
         viewModel.loadStory(storyId)
     }
 
     LaunchedEffect(userPreferences.fontSize) {
-        fontSize = userPreferences.fontSize.toFloat()
+        fontSize.value = userPreferences.fontSize.toFloat()
     }
 
     Box(
@@ -165,7 +173,7 @@ fun ReadStoryScreen(
                                 Text(
                                     text = story?.content ?: "",
                                     style = MaterialTheme.typography.bodyLarge.copy(
-                                        fontSize = fontSize.sp
+                                        fontSize = fontSize.value.sp
                                     ),
                                     color = textColor
                                 )
@@ -179,7 +187,7 @@ fun ReadStoryScreen(
                                 Text(
                                     text = story?.content ?: "",
                                     style = MaterialTheme.typography.bodyLarge.copy(
-                                        fontSize = fontSize.sp
+                                        fontSize = fontSize.value.sp
                                     ),
                                     color = textColor
                                 )
