@@ -183,7 +183,7 @@ fun ChatScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(horizontal = 16.dp)
-                        .padding(bottom = 80.dp)
+                        .padding(bottom = 115.dp)
                         .windowInsetsPadding(WindowInsets.ime) // Keyboard-Anpassung
                 ) {
                     items(messages) { message ->
@@ -202,7 +202,7 @@ fun ChatScreen(
                             }
                         )
                     }
-                    
+
                     if (isLoading) {
                         item {
                             LoadingDots()
@@ -235,23 +235,74 @@ fun ChatScreen(
                 }
             }
 
-            // Chat Input Box
-            ChatInputBox(
-                messageText = messageText,
-                onMessageChange = { messageText = it },
-                onSendClick = {
-                    if (messageText.isNotBlank()) {
-                        viewModel.sendMessage(messageText)
-                        messageText = ""
-                        keyboardController?.hide() // Keyboard verstecken nach Senden
-                        focusManager.clearFocus() // Focus entfernen
-                    }
-                },
+            // Chat Input Bar - jetzt am unteren Rand fixiert
+            Surface(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .background(Color(0xFF2D2D3A))
-                    .navigationBarsPadding() // Navigation Bar Padding
-            )
+                    .fillMaxWidth()
+                    .padding(20.dp)
+                    .shadow(
+                        elevation = 16.dp,
+                        spotColor = AccentPurple,
+                        ambientColor = AccentPurple,
+                        shape = RoundedCornerShape(24.dp)
+                    ),
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = RoundedCornerShape(24.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    TextField(
+                        value = messageText,
+                        onValueChange = { messageText = it },
+                        modifier = Modifier
+                            .weight(1f)
+                            .heightIn(min = 40.dp),
+                        placeholder = {
+                            Text(
+                                "Schreibe eine Nachricht...",
+                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                            )
+                        },
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent
+                        ),
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    )
+                    
+                    FilledIconButton(
+                        onClick = {
+                            if (messageText.isNotBlank()) {
+                                viewModel.sendMessage(messageText)
+                                messageText = ""
+                                keyboardController?.hide()
+                                focusManager.clearFocus()
+                            }
+                        },
+                        modifier = Modifier.size(40.dp),
+                        colors = IconButtonDefaults.filledIconButtonColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                        )
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_send),
+                            contentDescription = "Nachricht senden",
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
+                }
+            }
         }
     }
 }
