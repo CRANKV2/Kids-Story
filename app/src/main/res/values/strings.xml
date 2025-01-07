@@ -56,4 +56,6 @@
     <string name="titel_schriftgroesse">Titel-Schriftgröße</string>
     <string name="hauptbildschirm_h1">Hauptbildschirm</string>
     <string name="color_picker_checked">✔️</string>
+    <string name="inhalt_bearbeiten">Bearbeiten</string>
+    <string name="was_moechtest_du_bearbeiten">Was möchtest du bearbeiten ?</string>
 </resources>
