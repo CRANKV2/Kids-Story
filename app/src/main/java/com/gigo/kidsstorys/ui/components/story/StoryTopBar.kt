@@ -7,9 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.gigo.kidsstorys.R
 
 @Composable
 fun StoryTopBar(
@@ -57,37 +57,51 @@ fun StoryTopBar(
                 // View Toggle Button
                 FilledIconButton(
                     onClick = onViewToggle,
-                    modifier = Modifier.size(40.dp),
+                    modifier = Modifier.size(45.dp),
                     colors = IconButtonDefaults.filledIconButtonColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 ) {
-                    Text(if (isCompactView) "📑" else "📋", fontSize = 18.sp)
+                    Icon(
+                        painter = painterResource(
+                            id = if (isCompactView) R.drawable.ic_grid_view
+                            else R.drawable.ic_list_view
+                        ),
+                        contentDescription = if (isCompactView) "Zur Listenansicht wechseln" 
+                        else "Zur Rasteransicht wechseln",
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
                 }
                 
                 // Chat Button
                 FilledIconButton(
                     onClick = onChatClick,
-                    modifier = Modifier.size(40.dp),
+                    modifier = Modifier.size(45.dp),
                     colors = IconButtonDefaults.filledIconButtonColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
                         contentColor = MaterialTheme.colorScheme.onSecondaryContainer
                     )
                 ) {
-                    Text("🤖", fontSize = 18.sp)
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_ai_chat),
+                        contentDescription = "KI Chat öffnen",
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
                 }
                 
                 // Settings Button
                 FilledIconButton(
                     onClick = onSettingsClick,
-                    modifier = Modifier.size(40.dp),
+                    modifier = Modifier.size(45.dp),
                     colors = IconButtonDefaults.filledIconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
                     )
                 ) {
-                    Text("⚙️", fontSize = 18.sp)
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_settings),
+                        contentDescription = "Einstellungen",
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
                 }
             }
         }

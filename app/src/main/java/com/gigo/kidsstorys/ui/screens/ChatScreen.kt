@@ -33,8 +33,11 @@ import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
 import android.widget.Toast
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.res.painterResource
+import com.gigo.kidsstorys.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -102,7 +105,12 @@ fun ChatScreen(
                             .shadow(8.dp, CircleShape, spotColor = AccentPurple)
                             .background(AccentPurple, CircleShape)
                     ) {
-                        Text("◀️", fontSize = 24.sp)
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_arrow_back),
+                            contentDescription = "Zurück",
+                            tint = Color.White,
+                            modifier = Modifier.size(32.dp)
+                        )
                     }
                     Text(
                         "Story AI Chat",
@@ -116,7 +124,12 @@ fun ChatScreen(
                             .shadow(8.dp, CircleShape, spotColor = AccentPurple)
                             .background(AccentPurple, CircleShape)
                     ) {
-                        Text("🗑️", fontSize = 24.sp)
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_delete),
+                            contentDescription = "Chat löschen",
+                            tint = Color.White,
+                            modifier = Modifier.size(32.dp)
+                        )
                     }
                 }
             }
@@ -286,7 +299,7 @@ fun ChatInputBox(
                 enabled = messageText.isNotBlank()
             ) {
                 Icon(
-                    Icons.Filled.Send,
+                    Icons.AutoMirrored.Filled.Send,
                     contentDescription = "Senden",
                     tint = if (messageText.isNotBlank()) AccentPurple else Color.Gray
                 )
