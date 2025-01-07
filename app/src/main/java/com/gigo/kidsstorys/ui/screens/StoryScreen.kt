@@ -84,7 +84,8 @@ fun StoryScreen(
             ) {
                 Text("+", fontSize = 24.sp)
             }
-        }
+        },
+        floatingActionButtonPosition = FabPosition.Center,
     ) { padding ->
         Surface(
             modifier = Modifier
