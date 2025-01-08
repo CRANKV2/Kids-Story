@@ -1,6 +1,7 @@
 package com.gigo.kidsstorys.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -28,6 +29,13 @@ import androidx.compose.ui.res.stringResource
 import com.gigo.kidsstorys.R
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -198,146 +206,338 @@ fun ReadStoryScreen(
 
                 // Existierende Dialoge bleiben unverändert
                 if (showEditDialog) {
-                    AlertDialog(
-                        onDismissRequest = { showEditDialog = false },
-                        title = { 
-                            Text(
-                                "Was möchtest du bearbeiten?",
-                                color = TextLight
-                            )
-                        },
-                        containerColor = if (isDarkTheme) CardDark else CardLight,
-                        confirmButton = {},
-                        dismissButton = {
-                            TextButton(onClick = { showEditDialog = false }) {
-                                Text(stringResource(R.string.abbrechen), color = TextLight)
-                            }
-                        },
-                        text = {
+                    Dialog(onDismissRequest = { showEditDialog = false }) {
+                        Surface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .shadow(
+                                    elevation = 16.dp,
+                                    spotColor = AccentPurple,
+                                    ambientColor = AccentPurple,
+                                    shape = RoundedCornerShape(24.dp)
+                                ),
+                            shape = RoundedCornerShape(24.dp),
+                            color = MaterialTheme.colorScheme.surfaceVariant
+                        ) {
                             Column(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(24.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Button(
+                                Text(
+                                    "Was möchtest du bearbeiten?",
+                                    style = MaterialTheme.typography.titleLarge.copy(
+                                        fontWeight = FontWeight.Bold,
+                                        letterSpacing = 0.5.sp,
+                                        shadow = Shadow(
+                                            color = AccentPurple.copy(alpha = 0.5f),
+                                            offset = Offset(0f, 2f),
+                                            blurRadius = 4f
+                                        )
+                                    ),
+                                    color = Color.White,
+                                    modifier = Modifier.padding(bottom = 16.dp)
+                                )
+
+                                FilledTonalButton(
                                     onClick = { 
                                         showEditDialog = false
                                         showContentEditDialog = true
                                     },
-                                    modifier = Modifier.fillMaxWidth(),
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = AccentPurple
-                                    )
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 8.dp)
+                                        .shadow(
+                                            elevation = 8.dp,
+                                            spotColor = AccentPurple,
+                                            shape = RoundedCornerShape(16.dp)
+                                        ),
+                                    colors = ButtonDefaults.filledTonalButtonColors(
+                                        containerColor = MaterialTheme.colorScheme.primaryContainer
+                                    ),
+                                    shape = RoundedCornerShape(16.dp)
                                 ) {
-                                    Text(stringResource(R.string.geschichte_bearbeiten))
+                                    Text(
+                                        stringResource(R.string.geschichte_bearbeiten),
+                                        fontSize = 18.sp,
+                                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                                    )
                                 }
-                                Button(
+
+                                FilledTonalButton(
                                     onClick = { 
                                         showEditDialog = false
                                         showTitleEditDialog = true
                                     },
-                                    modifier = Modifier.fillMaxWidth(),
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = AccentPurple
-                                    )
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 8.dp)
+                                        .shadow(
+                                            elevation = 8.dp,
+                                            spotColor = AccentPurple,
+                                            shape = RoundedCornerShape(16.dp)
+                                        ),
+                                    colors = ButtonDefaults.filledTonalButtonColors(
+                                        containerColor = MaterialTheme.colorScheme.primaryContainer
+                                    ),
+                                    shape = RoundedCornerShape(16.dp)
                                 ) {
-                                    Text(stringResource(R.string.titel_bearbeiten))
+                                    Text(
+                                        stringResource(R.string.titel_bearbeiten),
+                                        fontSize = 18.sp,
+                                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                                    )
                                 }
                             }
                         }
-                    )
+                    }
                 }
 
                 // Dialog für die Bearbeitung des Inhalts
                 if (showContentEditDialog) {
-                    AlertDialog(
-                        onDismissRequest = { showContentEditDialog = false },
-                        title = { Text(stringResource(R.string.geschichte_bearbeiten), color = TextLight) },
-                        containerColor = if (isDarkTheme) CardDark else CardLight,
-                        text = {
-                            OutlinedTextField(
-                                value = currentContent,
-                                onValueChange = { currentContent = it },
-                                label = { Text(stringResource(R.string.geschichte), color = TextLight) },
-                                colors = OutlinedTextFieldDefaults.colors(
-                                    focusedBorderColor = TextLight,
-                                    unfocusedBorderColor = TextLight.copy(alpha = 0.5f),
-                                    focusedLabelColor = TextLight,
-                                    unfocusedLabelColor = TextLight.copy(alpha = 0.5f)
+                    Dialog(onDismissRequest = { showContentEditDialog = false }) {
+                        Surface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 8.dp)
+                                .wrapContentHeight()
+                                .shadow(
+                                    elevation = 16.dp,
+                                    spotColor = AccentPurple,
+                                    ambientColor = AccentPurple,
+                                    shape = RoundedCornerShape(24.dp)
                                 ),
-                                modifier = Modifier.fillMaxWidth(),
-                                minLines = 5
-                            )
-                        },
-                        confirmButton = {
-                            Button(
-                                onClick = {
-                                    viewModel.updateStory(currentStory.copy(content = currentContent))
-                                    showContentEditDialog = false
-                                }
+                            shape = RoundedCornerShape(24.dp),
+                            color = MaterialTheme.colorScheme.surfaceVariant
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(24.dp)
+                                    .imePadding(),
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text(stringResource(R.string.speichern))
-                            }
-                        },
-                        dismissButton = {
-                            TextButton(onClick = { showContentEditDialog = false }) {
-                                Text(stringResource(R.string.abbrechen), color = TextLight)
+                                Text(
+                                    stringResource(R.string.geschichte_bearbeiten),
+                                    style = MaterialTheme.typography.titleLarge.copy(
+                                        fontWeight = FontWeight.Bold,
+                                        letterSpacing = 0.5.sp,
+                                        shadow = Shadow(
+                                            color = AccentPurple.copy(alpha = 0.5f),
+                                            offset = Offset(0f, 2f),
+                                            blurRadius = 4f
+                                        )
+                                    ),
+                                    color = Color.White,
+                                    modifier = Modifier.padding(bottom = 16.dp)
+                                )
+
+                                BasicTextField(
+                                    value = currentContent,
+                                    onValueChange = { currentContent = it },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .heightIn(min = 150.dp, max = 300.dp)
+                                        .background(
+                                            color = MaterialTheme.colorScheme.surfaceVariant,
+                                            shape = RoundedCornerShape(8.dp)
+                                        )
+                                        .border(
+                                            width = 1.dp,
+                                            color = Color.White.copy(alpha = 0.5f),
+                                            shape = RoundedCornerShape(8.dp)
+                                        ),
+                                    textStyle = TextStyle(
+                                        color = Color.White,
+                                        fontSize = 16.sp
+                                    ),
+                                    decorationBox = { innerTextField ->
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(16.dp)
+                                        ) {
+                                            if (currentContent.isEmpty()) {
+                                                Text(
+                                                    stringResource(R.string.geschichte),
+                                                    color = Color.White.copy(alpha = 0.5f)
+                                                )
+                                            }
+                                            innerTextField()
+                                        }
+                                    }
+                                )
+
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 16.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    TextButton(
+                                        onClick = { showContentEditDialog = false },
+                                        modifier = Modifier.weight(1f)
+                                    ) {
+                                        Text(
+                                            stringResource(R.string.abbrechen),
+                                            color = Color.White,
+                                            fontSize = 16.sp
+                                        )
+                                    }
+
+                                    Spacer(modifier = Modifier.width(8.dp))
+
+                                    FilledTonalButton(
+                                        onClick = {
+                                            viewModel.updateStory(currentStory.copy(content = currentContent))
+                                            showContentEditDialog = false
+                                        },
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .shadow(
+                                                elevation = 8.dp,
+                                                spotColor = AccentPurple,
+                                                ambientColor = AccentPurple,
+                                                shape = RoundedCornerShape(20.dp)
+                                            ),
+                                        colors = ButtonDefaults.filledTonalButtonColors(
+                                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                                        ),
+                                        shape = RoundedCornerShape(20.dp)
+                                    ) {
+                                        Text(
+                                            stringResource(R.string.speichern),
+                                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                            fontSize = 16.sp,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
+                                }
                             }
                         }
-                    )
+                    }
                 }
 
-                // Existierender Dialog für die Titel-Bearbeitung bleibt unverändert
+                // Dialog für die Bearbeitung des Titels
                 if (showTitleEditDialog) {
-                    var newTitle by remember { mutableStateOf(currentTitle) }
-                    
                     Dialog(onDismissRequest = { showTitleEditDialog = false }) {
                         Surface(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp),
-                            shape = RoundedCornerShape(16.dp),
-                            color = if (isDarkTheme) CardDark else CardLight
+                                .padding(horizontal = 8.dp)
+                                .wrapContentHeight()
+                                .shadow(
+                                    elevation = 16.dp,
+                                    spotColor = AccentPurple,
+                                    ambientColor = AccentPurple,
+                                    shape = RoundedCornerShape(24.dp)
+                                ),
+                            shape = RoundedCornerShape(24.dp),
+                            color = MaterialTheme.colorScheme.surfaceVariant
                         ) {
                             Column(
-                                modifier = Modifier.padding(16.dp)
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(24.dp)
+                                    .imePadding(),
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text(
                                     stringResource(R.string.titel_bearbeiten),
-                                    style = MaterialTheme.typography.titleLarge,
-                                    color = TextLight
+                                    style = MaterialTheme.typography.titleLarge.copy(
+                                        fontWeight = FontWeight.Bold,
+                                        letterSpacing = 0.5.sp,
+                                        shadow = Shadow(
+                                            color = AccentPurple.copy(alpha = 0.5f),
+                                            offset = Offset(0f, 2f),
+                                            blurRadius = 4f
+                                        )
+                                    ),
+                                    color = Color.White,
+                                    modifier = Modifier.padding(bottom = 16.dp)
                                 )
-                                Spacer(modifier = Modifier.height(16.dp))
-                                OutlinedTextField(
-                                    value = newTitle,
-                                    onValueChange = { newTitle = it },
-                                    label = { Text(stringResource(R.string.titel)) },
-                                    colors = OutlinedTextFieldDefaults.colors(
-                                        focusedBorderColor = TextLight,
-                                        unfocusedBorderColor = TextLight.copy(alpha = 0.5f),
-                                        focusedLabelColor = TextLight,
-                                        unfocusedLabelColor = TextLight.copy(alpha = 0.5f)
-                                    )
+
+                                BasicTextField(
+                                    value = currentTitle,
+                                    onValueChange = { currentTitle = it },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background(
+                                            color = MaterialTheme.colorScheme.surfaceVariant,
+                                            shape = RoundedCornerShape(8.dp)
+                                        )
+                                        .border(
+                                            width = 1.dp,
+                                            color = Color.White.copy(alpha = 0.5f),
+                                            shape = RoundedCornerShape(8.dp)
+                                        ),
+                                    textStyle = TextStyle(
+                                        color = Color.White,
+                                        fontSize = 16.sp
+                                    ),
+                                    singleLine = true,
+                                    decorationBox = { innerTextField ->
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(16.dp)
+                                        ) {
+                                            if (currentTitle.isEmpty()) {
+                                                Text(
+                                                    stringResource(R.string.titel),
+                                                    color = Color.White.copy(alpha = 0.5f)
+                                                )
+                                            }
+                                            innerTextField()
+                                        }
+                                    }
                                 )
-                                Spacer(modifier = Modifier.height(16.dp))
+
                                 Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.End
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 16.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     TextButton(
-                                        onClick = { showTitleEditDialog = false }
+                                        onClick = { showTitleEditDialog = false },
+                                        modifier = Modifier.weight(1f)
                                     ) {
-                                        Text(stringResource(R.string.abbrechen), color = TextLight)
+                                        Text(
+                                            stringResource(R.string.abbrechen),
+                                            color = Color.White,
+                                            fontSize = 16.sp
+                                        )
                                     }
+
                                     Spacer(modifier = Modifier.width(8.dp))
-                                    Button(
+
+                                    FilledTonalButton(
                                         onClick = {
-                                            story?.let { currentStory ->
-                                                viewModel.updateStoryTitle(currentStory, newTitle)
-                                            }
+                                            viewModel.updateStory(currentStory.copy(title = currentTitle))
                                             showTitleEditDialog = false
-                                        }
+                                        },
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .shadow(
+                                                elevation = 8.dp,
+                                                spotColor = AccentPurple,
+                                                ambientColor = AccentPurple,
+                                                shape = RoundedCornerShape(20.dp)
+                                            ),
+                                        colors = ButtonDefaults.filledTonalButtonColors(
+                                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                                        ),
+                                        shape = RoundedCornerShape(20.dp)
                                     ) {
-                                        Text(stringResource(R.string.speichern))
+                                        Text(
+                                            stringResource(R.string.speichern),
+                                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                            fontSize = 16.sp,
+                                            fontWeight = FontWeight.Bold
+                                        )
                                     }
                                 }
                             }

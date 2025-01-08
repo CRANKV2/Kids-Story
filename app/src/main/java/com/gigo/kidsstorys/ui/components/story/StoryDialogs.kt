@@ -9,7 +9,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -149,30 +151,83 @@ fun StoryDeleteDialog(
     onDismiss: () -> Unit,
     isDarkTheme: Boolean
 ) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = {
-            Text(
-                stringResource(R.string.geschichte_loeschen),
-                color = TextLight
-            )
-        },
-        text = {
-            Text(
-                stringResource(R.string.frage_wirklich_loeschen),
-                color = TextLight
-            )
-        },
-        confirmButton = {
-            TextButton(onClick = onConfirm) {
-                Text(stringResource(R.string.loeschen), color = Color.Red)
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .shadow(
+                    elevation = 16.dp,
+                    spotColor = AccentPurple,
+                    ambientColor = AccentPurple,
+                    shape = RoundedCornerShape(24.dp)
+                ),
+            shape = RoundedCornerShape(24.dp),
+            color = MaterialTheme.colorScheme.surfaceVariant
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    stringResource(R.string.geschichte_loeschen),
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 0.5.sp,
+                        shadow = Shadow(
+                            color = AccentPurple.copy(alpha = 0.5f),
+                            offset = Offset(0f, 2f),
+                            blurRadius = 4f
+                        )
+                    ),
+                    color = Color.White,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+
+                Text(
+                    stringResource(R.string.frage_wirklich_loeschen),
+                    color = Color.White.copy(alpha = 0.8f),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(bottom = 24.dp)
+                )
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    TextButton(
+                        onClick = onDismiss,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(
+                            stringResource(R.string.abbrechen),
+                            color = Color.White,
+                            fontSize = 16.sp
+                        )
+                    }
+
+                    FilledTonalButton(
+                        onClick = {
+                            onConfirm()
+                            onDismiss()
+                        },
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.filledTonalButtonColors(
+                            containerColor = Color(0xFFBA1A1A).copy(alpha = 0.12f)
+                        )
+                    ) {
+                        Text(
+                            stringResource(R.string.loeschen),
+                            color = Color(0xFFBA1A1A),
+                            fontSize = 16.sp
+                        )
+                    }
+                }
             }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.abbrechen), color = TextLight)
-            }
-        },
-        containerColor = if (isDarkTheme) CardDark else CardLight
-    )
+        }
+    }
 } 

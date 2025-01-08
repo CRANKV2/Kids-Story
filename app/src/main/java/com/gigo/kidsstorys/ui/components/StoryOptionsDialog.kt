@@ -1,21 +1,29 @@
 package com.gigo.kidsstorys.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.gigo.kidsstorys.R
-import com.gigo.kidsstorys.data.Story
+import com.gigo.kidsstorys.data.models.Story
 import com.gigo.kidsstorys.ui.theme.*
 
 @Composable
 fun StoryOptionsDialog(
-    story: com.gigo.kidsstorys.data.models.Story,
+    story: Story,
     onDismiss: () -> Unit,
     onEdit: () -> Unit,
     onDelete: () -> Unit,
@@ -25,23 +33,38 @@ fun StoryOptionsDialog(
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            shape = RoundedCornerShape(16.dp),
-            color = if (isDarkTheme) CardDark else CardLight
+                .padding(16.dp)
+                .shadow(
+                    elevation = 16.dp,
+                    spotColor = AccentPurple,
+                    ambientColor = AccentPurple,
+                    shape = RoundedCornerShape(24.dp)
+                ),
+            shape = RoundedCornerShape(24.dp),
+            color = MaterialTheme.colorScheme.surfaceVariant
         ) {
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    "${story.title}",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = TextLight
+                    "Optionen",
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 0.5.sp,
+                        shadow = Shadow(
+                            color = AccentPurple.copy(alpha = 0.5f),
+                            offset = Offset(0f, 2f),
+                            blurRadius = 4f
+                        )
+                    ),
+                    color = Color.White,
+                    modifier = Modifier.padding(vertical = 16.dp)
                 )
-                
-                Spacer(modifier = Modifier.height(24.dp))
-                
-                // Bearbeiten Button
-                Button(
+
+                FilledTonalButton(
                     onClick = {
                         onEdit()
                         onDismiss()
@@ -49,16 +72,19 @@ fun StoryOptionsDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = AccentPurple
-                    )
+                    colors = ButtonDefaults.filledTonalButtonColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer
+                    ),
+                    shape = RoundedCornerShape(16.dp)
                 ) {
-                    Text(stringResource(R.string.bearbeiten), fontSize = 18.sp)
+                    Text(
+                        stringResource(R.string.bearbeiten),
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        fontSize = 16.sp
+                    )
                 }
 
-                // Löschen Button
-                Button(
+                FilledTonalButton(
                     onClick = {
                         onDelete()
                         onDismiss()
@@ -66,26 +92,28 @@ fun StoryOptionsDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = AccentPurple
-                    )
+                    colors = ButtonDefaults.filledTonalButtonColors(
+                        containerColor = Color(0xFFBA1A1A).copy(alpha = 0.12f)
+                    ),
+                    shape = RoundedCornerShape(16.dp)
                 ) {
-                    Text(stringResource(R.string.l_schen), fontSize = 18.sp)
+                    Text(
+                        stringResource(R.string.l_schen),
+                        color = Color(0xFFBA1A1A),
+                        fontSize = 16.sp
+                    )
                 }
 
-                // Schließen Button
                 TextButton(
                     onClick = onDismiss,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    shape = RoundedCornerShape(16.dp)
+                        .padding(top = 8.dp)
                 ) {
                     Text(
-                        stringResource(R.string.schliessen),
-                        fontSize = 18.sp,
-                        color = TextLight
+                        stringResource(R.string.abbrechen),
+                        color = Color.White,
+                        fontSize = 16.sp
                     )
                 }
             }
