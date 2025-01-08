@@ -18,7 +18,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gigo.kidsstorys.data.models.Story
 import com.gigo.kidsstorys.ui.theme.TextLight
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.ui.res.painterResource
+import com.gigo.kidsstorys.R
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ModernStoryCard(
     story: Story,
@@ -31,75 +36,55 @@ fun ModernStoryCard(
     isCompactView: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Surface(
+    Card(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onCardClick)
-            .shadow(
-                elevation = 16.dp,
-                shape = RoundedCornerShape(24.dp),
-                spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
-                ambientColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
+            .combinedClickable(
+                onClick = onCardClick,
+                onLongClick = onOptionsClick
             ),
-        color = Color(0xFF2D2D3A),
-        shape = RoundedCornerShape(24.dp)
+        colors = CardDefaults.cardColors(
+            containerColor = Color(0xFF353545)
+        ),
+        shape = RoundedCornerShape(16.dp)
     ) {
         Column(
-            modifier = Modifier.padding(if (isCompactView) 20.dp else 16.dp),
-            horizontalAlignment = if (!isCompactView) Alignment.CenterHorizontally else Alignment.Start
+            modifier = Modifier.padding(16.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = if (!isCompactView) Arrangement.Center else Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = story.title,
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = titleSize.sp
-                    ),
+                    style = MaterialTheme.typography.titleLarge,
                     color = titleColor,
-                    modifier = if (isCompactView) Modifier.weight(1f) else Modifier,
-                    textAlign = if (!isCompactView) TextAlign.Center else TextAlign.Start
+                    fontSize = titleSize.sp
                 )
-                
-                if (isCompactView) {
+
                     IconButton(
                         onClick = onOptionsClick,
-                        modifier = Modifier
-                            .size(40.dp)
-                            .background(Color(0xFF353545), CircleShape)
+                        modifier = Modifier.size(45.dp)
                     ) {
-                        Text("⋮", fontSize = 24.sp, color = TextLight)
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_more),
+                            contentDescription = "Optionen",
+                        )
                     }
-                }
+                
             }
             
-            if (isCompactView) {
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = story.content,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = previewColor,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis,
-                    fontSize = previewSize.sp,
-                    lineHeight = (previewSize * 1.5).sp
-                )
-            }
+            Spacer(modifier = Modifier.height(8.dp))
             
-            if (!isCompactView) {
-                Spacer(modifier = Modifier.height(8.dp))
-                IconButton(
-                    onClick = onOptionsClick,
-                    modifier = Modifier
-                        .size(40.dp)
-                        .background(Color(0xFF353545), CircleShape)
-                ) {
-                    Text("⋮", fontSize = 24.sp, color = TextLight)
-                }
-            }
+            Text(
+                text = story.content,
+                style = MaterialTheme.typography.bodyMedium,
+                color = previewColor,
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis,
+                fontSize = previewSize.sp
+            )
         }
     }
 } 
