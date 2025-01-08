@@ -72,7 +72,7 @@ fun ModernStoryCard(
                             contentDescription = "Optionen",
                         )
                     }
-                
+
             }
             
             Spacer(modifier = Modifier.height(8.dp))
