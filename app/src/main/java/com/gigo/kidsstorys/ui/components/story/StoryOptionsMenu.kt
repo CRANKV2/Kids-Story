@@ -46,84 +46,36 @@ fun StoryOptionsMenu(
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .shadow(
-                            elevation = 8.dp,
-                            spotColor = AccentPurple,
-                            ambientColor = AccentPurple,
-                            shape = RoundedCornerShape(8.dp)
-                        )
+                Button(
+                    onClick = onEdit,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = AccentPurple
+                    ),
+                    shape = RoundedCornerShape(8.dp)
                 ) {
-                    Button(
-                        onClick = onEdit,
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = AccentPurple
-                        ),
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(
-                                "Bearbeiten",
-                                color = Color.White,
-                                fontSize = 16.sp
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_edit),
-                                contentDescription = null,
-                                tint = Color.White,
-                                modifier = Modifier.size(20.dp)
-                            )
-                        }
-                    }
+                    Text(
+                        "Bearbeiten",
+                        color = Color.White,
+                        fontSize = 16.sp
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .shadow(
-                            elevation = 8.dp,
-                            spotColor = Color(0xFF6B1B1B),
-                            ambientColor = Color(0xFF6B1B1B),
-                            shape = RoundedCornerShape(8.dp)
-                        )
+                Button(
+                    onClick = onDelete,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF6B1B1B)
+                    ),
+                    shape = RoundedCornerShape(8.dp)
                 ) {
-                    Button(
-                        onClick = onDelete,
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF6B1B1B)
-                        ),
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(
-                                "Löschen",
-                                color = Color.White,
-                                fontSize = 16.sp
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_delete),
-                                contentDescription = null,
-                                tint = Color.White,
-                                modifier = Modifier.size(20.dp)
-                            )
-                        }
-                    }
+                    Text(
+                        "Löschen",
+                        color = Color.White,
+                        fontSize = 16.sp
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))

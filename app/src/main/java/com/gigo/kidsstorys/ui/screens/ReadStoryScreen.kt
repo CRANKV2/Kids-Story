@@ -31,11 +31,13 @@ import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.painterResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,20 +95,37 @@ fun ReadStoryScreen(
                 modifier = Modifier.fillMaxSize(),
                 topBar = {
                     TopAppBar(
-                        title = { },
+                        title = { Text(currentStory.title, color = Color.White) },
                         navigationIcon = {
                             IconButton(onClick = onBack) {
-                                Text(stringResource(R.string.navigation_left), fontSize = 24.sp)
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_arrow_back),
+                                    contentDescription = "Zurück",
+                                    tint = Color.White
+                                )
                             }
                         },
                         actions = {
                             IconButton(onClick = { showEditDialog = true }) {
-                                Text(stringResource(R.string.aendern), fontSize = 24.sp)
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_edit),
+                                    contentDescription = "Bearbeiten",
+                                    tint = Color.White
+                                )
                             }
                         },
                         colors = TopAppBarDefaults.topAppBarColors(
-                            containerColor = Color(0xFF1E1E2A)
-                        )
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            navigationIconContentColor = Color.White
+                        ),
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
+                            .shadow(
+                                elevation = 8.dp,
+                                shape = RoundedCornerShape(24.dp),
+                                ambientColor = AccentPurple
+                            )
+                            .clip(RoundedCornerShape(24.dp))
                     )
                 },
                 containerColor = Color(0xFF1E1E2A)
