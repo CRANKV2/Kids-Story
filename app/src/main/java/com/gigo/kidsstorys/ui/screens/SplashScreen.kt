@@ -1,5 +1,6 @@
 package com.gigo.kidsstorys.ui.screens
 
+import android.content.Context
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -9,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -21,7 +23,8 @@ import kotlinx.coroutines.delay
 @Composable
 fun SplashScreen(
     isDarkTheme: Boolean,
-    onTimeout: () -> Unit
+    onTimeout: () -> Unit,
+    onFirstLaunch: () -> Unit
 ) {
     var startAnimation by remember { mutableStateOf(false) }
     val alphaAnim = animateFloatAsState(
@@ -32,10 +35,24 @@ fun SplashScreen(
         label = "Alpha Animation"
     )
 
+    val context = LocalContext.current
+    val sharedPrefs = remember {
+        context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+    }
+    val isFirstLaunch = remember {
+        sharedPrefs.getBoolean("is_first_launch", true)
+    }
+
     LaunchedEffect(key1 = true) {
         startAnimation = true
-        delay(2000)
-        onTimeout()
+        delay(1500)
+        
+        if (isFirstLaunch) {
+            sharedPrefs.edit().putBoolean("is_first_launch", false).apply()
+            onFirstLaunch()
+        } else {
+            onTimeout()
+        }
     }
 
     Box(

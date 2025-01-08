@@ -8,8 +8,8 @@
     <string name="bearbeiten">Bearbeiten ✏️</string>
     <string name="l_schen">Löschen 🗑️</string>
     <string name="schliessen">Schließen ✖️</string>
-    <string name="books">📚</string>
-    <string name="geschichten_app">Geschichten App</string>
+    <string name="books"> </string>
+    <string name="geschichten_app">Kids Story\'s</string>
     <string name="emoji_auswaehlen">Emoji auswählen</string>
     <string name="color_picker_check">✔️</string>
     <string name="einstellungen">Einstellungen ⚙️</string>
@@ -17,7 +17,6 @@
     <string name="tipps_info_emoji">ℹ️</string>
     <string name="settings_emoji">⚙️</string>
     <string name="fab_button_inner">+</string>
-    <string name="zeilenumbruch_setting">Text am Bildschirmrand umbrechen</string>
     <string name="navigation_left">⬅️</string>
     <string name="aendern">✏️</string>
     <string name="fertig">Fertig! ✨</string>

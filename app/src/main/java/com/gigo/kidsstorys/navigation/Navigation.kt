@@ -1,5 +1,6 @@
 package com.gigo.kidsstorys.navigation
 
+import OnboardingScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -13,8 +14,34 @@ fun AppNavigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = "stories"
+        startDestination = "splash"
     ) {
+        composable("splash") {
+            SplashScreen(
+                isDarkTheme = isDarkTheme,
+                onTimeout = {
+                    navController.navigate("stories") {
+                        popUpTo("splash") { inclusive = true }
+                    }
+                },
+                onFirstLaunch = {
+                    navController.navigate("onboarding") {
+                        popUpTo("splash") { inclusive = true }
+                    }
+                }
+            )
+        }
+
+        composable("onboarding") {
+            OnboardingScreen(
+                onComplete = {
+                    navController.navigate("stories") {
+                        popUpTo("onboarding") { inclusive = true }
+                    }
+                }
+            )
+        }
+
         composable("stories") {
             StoryScreen(
                 navController = navController,

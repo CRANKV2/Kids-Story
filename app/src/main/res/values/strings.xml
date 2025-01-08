@@ -8,8 +8,8 @@
     <string name="bearbeiten">Bearbeiten ✏️</string>
     <string name="l_schen">Löschen 🗑️</string>
     <string name="schliessen">Schließen ✖️</string>
-    <string name="books">📚</string>
-    <string name="geschichten_app">Geschichten App</string>
+    <string name="books"> </string>
+    <string name="geschichten_app">Kids Story\'s</string>
     <string name="emoji_auswaehlen">Emoji auswählen</string>
     <string name="color_picker_check">✔️</string>
     <string name="einstellungen">Einstellungen ⚙️</string>
@@ -32,6 +32,7 @@
     <string name="schriftgroese_beim_lesen_context">Betrifft nur die Schriftgröße beim Lesen einer Geschichte</string>
     <string name="zeilenumbruch_empfohlen">Zeilenumbruch (empfohlen)</string>
     <string name="automatischer_zeilenumbruch_beim_lesen">Automatischer Zeilenumbruch beim Lesen</string>
+    <string name="zeilenumbruch_setting">Text am Bildschirmrand umbrechen</string>
     <string name="farbeinstellungen">Farbeinstellungen</string>
     <string name="farbeinstellungen_h2">🎨 Farbeinstellungen</string>
     <string name="hauptbildschirm">Hauptbildschirm</string>
