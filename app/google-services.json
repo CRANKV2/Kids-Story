@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "814220420211",
+    "project_id": "kids-storys-app",
+    "storage_bucket": "kids-storys-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814220420211:android:aa3a1d7e4f397fc8dab606",
+        "android_client_info": {
+          "package_name": "com.gigo.kidsstorys"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBp_iIbdVrC_v183lUzIzI8a8LSt23Gw_I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
