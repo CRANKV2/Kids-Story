@@ -53,30 +53,34 @@ fun ModernStoryCard(
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.Top
             ) {
                 Text(
                     text = story.title,
                     style = MaterialTheme.typography.titleLarge,
                     color = titleColor,
-                    fontSize = titleSize.sp
+                    fontSize = titleSize.sp,
+                    modifier = Modifier.weight(1f) // Gibt dem Text eine flexible Breite, behält aber Platz für das Icon
                 )
 
-                    IconButton(
-                        onClick = onOptionsClick,
-                        modifier = Modifier.size(45.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_more),
-                            contentDescription = "Optionen",
-                        )
-                    }
+                Spacer(modifier = Modifier.width(8.dp)) // Fügt einen kleinen horizontalen Abstand zwischen Text und Icon hinzu
 
+                IconButton(
+                    onClick = onOptionsClick,
+                    modifier = Modifier
+                        .size(36.dp) // Reduzierte Größe für das Icon
+                        .padding(0.dp) // Entfernt jegliches Padding innerhalb des IconButton
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_more),
+                        contentDescription = "Optionen",
+                        modifier = Modifier.size(24.dp) // Stellt die tatsächliche Größe des Icons ein
+                    )
+                }
             }
-            
+
             Spacer(modifier = Modifier.height(8.dp))
-            
+
             Text(
                 text = story.content,
                 style = MaterialTheme.typography.bodyMedium,
@@ -87,4 +91,4 @@ fun ModernStoryCard(
             )
         }
     }
-} 
+}

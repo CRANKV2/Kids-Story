@@ -1,42 +1,21 @@
 package com.gigo.kidsstorys.ui.screens
 
-import android.util.Log
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
+
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.gigo.kidsstorys.data.models.Story
-import com.gigo.kidsstorys.ui.theme.*
 import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
 import com.gigo.kidsstorys.ui.components.*
 import com.gigo.kidsstorys.data.SettingsManager
-import com.gigo.kidsstorys.R
-import com.gigo.kidsstorys.ui.components.story.ModernStoryCard
 import com.gigo.kidsstorys.ui.components.story.EmptyStateView
 import com.gigo.kidsstorys.ui.components.story.StoryTutorialDialog
 import com.gigo.kidsstorys.ui.components.story.StoryDeleteDialog
@@ -44,7 +23,6 @@ import com.gigo.kidsstorys.ui.components.story.StoryTopBar
 import com.gigo.kidsstorys.ui.components.story.GridStoryLayout
 import com.gigo.kidsstorys.ui.components.story.CompactStoryLayout
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun StoryScreen(
     navController: NavController,
