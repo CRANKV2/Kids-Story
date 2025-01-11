@@ -1,5 +1,6 @@
 package com.gigo.kidsstorys.ui.components.story
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
@@ -8,10 +9,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.gigo.kidsstorys.R
 import com.gigo.kidsstorys.ui.theme.TextLight
 
 @Composable
@@ -38,9 +41,10 @@ fun EmptyStateView() {
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    "📚",
-                    fontSize = 48.sp
+                Image(
+                    painter = painterResource(id = R.drawable.empty_state_icon),
+                    contentDescription = "Keine Geschichten",
+                    modifier = Modifier.size(100.dp)
                 )
             }
         }
