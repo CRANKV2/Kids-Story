@@ -38,6 +38,14 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.painterResource
+import android.graphics.BitmapFactory
+import android.graphics.Bitmap
+import android.content.ContentResolver
+import android.net.Uri
+import java.io.File
+import androidx.compose.foundation.Image
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,6 +82,10 @@ fun ReadStoryScreen(
         scale = (scale * zoomChange).coerceIn(0.5f..3f)
     }
 
+    val backgroundImageFile = remember {
+        File(context.filesDir, "background_image.jpg")
+    }
+
     LaunchedEffect(storyId) {
         viewModel.loadStory(storyId)
     }
@@ -87,6 +99,20 @@ fun ReadStoryScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
+        // Hintergrundbild
+        if (backgroundImageFile.exists()) {
+            val bitmap = remember {
+                BitmapFactory.decodeFile(backgroundImageFile.absolutePath)
+            }
+            Image(
+                bitmap = bitmap.asImageBitmap(),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+                alpha = 0.15f
+            )
+        }
+
         story?.let { currentStory ->
             var currentTitle by remember { mutableStateOf(currentStory.title) }
             var currentContent by remember { mutableStateOf(currentStory.content) }
@@ -128,7 +154,7 @@ fun ReadStoryScreen(
                             .clip(RoundedCornerShape(24.dp))
                     )
                 },
-                containerColor = Color(0xFF1E1E2A)
+                containerColor = Color.Transparent
             ) { padding ->
                 Column(
                     modifier = Modifier
@@ -147,12 +173,14 @@ fun ReadStoryScreen(
                                 ambientColor = AccentPurple
                             ),
                         colors = CardDefaults.cardColors(
-                            containerColor = Color(0xFF2D2D3A)
+                            containerColor = Color(0xFF2D2D3A).copy(alpha = 0.75f)
                         ),
                         shape = RoundedCornerShape(24.dp)
                     ) {
                         Column(
-                            modifier = Modifier.padding(20.dp)
+                            modifier = Modifier
+                                .padding(20.dp)
+                                .background(Color.Transparent)
                         ) {
                             Text(
                                 text = currentTitle,
@@ -166,7 +194,7 @@ fun ReadStoryScreen(
                                 onClick = { },
                                 label = { Text(stringResource(R.string.read_story_screen_geschichte)) },
                                 colors = AssistChipDefaults.assistChipColors(
-                                    containerColor = Color(0xFF353545),
+                                    containerColor = Color(0xFF353545).copy(alpha = 0.75f),
                                     labelColor = AccentPurple
                                 )
                             )
@@ -186,37 +214,36 @@ fun ReadStoryScreen(
                                 ambientColor = AccentPurple
                             ),
                         colors = CardDefaults.cardColors(
-                            containerColor = Color(0xFF2D2D3A)
+                            containerColor = Color(0xFF2D2D3A).copy(alpha = 0.75f)
                         ),
                         shape = RoundedCornerShape(24.dp)
                     ) {
-                        if (wrapText) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .verticalScroll(verticalScrollState)
-                                    .padding(20.dp)
-                            ) {
+                        Column(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .background(Color.Transparent)
+                        ) {
+                            if (wrapText) {
                                 Text(
-                                    text = story?.content ?: "",
+                                    text = currentStory.content,
                                     style = MaterialTheme.typography.bodyLarge.copy(
                                         fontSize = fontSize.value.sp
                                     ),
-                                    color = textColor
+                                    color = textColor,
+                                    modifier = Modifier
+                                        .verticalScroll(verticalScrollState)
+                                        .padding(8.dp)
                                 )
-                            }
-                        } else {
-                            Row(
-                                modifier = Modifier
-                                    .horizontalScroll(horizontalScrollState)
-                                    .padding(20.dp)
-                            ) {
+                            } else {
                                 Text(
-                                    text = story?.content ?: "",
+                                    text = currentStory.content,
                                     style = MaterialTheme.typography.bodyLarge.copy(
                                         fontSize = fontSize.value.sp
                                     ),
-                                    color = textColor
+                                    color = textColor,
+                                    modifier = Modifier
+                                        .horizontalScroll(horizontalScrollState)
+                                        .padding(8.dp)
                                 )
                             }
                         }

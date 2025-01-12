@@ -22,6 +22,11 @@ import com.gigo.kidsstorys.ui.components.story.StoryDeleteDialog
 import com.gigo.kidsstorys.ui.components.story.StoryTopBar
 import com.gigo.kidsstorys.ui.components.story.GridStoryLayout
 import com.gigo.kidsstorys.ui.components.story.CompactStoryLayout
+import android.graphics.BitmapFactory
+import androidx.compose.foundation.Image
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import java.io.File
 
 @Composable
 fun StoryScreen(
@@ -39,109 +44,141 @@ fun StoryScreen(
     var storyToDelete by remember { mutableStateOf<Story?>(null) }
     var showTutorial by remember { mutableStateOf(false) }
     var isCompactView by remember { mutableStateOf(settingsManager.isCompactView) }
+    val backgroundImageFile = remember {
+        File(localContext.filesDir, "background_image.jpg")
+    }
 
-    Scaffold(
-        topBar = {
-            StoryTopBar(
-                storiesCount = stories.size,
-                isCompactView = isCompactView,
-                onViewToggle = { 
-                    isCompactView = !isCompactView
-                    settingsManager.isCompactView = isCompactView
-                },
-                onChatClick = { navController.navigate("chat") },
-                onSettingsClick = { navController.navigate("settings") }
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { showAddDialog = true },
-                modifier = Modifier.padding(16.dp),
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-            ) {
-                Text("+", fontSize = 24.sp)
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (backgroundImageFile.exists()) {
+            val bitmap = remember {
+                BitmapFactory.decodeFile(backgroundImageFile.absolutePath)
             }
-        },
-        floatingActionButtonPosition = FabPosition.Center,
-    ) { padding ->
-        Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            if (stories.isEmpty()) {
-                EmptyStateView()
-            } else {
-                if (!isCompactView) {
-                    GridStoryLayout(
-                        stories = stories,
-                        userPreferences = userPreferences,
-                        isCompactView = isCompactView,
-                        onStoryClick = { story -> navController.navigate("readStory/${story.id}") },
-                        onOptionsClick = { story -> selectedStory = story }
-                    )
-                } else {
-                    CompactStoryLayout(
-                        stories = stories,
-                        userPreferences = userPreferences,
-                        isCompactView = isCompactView,
-                        onStoryClick = { story -> navController.navigate("readStory/${story.id}") },
-                        onOptionsClick = { story -> selectedStory = story }
-                    )
-                }
-            }
-        }
-
-        if (showAddDialog) {
-            AddStoryDialog(
-                onDismissRequest = { showAddDialog = false },
-                onConfirm = { title, content ->
-                    viewModel.addStory(title, content)
-                    showAddDialog = false
-                }
+            Image(
+                bitmap = bitmap.asImageBitmap(),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+                alpha = 0.15f
             )
         }
 
-        selectedStory?.let { story ->
-            StoryOptionsDialog(
-                story = story,
-                onDismiss = { selectedStory = null },
-                onEdit = { 
-                    navController.navigate("readStory/${story.id}")
-                },
-                onDelete = {
-                    storyToDelete = story
-                    showDeleteDialog = true
-                    selectedStory = null
-                },
-                isDarkTheme = isDarkTheme
-            )
-        }
-
-        if (showDeleteDialog) {
-            StoryDeleteDialog(
-                onConfirm = {
-                    storyToDelete?.let { story ->
-                        viewModel.deleteStory(story)
+        Scaffold(
+            topBar = {
+                StoryTopBar(
+                    storiesCount = stories.size,
+                    isCompactView = isCompactView,
+                    onViewToggle = { 
+                        isCompactView = !isCompactView
+                        settingsManager.isCompactView = isCompactView
+                    },
+                    onChatClick = { navController.navigate("chat") },
+                    onSettingsClick = { navController.navigate("settings") }
+                )
+            },
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = { showAddDialog = true },
+                    modifier = Modifier.padding(16.dp),
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                ) {
+                    Text("+", fontSize = 24.sp)
+                }
+            },
+            floatingActionButtonPosition = FabPosition.Center,
+        ) { paddingValues ->
+            Box(modifier = Modifier.fillMaxSize()) {
+                if (backgroundImageFile.exists()) {
+                    val bitmap = remember {
+                        BitmapFactory.decodeFile(backgroundImageFile.absolutePath)
                     }
-                    showDeleteDialog = false
-                    storyToDelete = null
-                },
-                onDismiss = {
-                    showDeleteDialog = false
-                    storyToDelete = null
-                },
-                isDarkTheme = isDarkTheme
-            )
-        }
+                    Image(
+                        bitmap = bitmap.asImageBitmap(),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop,
+                        alpha = 0.15f
+                    )
+                }
 
-        if (showTutorial) {
-            StoryTutorialDialog(
-                onDismiss = { showTutorial = false },
-                isDarkTheme = isDarkTheme
-            )
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                ) {
+                    if (stories.isEmpty()) {
+                        EmptyStateView()
+                    } else {
+                        if (!isCompactView) {
+                            GridStoryLayout(
+                                stories = stories,
+                                userPreferences = userPreferences,
+                                isCompactView = isCompactView,
+                                onStoryClick = { story -> navController.navigate("readStory/${story.id}") },
+                                onOptionsClick = { story -> selectedStory = story }
+                            )
+                        } else {
+                            CompactStoryLayout(
+                                stories = stories,
+                                userPreferences = userPreferences,
+                                isCompactView = isCompactView,
+                                onStoryClick = { story -> navController.navigate("readStory/${story.id}") },
+                                onOptionsClick = { story -> selectedStory = story }
+                            )
+                        }
+                    }
+
+                    if (showAddDialog) {
+                        AddStoryDialog(
+                            onDismissRequest = { showAddDialog = false },
+                            onConfirm = { title, content ->
+                                viewModel.addStory(title, content)
+                                showAddDialog = false
+                            }
+                        )
+                    }
+
+                    selectedStory?.let { story ->
+                        StoryOptionsDialog(
+                            story = story,
+                            onDismiss = { selectedStory = null },
+                            onEdit = { 
+                                navController.navigate("readStory/${story.id}")
+                            },
+                            onDelete = {
+                                storyToDelete = story
+                                showDeleteDialog = true
+                                selectedStory = null
+                            },
+                            isDarkTheme = isDarkTheme
+                        )
+                    }
+
+                    if (showDeleteDialog) {
+                        StoryDeleteDialog(
+                            onConfirm = {
+                                storyToDelete?.let { story ->
+                                    viewModel.deleteStory(story)
+                                }
+                                showDeleteDialog = false
+                                storyToDelete = null
+                            },
+                            onDismiss = {
+                                showDeleteDialog = false
+                                storyToDelete = null
+                            },
+                            isDarkTheme = isDarkTheme
+                        )
+                    }
+
+                    if (showTutorial) {
+                        StoryTutorialDialog(
+                            onDismiss = { showTutorial = false },
+                            isDarkTheme = isDarkTheme
+                        )
+                    }
+                }
+            }
         }
     }
 }

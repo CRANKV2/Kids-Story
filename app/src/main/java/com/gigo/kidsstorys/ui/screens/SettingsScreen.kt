@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
@@ -22,9 +23,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,6 +36,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -56,6 +61,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.gigo.kidsstorys.R
@@ -64,6 +70,24 @@ import com.gigo.kidsstorys.ui.components.ColorPicker
 import com.gigo.kidsstorys.ui.theme.AccentPurple
 import com.gigo.kidsstorys.ui.theme.TextLight
 import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.os.Build
+import android.provider.MediaStore
+import com.gigo.kidsstorys.utils.ImageUtils
+import kotlinx.coroutines.launch
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarHost
+import android.graphics.BitmapFactory
+import androidx.compose.foundation.Image
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,6 +100,8 @@ fun SettingsScreen(
     val context = LocalContext.current
     val settingsManager = remember { SettingsManager.getInstance(context) }
     val scrollState = rememberScrollState()
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
     
     // Initialisiere die State-Variablen mit den gespeicherten Werten
     var fontSize by remember { mutableStateOf(settingsManager.fontSize.toFloat()) }
@@ -95,6 +121,43 @@ fun SettingsScreen(
     }
     var storyTextColor by remember(userPreferences.storyTextColor) { 
         mutableStateOf(Color(userPreferences.storyTextColor.toInt())) 
+    }
+
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    
+    var showImagePickerDialog by remember { mutableStateOf(false) }
+    var isProcessingImage by remember { mutableStateOf(false) }
+    
+    // Bildverarbeitungs-Logik
+    fun processSelectedImage(uri: Uri) {
+        scope.launch {
+            isProcessingImage = true
+            val success = ImageUtils.processAndSaveImage(context, uri)
+            isProcessingImage = false
+            showImagePickerDialog = false
+            
+            val message = if (success) {
+                "Hintergrundbild wurde erfolgreich gespeichert"
+            } else {
+                "Fehler beim Speichern des Hintergrundbildes"
+            }
+            
+            snackbarHostState.showSnackbar(message)
+        }
+    }
+
+    // Aktualisieren Sie den imagePickerLauncher
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            processSelectedImage(it)
+        }
+    }
+
+    // Vorschau des aktuellen Hintergrundbildes
+    val backgroundImageFile = remember {
+        File(context.filesDir, "background_image.jpg")
     }
 
     Scaffold(
@@ -132,6 +195,12 @@ fun SettingsScreen(
                         ambientColor = AccentPurple
                     )
                     .clip(RoundedCornerShape(24.dp))
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.padding(16.dp)
             )
         },
         containerColor = if (isDarkTheme) Color(0xFF1E1E2E) else Color(0xFFF5F5F5)
@@ -271,6 +340,128 @@ fun SettingsScreen(
                                 .fillMaxWidth() // Occupy the full width of the Column
                                 .wrapContentSize(Alignment.Center) // Center content within itself
                         )
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Hintergrundbild-Einstellung
+                    Column {
+                        Text(
+                            "Hintergrundbild",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = TextLight
+                        )
+                        Text(
+                            "Wähle ein Hintergrundbild für den Hauptbildschirm",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = TextLight.copy(alpha = 0.7f)
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        
+                        Button(
+                            onClick = { imagePickerLauncher.launch("image/*") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .shadow(
+                                    elevation = 8.dp,
+                                    spotColor = AccentPurple,
+                                    shape = RoundedCornerShape(20.dp)
+                                ),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFF353545)
+                            ),
+                            shape = RoundedCornerShape(20.dp)
+                        ) {
+                            Text(
+                                "Hintergrundbild auswählen",
+                                color = TextLight,
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
+                        }
+
+                        // Image Picker Dialog
+                        if (showImagePickerDialog) {
+                            Dialog(onDismissRequest = { showImagePickerDialog = false }) {
+                                Surface(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .wrapContentHeight()
+                                        .shadow(
+                                            elevation = 16.dp,
+                                            spotColor = AccentPurple,
+                                            shape = RoundedCornerShape(24.dp)
+                                        ),
+                                    shape = RoundedCornerShape(24.dp),
+                                    color = MaterialTheme.colorScheme.surfaceVariant
+                                ) {
+                                    Column(
+                                        modifier = Modifier.padding(24.dp),
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        if (isProcessingImage) {
+                                            CircularProgressIndicator(color = AccentPurple)
+                                            Text(
+                                                "Bild wird verarbeitet...",
+                                                color = TextLight,
+                                                modifier = Modifier.padding(top = 16.dp)
+                                            )
+                                        } else {
+                                            Text(
+                                                "Hintergrundbild auswählen",
+                                                style = MaterialTheme.typography.titleLarge,
+                                                color = TextLight
+                                            )
+                                            Spacer(modifier = Modifier.height(16.dp))
+                                            Button(
+                                                onClick = { imagePickerLauncher.launch("image/*") },
+                                                colors = ButtonDefaults.buttonColors(
+                                                    containerColor = AccentPurple
+                                                )
+                                            ) {
+                                                Text("Aus Galerie wählen")
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // Vorschau des aktuellen Hintergrundbildes
+                    if (backgroundImageFile.exists()) {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        
+                        // Vorschau
+                        Surface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(120.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                        ) {
+                            Image(
+                                bitmap = remember { BitmapFactory.decodeFile(backgroundImageFile.absolutePath).asImageBitmap() },
+                                contentDescription = "Aktuelles Hintergrundbild",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                        
+                        // Reset-Button
+                        TextButton(
+                            onClick = {
+                                scope.launch {
+                                    backgroundImageFile.delete()
+                                    snackbarHostState.showSnackbar("Hintergrundbild wurde entfernt")
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(
+                                "Hintergrundbild entfernen",
+                                color = Color.Red.copy(alpha = 0.7f),
+                                modifier = Modifier.wrapContentWidth(Alignment.End)
+                            )
+                        }
                     }
                 }
             }
