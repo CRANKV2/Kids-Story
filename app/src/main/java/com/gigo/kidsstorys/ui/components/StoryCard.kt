@@ -1,5 +1,6 @@
 package com.gigo.kidsstorys.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -33,15 +34,16 @@ fun StoryCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onCardClick),
-        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isSystemInDarkTheme()) CardDark else CardLight
-        )
+            containerColor = Color(0xFF353545).copy(alpha = 0.75f)
+        ),
+        shape = RoundedCornerShape(16.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
+                .background(Color.Transparent)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
