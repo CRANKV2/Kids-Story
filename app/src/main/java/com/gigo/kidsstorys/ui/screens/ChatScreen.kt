@@ -40,9 +40,12 @@ import androidx.compose.ui.res.painterResource
 import com.gigo.kidsstorys.R
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import com.gigo.kidsstorys.ui.theme.TextLight
 import java.io.File
+import com.gigo.kidsstorys.ui.components.StoryCategoryDropdown
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -176,16 +179,23 @@ fun ChatScreen(
                         Spacer(modifier = Modifier.height(24.dp))
                         Text(
                             "Zum Beispiel:",
-                            color = Color.White.copy(alpha = 0.7f),
+                            color = Color.White,
                             textAlign = TextAlign.Center
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            "• Eine Geschichte über einen mutigen Drachen\n" +
-                            "• Ein Abenteuer im Weltraum\n" +
-                            "• Eine lustige Geschichte über sprechende Tiere",
-                            color = Color.White.copy(alpha = 0.6f),
-                            textAlign = TextAlign.Center
+                        var currentExamples by remember { mutableStateOf(listOf<String>()) }
+                        StoryCategoryDropdown(
+                            onCategorySelected = { examples ->
+                                currentExamples = examples
+                            },
+                            hasBackground = backgroundImageFile.exists()
+                        )
+                        MessageCarousel(
+                            examples = currentExamples,
+                            onMessageSelected = { selectedMessage ->
+                                messageText = selectedMessage
+                            },
+                            hasBackground = backgroundImageFile.exists()
                         )
                     }
                 } else {
@@ -577,6 +587,62 @@ fun ChatMessage(
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.bodyLarge
                 )
+            }
+        }
+    }
+} 
+
+@Composable
+fun MessageCarousel(
+    examples: List<String>,
+    onMessageSelected: (String) -> Unit,
+    hasBackground: Boolean
+) {
+    LazyRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp)
+    ) {
+        items(examples) { example ->
+            Card(
+                modifier = Modifier
+                    .width(280.dp)
+                    .clickable { onMessageSelected(example) }
+                    .shadow(
+                        elevation = 8.dp,
+                        spotColor = AccentPurple,
+                        shape = RoundedCornerShape(16.dp)
+                    ),
+                colors = CardDefaults.cardColors(
+                    containerColor = if (hasBackground) {
+                        Color(0xFF2D2D3A).copy(alpha = 0.75f)
+                    } else {
+                        Color(0xFF2D2D3A)
+                    }
+                ),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = example,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = TextLight
+                    )
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    Text(
+                        text = "Tippen zum Auswählen",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextLight.copy(alpha = 0.7f)
+                    )
+                }
             }
         }
     }
