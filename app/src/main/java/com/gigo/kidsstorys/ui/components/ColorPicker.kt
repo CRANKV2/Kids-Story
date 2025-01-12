@@ -38,11 +38,14 @@ fun ColorPicker(
         Color(0xFFBA68C8)  // Pink
     )
 
-    Column {
+    Column(
+        modifier = Modifier.padding(vertical = 8.dp)
+    ) {
         Text(
-            title,
-            style = MaterialTheme.typography.titleSmall,
-            color = TextLight.copy(alpha = 0.7f)
+            text = title,
+            style = MaterialTheme.typography.bodyLarge,
+            color = TextLight,
+            modifier = Modifier.padding(bottom = 4.dp)
         )
         
         LazyRow(

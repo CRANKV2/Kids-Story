@@ -83,6 +83,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarHost
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.asImageBitmap
@@ -216,11 +217,11 @@ fun SettingsScreen(
             Text(
                 stringResource(R.string.hauptbildschirm_h1),
                 style = MaterialTheme.typography.headlineMedium,
-                fontSize = 28.sp,
+                fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = TextLight,
                 modifier = Modifier
-                    .padding(vertical = 16.dp)
+                    .padding(vertical = 12.dp)
                     .fillMaxWidth()
                     .wrapContentWidth(Alignment.CenterHorizontally)
             )
@@ -234,12 +235,12 @@ fun SettingsScreen(
                 shape = RoundedCornerShape(16.dp)
             ) {
                 Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    modifier = Modifier.padding(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text(
                         stringResource(R.string.hauptbildschirm),
-                        style = MaterialTheme.typography.titleLarge,
+                        style = MaterialTheme.typography.titleMedium,
                         color = Color(0xFF9575CD)
                     )
 
@@ -247,12 +248,12 @@ fun SettingsScreen(
                     Column {
                         Text(
                             stringResource(R.string.titel_schriftgroesse),
-                            style = MaterialTheme.typography.titleMedium,
+                            style = MaterialTheme.typography.bodyLarge,
                             color = TextLight
                         )
                         Text(
                             stringResource(R.string.schriftgroesse_der_titel_in_der_bersicht),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.bodySmall,
                             color = TextLight.copy(alpha = 0.7f)
                         )
                         Slider(
@@ -266,7 +267,7 @@ fun SettingsScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .wrapContentSize()
-                                .heightIn(min = 16.dp),
+                                .heightIn(min = 12.dp),
                             colors = SliderDefaults.colors(
                                 thumbColor = AccentPurple,
                                 activeTrackColor = AccentPurple,
@@ -309,7 +310,7 @@ fun SettingsScreen(
                         )
                         Text(
                             stringResource(R.string.schriftgroee_der_geschichten_vorschau),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.bodySmall,
                             color = TextLight.copy(alpha = 0.7f)
                         )
                         Slider(
@@ -323,7 +324,7 @@ fun SettingsScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .wrapContentSize()
-                                .heightIn(min = 16.dp),
+                                .heightIn(min = 12.dp),
                             colors = SliderDefaults.colors(
                                 thumbColor = AccentPurple,
                                 activeTrackColor = AccentPurple,
@@ -342,7 +343,7 @@ fun SettingsScreen(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
 
                     // Hintergrundbild-Einstellung
                     Column {
@@ -353,7 +354,7 @@ fun SettingsScreen(
                         )
                         Text(
                             "Wähle ein Hintergrundbild für den Hauptbildschirm",
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.bodySmall,
                             color = TextLight.copy(alpha = 0.7f)
                         )
                         Spacer(modifier = Modifier.height(8.dp))
@@ -363,19 +364,21 @@ fun SettingsScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .shadow(
-                                    elevation = 8.dp,
+                                    elevation = 6.dp,
                                     spotColor = AccentPurple,
-                                    shape = RoundedCornerShape(20.dp)
+                                    shape = RoundedCornerShape(16.dp)
                                 ),
+                            contentPadding = PaddingValues(vertical = 6.dp, horizontal = 12.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFF353545)
                             ),
-                            shape = RoundedCornerShape(20.dp)
+                            shape = RoundedCornerShape(16.dp)
                         ) {
                             Text(
                                 "Hintergrundbild auswählen",
+                                style = MaterialTheme.typography.bodyMedium,
                                 color = TextLight,
-                                modifier = Modifier.padding(vertical = 8.dp)
+                                modifier = Modifier.padding(vertical = 4.dp)
                             )
                         }
 
@@ -572,7 +575,7 @@ fun SettingsScreen(
                         stringResource(R.string.hauptbildschirm),
                         style = MaterialTheme.typography.titleMedium,
                         color = Color(0xFF9575CD),
-                        fontSize = 22.sp,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
                     
@@ -641,7 +644,7 @@ fun SettingsScreen(
                         stringResource(R.string.leseansicht),
                         style = MaterialTheme.typography.titleMedium,
                         color = Color(0xFF9575CD),
-                        fontSize = 22.sp,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
                     
