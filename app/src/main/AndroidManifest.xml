@@ -13,6 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App.Starting"
         tools:targetApi="31">
+        <meta-data
+            android:name="VERSION_NAME"
+            android:value="1.1.0" />
+        <meta-data
+            android:name="VERSION_CODE"
+            android:value="2" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

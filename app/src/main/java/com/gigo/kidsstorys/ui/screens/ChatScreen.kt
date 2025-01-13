@@ -97,56 +97,74 @@ fun ChatScreen(
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
+                        .padding(8.dp)
                         .shadow(
-                            elevation = 16.dp * cardAlpha.value,
+                            elevation = 8.dp * cardAlpha.value,
                             spotColor = AccentPurple.copy(alpha = cardAlpha.value),
                             ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
-                            shape = RoundedCornerShape(24.dp)
+                            shape = RoundedCornerShape(16.dp)
                         ),
                     color = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value),
-                    shape = RoundedCornerShape(24.dp)
+                    shape = RoundedCornerShape(16.dp)
                 ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp),
+                            .padding(4.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         IconButton(
                             onClick = { navController.navigateUp() },
                             modifier = Modifier
-                                .size(48.dp)
-                                .shadow(8.dp, CircleShape, spotColor = AccentPurple)
-                                .background(AccentPurple, CircleShape)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_arrow_back),
-                                contentDescription = "Zurück",
-                                tint = Color.White,
-                                modifier = Modifier.size(32.dp)
-                            )
-                        }
+                                .size(32.dp),
+                            content = {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .shadow(4.dp, CircleShape, spotColor = AccentPurple)
+                                        .background(AccentPurple, CircleShape)
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_arrow_back),
+                                        contentDescription = "Zurück",
+                                        tint = Color.White,
+                                        modifier = Modifier
+                                            .size(20.dp)
+                                            .align(Alignment.Center)
+                                    )
+                                }
+                            }
+                        )
+
                         Text(
-                            "DeMa AI Chat",
+                            "✨ DeMa ✨",
                             style = MaterialTheme.typography.titleMedium,
                             color = Color.White
                         )
+
                         IconButton(
                             onClick = { viewModel.clearChat() },
                             modifier = Modifier
-                                .size(48.dp)
-                                .shadow(8.dp, CircleShape, spotColor = AccentPurple)
-                                .background(AccentPurple, CircleShape)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_delete),
-                                contentDescription = "Chat löschen",
-                                tint = Color.White,
-                                modifier = Modifier.size(32.dp)
-                            )
-                        }
+                                .size(32.dp),
+                            content = {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .shadow(4.dp, CircleShape, spotColor = AccentPurple)
+                                        .background(AccentPurple, CircleShape)
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_delete),
+                                        contentDescription = "Chat löschen",
+                                        tint = Color.White,
+                                        modifier = Modifier
+                                            .size(20.dp)
+                                            .align(Alignment.Center)
+                                    )
+                                }
+                            }
+                        )
                     }
                 }
             }
@@ -161,10 +179,13 @@ fun ChatScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(32.dp),
+                            .padding(32.dp)
+                            .padding(top = 16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+                        verticalArrangement = Arrangement.Top
                     ) {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        
                         Text(
                             "Hallo! \nIch bin DeMa \uD83D\uDE0A \n\nDein\nKI-Geschichtenhelfer!",
                             style = MaterialTheme.typography.titleLarge,
@@ -172,33 +193,54 @@ fun ChatScreen(
                             textAlign = TextAlign.Center,
                             fontWeight = FontWeight.Bold
                         )
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
+                        
                         Text(
                             "Erzähl mir, was für eine Geschichte du erschaffen möchtest! \nIch helfe dir dabei, magische Abenteuer zu gestalten. ✨",
                             color = Color.White.copy(alpha = 0.8f),
                             textAlign = TextAlign.Center
                         )
-                        Spacer(modifier = Modifier.height(24.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
+                        
                         Text(
                             "Zum Beispiel:",
                             color = Color.White,
                             textAlign = TextAlign.Center
                         )
                         Spacer(modifier = Modifier.height(8.dp))
+                        
                         var currentExamples by remember { mutableStateOf(listOf<String>()) }
-                        StoryCategoryDropdown(
-                            onCategorySelected = { examples ->
-                                currentExamples = examples
-                            },
-                            hasBackground = backgroundImageFile.exists()
-                        )
-                        MessageCarousel(
-                            examples = currentExamples,
-                            onMessageSelected = { selectedMessage ->
-                                messageText = selectedMessage
-                            },
-                            hasBackground = backgroundImageFile.exists()
-                        )
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            StoryCategoryDropdown(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(45.dp),
+                                onCategorySelected = { examples ->
+                                    currentExamples = examples
+                                },
+                                hasBackground = backgroundImageFile.exists()
+                            )
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            MessageCarousel(
+                                examples = currentExamples,
+                                onMessageSelected = { selectedMessage ->
+                                    messageText = selectedMessage
+                                },
+                                hasBackground = backgroundImageFile.exists()
+                            )
+                        }
+                        
+                        Spacer(modifier = Modifier.weight(1f))
                     }
                 } else {
                     LazyColumn(
@@ -308,7 +350,7 @@ fun ChatScreen(
                             )
                         )
                         
-                        FilledIconButton(
+                        IconButton(
                             onClick = {
                                 if (messageText.isNotBlank()) {
                                     viewModel.sendMessage(messageText)
@@ -317,17 +359,28 @@ fun ChatScreen(
                                     focusManager.clearFocus()
                                 }
                             },
-                            modifier = Modifier.size(40.dp),
-                            colors = IconButtonDefaults.filledIconButtonColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer
-                            )
+                            modifier = Modifier
+                                .size(32.dp),
+                            enabled = messageText.isNotBlank()
                         ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_send),
-                                contentDescription = "Nachricht senden",
-                                tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                                modifier = Modifier.size(32.dp)
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .shadow(4.dp, CircleShape, spotColor = AccentPurple)
+                                    .background(
+                                        if (messageText.isNotBlank()) AccentPurple else AccentPurple.copy(alpha = 0.5f),
+                                        CircleShape
+                                    )
+                            ) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.Send,
+                                    contentDescription = "Senden",
+                                    tint = Color.White,
+                                    modifier = Modifier
+                                        .size(20.dp)
+                                        .align(Alignment.Center)
+                                )
+                            }
                         }
                     }
                 }
@@ -412,30 +465,31 @@ fun ChatMessageItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                start = if (isUserMessage) 40.dp else 8.dp,
-                end = if (isUserMessage) 8.dp else 40.dp,
-                top = 4.dp,
-                bottom = 4.dp
+                start = if (isUserMessage) 32.dp else 4.dp,
+                end = if (isUserMessage) 4.dp else 32.dp,
+                top = 2.dp,
+                bottom = 2.dp
             )
     ) {
         // Message-Box
         Surface(
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(12.dp),
             color = backgroundColor,
             modifier = Modifier
                 .align(if (isUserMessage) Alignment.CenterEnd else Alignment.CenterStart)
                 .shadow(
-                    elevation = 8.dp * cardAlpha.value,
+                    elevation = 4.dp * cardAlpha.value,
                     spotColor = AccentPurple.copy(alpha = cardAlpha.value),
                     ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
-                    shape = RoundedCornerShape(16.dp)
+                    shape = RoundedCornerShape(12.dp)
                 )
                 .clickable(enabled = !isUserMessage) { showPopup = true }
         ) {
             Text(
                 text = message.content,
-                modifier = Modifier.padding(12.dp),
-                color = Color.White.copy(alpha = maxOf(cardAlpha.value + 0.2f, 1f))
+                modifier = Modifier.padding(8.dp),
+                color = Color.White.copy(alpha = maxOf(cardAlpha.value + 0.2f, 1f)),
+                fontSize = 14.sp
             )
         }
 
@@ -601,41 +655,48 @@ fun ChatMessage(
 fun MessageCarousel(
     examples: List<String>,
     onMessageSelected: (String) -> Unit,
-    hasBackground: Boolean
+    hasBackground: Boolean,
+    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val settingsManager = remember { SettingsManager.getInstance(context) }
     val cardAlpha = settingsManager.cardAlpha.collectAsState(initial = 0.75f)
 
     LazyRow(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(horizontal = 16.dp)
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp)  // Padding für erste/letzte Karte
     ) {
         items(examples) { example ->
             Card(
                 modifier = Modifier
-                    .width(280.dp)
+                    .width(280.dp)  // Feste Breite für die Karten
+                    .height(140.dp)
                     .clickable { onMessageSelected(example) }
                     .shadow(
-                        elevation = 8.dp * cardAlpha.value,
+                        elevation = 4.dp * cardAlpha.value,
                         spotColor = AccentPurple.copy(alpha = cardAlpha.value),
                         ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
-                        shape = RoundedCornerShape(16.dp)
+                        shape = RoundedCornerShape(10.dp)
                     ),
                 colors = CardDefaults.cardColors(
                     containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
                 ),
-                shape = RoundedCornerShape(16.dp)
+                shape = RoundedCornerShape(10.dp)
             ) {
-                Text(
-                    text = example,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = TextLight.copy(alpha = maxOf(cardAlpha.value + 0.2f, 1f)),
-                    modifier = Modifier.padding(16.dp)
-                )
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = example,
+                        modifier = Modifier.padding(10.dp),
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        lineHeight = 19.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
     }

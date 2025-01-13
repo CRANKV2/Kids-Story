@@ -19,6 +19,7 @@ data class StoryCategory(
 
 @Composable
 fun StoryCategoryDropdown(
+    modifier: Modifier = Modifier,
     onCategorySelected: (List<String>) -> Unit,
     hasBackground: Boolean
 ) {
@@ -83,11 +84,10 @@ fun StoryCategoryDropdown(
     var expanded by remember { mutableStateOf(false) }
     var selectedCategory by remember { mutableStateOf<StoryCategory?>(null) }
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Box(
         modifier = Modifier
-            .padding(vertical = 8.dp)
             .fillMaxWidth()
+            .wrapContentSize(Alignment.TopCenter)
     ) {
         Surface(
             onClick = { expanded = true },
@@ -98,8 +98,7 @@ fun StoryCategoryDropdown(
                 AccentPurple
             },
             modifier = Modifier
-                .padding(8.dp)
-                .widthIn(min = 280.dp)
+                .width(280.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -127,7 +126,7 @@ fun StoryCategoryDropdown(
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = Modifier
-                .widthIn(min = 280.dp)
+                .width(280.dp)
                 .background(
                     if (hasBackground) {
                         MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
