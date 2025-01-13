@@ -12,12 +12,16 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gigo.kidsstorys.R
 import com.gigo.kidsstorys.ui.theme.AccentPurple
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import com.gigo.kidsstorys.data.SettingsManager
 
 @Composable
 fun StoryTopBar(
@@ -27,18 +31,29 @@ fun StoryTopBar(
     onChatClick: () -> Unit,
     onSettingsClick: () -> Unit
 ) {
-    Surface(
+    val context = LocalContext.current
+    val settingsManager = remember { SettingsManager.getInstance(context) }
+    val cardAlpha = settingsManager.cardAlpha.collectAsState(initial = 0.75f)
+
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
             .shadow(
-                elevation = 16.dp,
-                spotColor = AccentPurple,
-                ambientColor = AccentPurple,
+                elevation = 16.dp * cardAlpha.value,
+                spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
                 shape = RoundedCornerShape(24.dp)
-            ),
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        shape = RoundedCornerShape(24.dp)
+            )
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFF353545).copy(alpha = cardAlpha.value),
+                        Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
+                    )
+                ),
+                shape = RoundedCornerShape(24.dp)
+            )
     ) {
         Row(
             modifier = Modifier

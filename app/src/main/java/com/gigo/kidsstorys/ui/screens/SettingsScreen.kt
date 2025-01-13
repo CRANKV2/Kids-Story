@@ -132,6 +132,8 @@ fun SettingsScreen(
     var showImagePickerDialog by remember { mutableStateOf(false) }
     var isProcessingImage by remember { mutableStateOf(false) }
 
+    val cardAlpha = settingsManager.cardAlpha.collectAsState(initial = 0.75f)
+
     // Bildverarbeitungs-Logik
     fun processSelectedImage(uri: Uri) {
         scope.launch {
@@ -204,16 +206,17 @@ fun SettingsScreen(
                         }
                     },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = AccentPurple,
+                        containerColor = AccentPurple.copy(alpha = cardAlpha.value),
                         titleContentColor = Color.White,
                         navigationIconContentColor = Color.White
                     ),
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 8.dp)
                         .shadow(
-                            elevation = 8.dp,
+                            elevation = 8.dp * cardAlpha.value,
                             shape = RoundedCornerShape(24.dp),
-                            ambientColor = AccentPurple
+                            ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
+                            spotColor = AccentPurple.copy(alpha = cardAlpha.value)
                         )
                         .clip(RoundedCornerShape(24.dp))
                 )
@@ -250,11 +253,7 @@ fun SettingsScreen(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
-                        containerColor = if (backgroundImageFile.exists()) {
-                            Color(0xFF2D2D3A).copy(alpha = 0.75f)
-                        } else {
-                            Color(0xFF2D2D3A)
-                        }
+                        containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
                     ),
                     shape = RoundedCornerShape(16.dp)
                 ) {
@@ -419,7 +418,7 @@ fun SettingsScreen(
                                                 shape = RoundedCornerShape(24.dp)
                                             ),
                                         shape = RoundedCornerShape(24.dp),
-                                        color = MaterialTheme.colorScheme.surfaceVariant
+                                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = cardAlpha.value)
                                     ) {
                                         Column(
                                             modifier = Modifier.padding(24.dp),
@@ -496,7 +495,6 @@ fun SettingsScreen(
                     }
                 }
 
-
                 Spacer(modifier = Modifier.height(32.dp))
 
                 // Leseansicht Titel
@@ -514,9 +512,16 @@ fun SettingsScreen(
 
                 // Darstellungseinstellungen Card
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .shadow(
+                            elevation = 8.dp * cardAlpha.value,
+                            spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                            ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
+                            shape = RoundedCornerShape(16.dp)
+                        ),
                     colors = CardDefaults.cardColors(
-                        containerColor = getCardBackgroundColor(backgroundImageFile.exists())
+                        containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
                     ),
                     shape = RoundedCornerShape(16.dp)
                 ) {
@@ -587,38 +592,9 @@ fun SettingsScreen(
                                         )
                                     )
                                 )
-                        )
-
-                        // Vorschau der Transparenz
-                        Text(
-                            "Vorschau",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = TextLight
-                        )
-                        Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = CardDefaults.cardColors(
-                                containerColor = getCardBackgroundColor(backgroundImageFile.exists())
-                            ),
-                            shape = RoundedCornerShape(16.dp)
-                        ) {
-                            Column(
-                                modifier = Modifier.padding(16.dp)
-                            ) {
-                                Text(
-                                    "Beispiel einer Karte",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = TextLight
-                                )
-                                Text(
-                                    "So wird die Transparenz auf allen Karten in der App angewendet.",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = TextLight
-                                )
-                            }
+                            )
                         }
                     }
-                }
 
                 Spacer(modifier = Modifier.height(32.dp))
 
@@ -639,11 +615,7 @@ fun SettingsScreen(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
-                        containerColor = if (backgroundImageFile.exists()) {
-                            Color(0xFF2D2D3A).copy(alpha = 0.75f)
-                        } else {
-                            Color(0xFF2D2D3A)
-                        }
+                        containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
                     ),
                     shape = RoundedCornerShape(16.dp)
                 ) {
@@ -708,13 +680,16 @@ fun SettingsScreen(
 
                 // Neue Karte für Farbeinstellungen
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .shadow(
+                            elevation = 8.dp * cardAlpha.value,
+                            spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                            ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
+                            shape = RoundedCornerShape(16.dp)
+                        ),
                     colors = CardDefaults.cardColors(
-                        containerColor = if (backgroundImageFile.exists()) {
-                            Color(0xFF2D2D3A).copy(alpha = 0.75f)
-                        } else {
-                            Color(0xFF2D2D3A)
-                        }
+                        containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
                     ),
                     shape = RoundedCornerShape(16.dp)
                 ) {
@@ -741,11 +716,7 @@ fun SettingsScreen(
                         Card(
                             modifier = Modifier.fillMaxWidth(),
                             colors = CardDefaults.cardColors(
-                                containerColor = if (backgroundImageFile.exists()) {
-                                    Color(0xFF2D2D3A).copy(alpha = 0.75f)
-                                } else {
-                                    Color(0xFF2D2D3A)
-                                }
+                                containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
                             ),
                             shape = RoundedCornerShape(16.dp)
                         ) {
@@ -814,11 +785,7 @@ fun SettingsScreen(
                         Card(
                             modifier = Modifier.fillMaxWidth(),
                             colors = CardDefaults.cardColors(
-                                containerColor = if (backgroundImageFile.exists()) {
-                                    Color(0xFF2D2D3A).copy(alpha = 0.75f)
-                                } else {
-                                    Color(0xFF2D2D3A)
-                                }
+                                containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
                             ),
                             shape = RoundedCornerShape(16.dp)
                         ) {
@@ -860,7 +827,7 @@ fun SettingsScreen(
                 }
 
                 Spacer(modifier = Modifier.height(32.dp))
-                SettingsFooter(hasBackground = backgroundImageFile.exists())
+                SettingsFooter(cardAlpha = cardAlpha.value, hasBackground = backgroundImageFile.exists())
                 Spacer(modifier = Modifier.height(24.dp))
             }
         }
@@ -918,22 +885,22 @@ fun SettingsScreen(
 }
 
 @Composable
-fun SettingsFooter(hasBackground: Boolean = false) {  // Parameter hinzugefügt
+fun SettingsFooter(
+    cardAlpha: Float,
+    hasBackground: Boolean = false
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .shadow(
-                elevation = 8.dp,
-                spotColor = AccentPurple,
+                elevation = 8.dp * cardAlpha,
+                spotColor = AccentPurple.copy(alpha = cardAlpha),
+                ambientColor = AccentPurple.copy(alpha = cardAlpha),
                 shape = RoundedCornerShape(24.dp)
             ),
         colors = CardDefaults.cardColors(
-            containerColor = if (hasBackground) {
-                Color(0xFF2D2D3A).copy(alpha = 0.75f)
-            } else {
-                Color(0xFF2D2D3A)
-            }
+            containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha)
         ),
         shape = RoundedCornerShape(24.dp)
     ) {

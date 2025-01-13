@@ -86,6 +86,8 @@ fun ReadStoryScreen(
         File(context.filesDir, "background_image.jpg")
     }
 
+    val cardAlpha = settingsManager.cardAlpha.collectAsState(initial = 0.75f)
+
     LaunchedEffect(storyId) {
         viewModel.loadStory(storyId)
     }
@@ -141,15 +143,16 @@ fun ReadStoryScreen(
                             }
                         },
                         colors = TopAppBarDefaults.topAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = cardAlpha.value),
                             navigationIconContentColor = Color.White
                         ),
                         modifier = Modifier
                             .padding(horizontal = 16.dp, vertical = 8.dp)
                             .shadow(
-                                elevation = 8.dp,
+                                elevation = 8.dp * cardAlpha.value,
                                 shape = RoundedCornerShape(24.dp),
-                                ambientColor = AccentPurple
+                                ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
+                                spotColor = AccentPurple.copy(alpha = cardAlpha.value)
                             )
                             .clip(RoundedCornerShape(24.dp))
                     )
@@ -167,13 +170,13 @@ fun ReadStoryScreen(
                             .fillMaxWidth()
                             .padding(16.dp)
                             .shadow(
-                                elevation = 16.dp,
+                                elevation = 16.dp * cardAlpha.value,
                                 shape = RoundedCornerShape(24.dp),
-                                spotColor = AccentPurple,
-                                ambientColor = AccentPurple
+                                spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                                ambientColor = AccentPurple.copy(alpha = cardAlpha.value)
                             ),
                         colors = CardDefaults.cardColors(
-                            containerColor = Color(0xFF2D2D3A).copy(alpha = 0.75f)
+                            containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
                         ),
                         shape = RoundedCornerShape(24.dp)
                     ) {
@@ -194,8 +197,8 @@ fun ReadStoryScreen(
                                 onClick = { },
                                 label = { Text(stringResource(R.string.read_story_screen_geschichte)) },
                                 colors = AssistChipDefaults.assistChipColors(
-                                    containerColor = Color(0xFF353545).copy(alpha = 0.75f),
-                                    labelColor = AccentPurple
+                                    containerColor = Color(0xFF353545).copy(alpha = cardAlpha.value),
+                                    labelColor = AccentPurple.copy(alpha = maxOf(cardAlpha.value + 0.2f, 1f))
                                 )
                             )
                         }
@@ -208,13 +211,13 @@ fun ReadStoryScreen(
                             .weight(1f)
                             .padding(16.dp)
                             .shadow(
-                                elevation = 16.dp,
+                                elevation = 16.dp * cardAlpha.value,
                                 shape = RoundedCornerShape(24.dp),
-                                spotColor = AccentPurple,
-                                ambientColor = AccentPurple
+                                spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                                ambientColor = AccentPurple.copy(alpha = cardAlpha.value)
                             ),
                         colors = CardDefaults.cardColors(
-                            containerColor = Color(0xFF2D2D3A).copy(alpha = 0.75f)
+                            containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
                         ),
                         shape = RoundedCornerShape(24.dp)
                     ) {
@@ -258,13 +261,13 @@ fun ReadStoryScreen(
                                 .fillMaxWidth()
                                 .padding(16.dp)
                                 .shadow(
-                                    elevation = 16.dp,
-                                    spotColor = AccentPurple,
-                                    ambientColor = AccentPurple,
+                                    elevation = 16.dp * cardAlpha.value,
+                                    spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                                    ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
                                     shape = RoundedCornerShape(24.dp)
                                 ),
                             shape = RoundedCornerShape(24.dp),
-                            color = MaterialTheme.colorScheme.surfaceVariant
+                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = cardAlpha.value)
                         ) {
                             Column(
                                 modifier = Modifier
@@ -296,12 +299,13 @@ fun ReadStoryScreen(
                                         .fillMaxWidth()
                                         .padding(vertical = 8.dp)
                                         .shadow(
-                                            elevation = 8.dp,
-                                            spotColor = AccentPurple,
+                                            elevation = 8.dp * cardAlpha.value,
+                                            spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                                            ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
                                             shape = RoundedCornerShape(16.dp)
                                         ),
                                     colors = ButtonDefaults.filledTonalButtonColors(
-                                        containerColor = MaterialTheme.colorScheme.primaryContainer
+                                        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = cardAlpha.value)
                                     ),
                                     shape = RoundedCornerShape(16.dp)
                                 ) {
@@ -321,12 +325,13 @@ fun ReadStoryScreen(
                                         .fillMaxWidth()
                                         .padding(vertical = 8.dp)
                                         .shadow(
-                                            elevation = 8.dp,
-                                            spotColor = AccentPurple,
+                                            elevation = 8.dp * cardAlpha.value,
+                                            spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                                            ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
                                             shape = RoundedCornerShape(16.dp)
                                         ),
                                     colors = ButtonDefaults.filledTonalButtonColors(
-                                        containerColor = MaterialTheme.colorScheme.primaryContainer
+                                        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = cardAlpha.value)
                                     ),
                                     shape = RoundedCornerShape(16.dp)
                                 ) {
@@ -350,13 +355,13 @@ fun ReadStoryScreen(
                                 .padding(horizontal = 8.dp)
                                 .wrapContentHeight()
                                 .shadow(
-                                    elevation = 16.dp,
-                                    spotColor = AccentPurple,
-                                    ambientColor = AccentPurple,
+                                    elevation = 16.dp * cardAlpha.value,
+                                    spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                                    ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
                                     shape = RoundedCornerShape(24.dp)
                                 ),
                             shape = RoundedCornerShape(24.dp),
-                            color = MaterialTheme.colorScheme.surfaceVariant
+                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = cardAlpha.value)
                         ) {
                             Column(
                                 modifier = Modifier
@@ -387,7 +392,7 @@ fun ReadStoryScreen(
                                         .fillMaxWidth()
                                         .heightIn(min = 150.dp, max = 300.dp)
                                         .background(
-                                            color = MaterialTheme.colorScheme.surfaceVariant,
+                                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = cardAlpha.value),
                                             shape = RoundedCornerShape(8.dp)
                                         )
                                         .border(
@@ -443,13 +448,13 @@ fun ReadStoryScreen(
                                         modifier = Modifier
                                             .weight(1f)
                                             .shadow(
-                                                elevation = 8.dp,
-                                                spotColor = AccentPurple,
-                                                ambientColor = AccentPurple,
+                                                elevation = 8.dp * cardAlpha.value,
+                                                spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                                                ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
                                                 shape = RoundedCornerShape(20.dp)
                                             ),
                                         colors = ButtonDefaults.filledTonalButtonColors(
-                                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                                            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = cardAlpha.value)
                                         ),
                                         shape = RoundedCornerShape(20.dp)
                                     ) {
@@ -475,13 +480,13 @@ fun ReadStoryScreen(
                                 .padding(horizontal = 8.dp)
                                 .wrapContentHeight()
                                 .shadow(
-                                    elevation = 16.dp,
-                                    spotColor = AccentPurple,
-                                    ambientColor = AccentPurple,
+                                    elevation = 16.dp * cardAlpha.value,
+                                    spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                                    ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
                                     shape = RoundedCornerShape(24.dp)
                                 ),
                             shape = RoundedCornerShape(24.dp),
-                            color = MaterialTheme.colorScheme.surfaceVariant
+                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = cardAlpha.value)
                         ) {
                             Column(
                                 modifier = Modifier
@@ -511,7 +516,7 @@ fun ReadStoryScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .background(
-                                            color = MaterialTheme.colorScheme.surfaceVariant,
+                                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = cardAlpha.value),
                                             shape = RoundedCornerShape(8.dp)
                                         )
                                         .border(
@@ -568,13 +573,13 @@ fun ReadStoryScreen(
                                         modifier = Modifier
                                             .weight(1f)
                                             .shadow(
-                                                elevation = 8.dp,
-                                                spotColor = AccentPurple,
-                                                ambientColor = AccentPurple,
+                                                elevation = 8.dp * cardAlpha.value,
+                                                spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                                                ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
                                                 shape = RoundedCornerShape(20.dp)
                                             ),
                                         colors = ButtonDefaults.filledTonalButtonColors(
-                                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                                            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = cardAlpha.value)
                                         ),
                                         shape = RoundedCornerShape(20.dp)
                                     ) {

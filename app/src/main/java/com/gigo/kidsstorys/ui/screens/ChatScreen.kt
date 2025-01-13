@@ -46,6 +46,10 @@ import androidx.compose.ui.layout.ContentScale
 import com.gigo.kidsstorys.ui.theme.TextLight
 import java.io.File
 import com.gigo.kidsstorys.ui.components.StoryCategoryDropdown
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import com.gigo.kidsstorys.data.SettingsManager
+import androidx.compose.material3.CardDefaults
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,7 +67,9 @@ fun ChatScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
-    
+    val settingsManager = remember { SettingsManager.getInstance(context) }
+    val cardAlpha = settingsManager.cardAlpha.collectAsState(initial = 0.75f)
+
     // Hintergrundbild-File
     val backgroundImageFile = remember {
         File(context.filesDir, "background_image.jpg")
@@ -93,16 +99,12 @@ fun ChatScreen(
                         .fillMaxWidth()
                         .padding(16.dp)
                         .shadow(
-                            elevation = 16.dp,
-                            spotColor = AccentPurple,
-                            ambientColor = AccentPurple,
+                            elevation = 16.dp * cardAlpha.value,
+                            spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                            ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
                             shape = RoundedCornerShape(24.dp)
                         ),
-                    color = if (backgroundImageFile.exists()) {
-                        Color(0xFF2D2D3A).copy(alpha = 0.75f)
-                    } else {
-                        Color(0xFF2D2D3A)
-                    },
+                    color = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value),
                     shape = RoundedCornerShape(24.dp)
                 ) {
                     Row(
@@ -243,8 +245,13 @@ fun ChatScreen(
                         Surface(
                             modifier = Modifier
                                 .padding(16.dp)
-                                .shadow(4.dp, RoundedCornerShape(8.dp)),
-                            color = Color(0xFF42424E),
+                                .shadow(
+                                    elevation = 4.dp * cardAlpha.value,
+                                    spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                                    ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
+                                    shape = RoundedCornerShape(8.dp)
+                                ),
+                            color = Color(0xFF42424E).copy(alpha = cardAlpha.value),
                             shape = RoundedCornerShape(8.dp)
                         ) {
                             Text(
@@ -263,16 +270,12 @@ fun ChatScreen(
                         .fillMaxWidth()
                         .padding(20.dp)
                         .shadow(
-                            elevation = 16.dp,
-                            spotColor = AccentPurple,
-                            ambientColor = AccentPurple,
+                            elevation = 16.dp * cardAlpha.value,
+                            spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                            ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
                             shape = RoundedCornerShape(24.dp)
                         ),
-                    color = if (backgroundImageFile.exists()) {
-                        Color(0xFF2D2D3A).copy(alpha = 0.75f)
-                    } else {
-                        MaterialTheme.colorScheme.surfaceVariant
-                    },
+                    color = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value),
                     shape = RoundedCornerShape(24.dp)
                 ) {
                     Row(
@@ -390,23 +393,19 @@ fun ChatMessageItem(
     message: ChatMessage,
     onSaveStory: (String, String) -> Unit
 ) {
+    val context = LocalContext.current
+    val settingsManager = remember { SettingsManager.getInstance(context) }
+    val cardAlpha = settingsManager.cardAlpha.collectAsState(initial = 0.75f)
+
     val isUserMessage = message.isUser
     var showPopup by remember { mutableStateOf(false) }
     var showTitleDialog by remember { mutableStateOf(false) }
     var title by remember { mutableStateOf("") }
-    
+
     val backgroundColor = if (isUserMessage) {
-        if (File(LocalContext.current.filesDir, "background_image.jpg").exists()) {
-            Color(0xFF353545).copy(alpha = 0.75f)
-        } else {
-            Color(0xFF353545)
-        }
+        Color(0xFF353545).copy(alpha = cardAlpha.value)
     } else {
-        if (File(LocalContext.current.filesDir, "background_image.jpg").exists()) {
-            Color(0xFF42424E).copy(alpha = 0.75f)
-        } else {
-            Color(0xFF42424E)
-        }
+        Color(0xFF42424E).copy(alpha = cardAlpha.value)
     }
 
     Box(
@@ -425,12 +424,18 @@ fun ChatMessageItem(
             color = backgroundColor,
             modifier = Modifier
                 .align(if (isUserMessage) Alignment.CenterEnd else Alignment.CenterStart)
+                .shadow(
+                    elevation = 8.dp * cardAlpha.value,
+                    spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                    ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
+                    shape = RoundedCornerShape(16.dp)
+                )
                 .clickable(enabled = !isUserMessage) { showPopup = true }
         ) {
             Text(
                 text = message.content,
                 modifier = Modifier.padding(12.dp),
-                color = Color.White
+                color = Color.White.copy(alpha = maxOf(cardAlpha.value + 0.2f, 1f))
             )
         }
 
@@ -598,6 +603,10 @@ fun MessageCarousel(
     onMessageSelected: (String) -> Unit,
     hasBackground: Boolean
 ) {
+    val context = LocalContext.current
+    val settingsManager = remember { SettingsManager.getInstance(context) }
+    val cardAlpha = settingsManager.cardAlpha.collectAsState(initial = 0.75f)
+
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
@@ -611,38 +620,22 @@ fun MessageCarousel(
                     .width(280.dp)
                     .clickable { onMessageSelected(example) }
                     .shadow(
-                        elevation = 8.dp,
-                        spotColor = AccentPurple,
+                        elevation = 8.dp * cardAlpha.value,
+                        spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                        ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
                         shape = RoundedCornerShape(16.dp)
                     ),
                 colors = CardDefaults.cardColors(
-                    containerColor = if (hasBackground) {
-                        Color(0xFF2D2D3A).copy(alpha = 0.75f)
-                    } else {
-                        Color(0xFF2D2D3A)
-                    }
+                    containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
                 ),
                 shape = RoundedCornerShape(16.dp)
             ) {
-                Column(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        text = example,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = TextLight
-                    )
-                    
-                    Spacer(modifier = Modifier.height(8.dp))
-                    
-                    Text(
-                        text = "Tippen zum Auswählen",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = TextLight.copy(alpha = 0.7f)
-                    )
-                }
+                Text(
+                    text = example,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = TextLight.copy(alpha = maxOf(cardAlpha.value + 0.2f, 1f)),
+                    modifier = Modifier.padding(16.dp)
+                )
             }
         }
     }

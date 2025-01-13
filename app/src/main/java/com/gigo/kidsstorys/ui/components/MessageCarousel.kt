@@ -16,9 +16,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.gigo.kidsstorys.ui.theme.AccentPurple
 import com.gigo.kidsstorys.ui.theme.TextLight
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import com.gigo.kidsstorys.data.SettingsManager
 
 @Composable
 fun MessageCarousel(
@@ -26,6 +30,10 @@ fun MessageCarousel(
     onMessageSelected: (String) -> Unit,
     hasBackground: Boolean
 ) {
+    val context = LocalContext.current
+    val settingsManager = remember { SettingsManager.getInstance(context) }
+    val cardAlpha = settingsManager.cardAlpha.collectAsState(initial = 0.75f)
+
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
@@ -39,21 +47,18 @@ fun MessageCarousel(
                     .width(260.dp)
                     .clickable { onMessageSelected(example) }
                     .shadow(
-                        elevation = 8.dp,
-                        spotColor = AccentPurple,
+                        elevation = 8.dp * cardAlpha.value,
+                        spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                        ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
                         shape = RoundedCornerShape(16.dp)
                     ),
-                color = if (hasBackground) {
-                    Color(0xFF2D2D3A).copy(alpha = 0.75f)
-                } else {
-                    Color(0xFF2D2D3A)
-                },
+                color = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value),
                 shape = RoundedCornerShape(16.dp)
             ) {
                 Text(
                     text = example,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = TextLight,
+                    color = TextLight.copy(alpha = maxOf(cardAlpha.value + 0.2f, 1f)),
                     modifier = Modifier.padding(16.dp)
                 )
             }
