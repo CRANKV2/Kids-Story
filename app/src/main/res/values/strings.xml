@@ -59,4 +59,5 @@
     <string name="inhalt_bearbeiten">Bearbeiten</string>
     <string name="was_moechtest_du_bearbeiten">Was möchtest du bearbeiten ?</string>
     <string name="was_moechtest_du_tun">Was möchtest du tun ?</string>
+    <string name="darstellung_title">Darstellung</string>
 </resources>

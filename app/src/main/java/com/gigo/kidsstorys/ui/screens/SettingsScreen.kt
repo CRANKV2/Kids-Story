@@ -73,21 +73,19 @@ import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
-import android.os.Build
-import android.provider.MediaStore
-import com.gigo.kidsstorys.utils.ImageUtils
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.rememberCoroutineScope
+import com.gigo.kidsstorys.utils.ImageUtils
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarHost
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.TextButton
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
+import com.gigo.kidsstorys.ui.theme.getCardBackgroundColor
 import java.io.File
 
 
@@ -125,6 +123,9 @@ fun SettingsScreen(
     var storyTextColor by remember(userPreferences.storyTextColor) {
         mutableStateOf(Color(userPreferences.storyTextColor.toInt()))
     }
+
+    // Füge diese Zeile hinzu
+    val coroutineScope = rememberCoroutineScope()
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
@@ -495,6 +496,129 @@ fun SettingsScreen(
                     }
                 }
 
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                // Leseansicht Titel
+                Text(
+                    stringResource(R.string.darstellung_title),
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = TextLight,
+                    modifier = Modifier
+                        .padding(vertical = 16.dp)
+                        .fillMaxWidth()
+                        .wrapContentWidth(Alignment.CenterHorizontally)
+                )
+
+                // Darstellungseinstellungen Card
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = getCardBackgroundColor(backgroundImageFile.exists())
+                    ),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        Text(
+                            "Darstellung",
+                            style = MaterialTheme.typography.titleLarge,
+                            color = Color(0xFF9575CD)
+                        )
+
+                        // Karten-Transparenz Einstellung
+                        Column {
+                            Text(
+                                "Karten-Transparenz",
+                                style = MaterialTheme.typography.titleMedium,
+                                color = TextLight
+                            )
+                            Text(
+                                "Stelle die Transparenz aller Karten in der App ein (0% = unsichtbar, 100% = voll sichtbar)",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = TextLight.copy(alpha = 0.7f)
+                            )
+
+                            val cardAlpha by settingsManager.cardAlpha.collectAsState(initial = 0.75f)
+
+                            Slider(
+                                value = cardAlpha,
+                                onValueChange = { newAlpha ->
+                                    coroutineScope.launch {
+                                        settingsManager.updateCardAlpha(newAlpha)
+                                    }
+                                },
+                                valueRange = 0f..1f,
+                                steps = 9, // 10 Schritte (0, 0.1, 0.2, ..., 0.9, 1.0)
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 8.dp),
+                                colors = SliderDefaults.colors(
+                                    thumbColor = AccentPurple,
+                                    activeTrackColor = AccentPurple,
+                                    inactiveTrackColor = AccentPurple.copy(alpha = 0.3f)
+                                )
+                            )
+
+                            Text(
+                                "Aktuelle Transparenz: ${(cardAlpha * 100).toInt()}%",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = TextLight,
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center
+                            )
+                        }
+
+                        // Trennlinie
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(2.dp)
+                                .background(
+                                    brush = Brush.horizontalGradient(
+                                        colors = listOf(
+                                            AccentPurple.copy(alpha = 0.0f),
+                                            AccentPurple.copy(alpha = 0.7f),
+                                            AccentPurple.copy(alpha = 0.0f)
+                                        )
+                                    )
+                                )
+                        )
+
+                        // Vorschau der Transparenz
+                        Text(
+                            "Vorschau",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = TextLight
+                        )
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(
+                                containerColor = getCardBackgroundColor(backgroundImageFile.exists())
+                            ),
+                            shape = RoundedCornerShape(16.dp)
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(16.dp)
+                            ) {
+                                Text(
+                                    "Beispiel einer Karte",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = TextLight
+                                )
+                                Text(
+                                    "So wird die Transparenz auf allen Karten in der App angewendet.",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = TextLight
+                                )
+                            }
+                        }
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(32.dp))
 

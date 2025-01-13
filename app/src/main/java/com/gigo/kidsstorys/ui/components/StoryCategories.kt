@@ -8,6 +8,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.gigo.kidsstorys.ui.theme.AccentPurple
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.ui.text.style.TextAlign
 
 data class StoryCategory(
     val name: String,
@@ -78,11 +81,13 @@ fun StoryCategoryDropdown(
     )
 
     var expanded by remember { mutableStateOf(false) }
-    var selectedCategory by remember { mutableStateOf(categories[0]) }
+    var selectedCategory by remember { mutableStateOf<StoryCategory?>(null) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(vertical = 8.dp)
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .fillMaxWidth()
     ) {
         Surface(
             onClick = { expanded = true },
@@ -94,17 +99,26 @@ fun StoryCategoryDropdown(
             },
             modifier = Modifier
                 .padding(8.dp)
-                .widthIn(min = 200.dp)
+                .widthIn(min = 280.dp)
         ) {
             Row(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    selectedCategory.name,
+                    selectedCategory?.name ?: "Wähle eine Beispiel Kategorie...",
                     color = MaterialTheme.colorScheme.onPrimary,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.weight(1f),
+                    textAlign = TextAlign.Center
+                )
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowDown,
+                    contentDescription = "Dropdown Pfeil",
+                    tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }
@@ -113,7 +127,7 @@ fun StoryCategoryDropdown(
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = Modifier
-                .widthIn(min = 200.dp)
+                .widthIn(min = 280.dp)
                 .background(
                     if (hasBackground) {
                         MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
@@ -127,14 +141,17 @@ fun StoryCategoryDropdown(
                     text = {
                         Text(
                             category.name,
-                            color = AccentPurple
+                            color = AccentPurple,
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
                         )
                     },
                     onClick = {
                         selectedCategory = category
                         expanded = false
                         onCategorySelected(category.examples)
-                    }
+                    },
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }
