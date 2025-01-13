@@ -129,8 +129,8 @@ fun ChatScreen(
                             )
                         }
                         Text(
-                            "Story AI Chat",
-                            style = MaterialTheme.typography.titleLarge,
+                            "DeMa AI Chat",
+                            style = MaterialTheme.typography.titleMedium,
                             color = Color.White
                         )
                         IconButton(
@@ -166,7 +166,7 @@ fun ChatScreen(
                         verticalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            "👋 Hallo! Ich bin dein\nKI-Geschichtenhelfer!",
+                            "Hallo! \nIch bin DeMa \uD83D\uDE0A \n\nDein\nKI-Geschichtenhelfer!",
                             style = MaterialTheme.typography.titleLarge,
                             color = Color.White,
                             textAlign = TextAlign.Center,
@@ -174,7 +174,7 @@ fun ChatScreen(
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            "Erzähl mir, was für eine Geschichte du erschaffen möchtest! Ich helfe dir dabei, magische Abenteuer zu gestalten. ✨",
+                            "Erzähl mir, was für eine Geschichte du erschaffen möchtest! \nIch helfe dir dabei, magische Abenteuer zu gestalten. ✨",
                             color = Color.White.copy(alpha = 0.8f),
                             textAlign = TextAlign.Center
                         )

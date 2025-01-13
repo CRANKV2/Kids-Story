@@ -47,42 +47,39 @@ class ChatViewModel(
     )
     
     private var chat = model.startChat(emptyList())
-    
+
     fun sendMessage(message: String) {
-        if (message.isBlank()) {
-            _error.value = "Die Nachricht darf nicht leer sein"
-            return
-        }
-        
         viewModelScope.launch {
-            _isLoading.value = true
-            _error.value = null
-            
-            // Benutzer-Nachricht speichern
-            chatMessageDao.insertMessage(ChatMessage(message, true).toEntity())
-            
             try {
-                val response = withTimeout(30000) { // 30 Sekunden Timeout
-                    chat.sendMessage(message)
+                _isLoading.value = true
+                _error.value = null
+                
+                // Prüfe ob es eine Story-Anfrage ist
+                val isStoryRequest = message.lowercase().contains("geschichte") || 
+                                    message.lowercase().contains("erzähl") ||
+                                    message.lowercase().contains("story")
+                
+                // Erstelle den passenden Prompt
+                val prompt = if (isStoryRequest) {
+                    PromptUtils.createStoryPrompt(thema = message)
+                } else {
+                    PromptUtils.createConversationPrompt(message)
                 }
                 
-                val botResponse = response.text ?: "Entschuldigung, ich konnte keine passende Antwort generieren"
-                chatMessageDao.insertMessage(ChatMessage(botResponse, false).toEntity())
+                // Speichere User-Nachricht
+                val userMessage = ChatMessage(message, true)
+                chatMessageDao.insertMessage(userMessage.toEntity())
+                
+                // Sende Prompt an Gemini
+                val response = chat.sendMessage(prompt)
+                val responseText = response.text ?: "Entschuldigung, ich konnte keine Antwort generieren."
+                
+                // Speichere AI-Antwort
+                val aiMessage = ChatMessage(responseText, false)
+                chatMessageDao.insertMessage(aiMessage.toEntity())
                 
             } catch (e: Exception) {
-                val errorMessage = when (e) {
-                    is TimeoutCancellationException -> 
-                        "Die Anfrage hat zu lange gedauert. Bitte versuche es erneut."
-                    is IOException -> 
-                        "Keine Internetverbindung. Bitte überprüfe deine Verbindung."
-                    else -> 
-                        "Ein Fehler ist aufgetreten: ${e.message}"
-                }
-                
-                _error.value = errorMessage
-                chatMessageDao.insertMessage(
-                    ChatMessage(errorMessage, false).toEntity()
-                )
+                _error.value = e.message
             } finally {
                 _isLoading.value = false
             }
