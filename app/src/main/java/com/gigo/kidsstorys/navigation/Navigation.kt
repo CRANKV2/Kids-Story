@@ -1,12 +1,15 @@
 package com.gigo.kidsstorys.navigation
 
 import OnboardingScreen
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.gigo.kidsstorys.ui.screens.*
 
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun AppNavigation(
     navController: NavHostController,
@@ -68,6 +71,14 @@ fun AppNavigation(
         composable("chat") {
             ChatScreen(
                 navController = navController
+            )
+        }
+
+        // In deiner Navigation
+        composable("about") {
+            AboutScreen(
+                navController = navController,
+                isDarkTheme = isDarkTheme
             )
         }
     }

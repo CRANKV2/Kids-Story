@@ -818,8 +818,39 @@ fun SettingsScreen(
                 }
 
                 Spacer(modifier = Modifier.height(32.dp))
-                SettingsFooter(cardAlpha = cardAlpha.value, hasBackground = backgroundImageFile.exists())
-                Spacer(modifier = Modifier.height(24.dp))
+
+                // Über die App Button
+                Button(
+                    onClick = { navController.navigate("about") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
+                    )
+                ) {
+                    Text(
+                        "Über die App",
+                        color = TextLight,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+
+                // App Version
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        "Build: 10. Januar 2025",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextLight.copy(alpha = 0.5f)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }
@@ -871,136 +902,6 @@ fun SettingsScreen(
                     onClick = { onColorSelected(color) }
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun SettingsFooter(
-    cardAlpha: Float,
-    hasBackground: Boolean = false
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .shadow(
-                elevation = 8.dp * cardAlpha,
-                spotColor = AccentPurple.copy(alpha = cardAlpha),
-                ambientColor = AccentPurple.copy(alpha = cardAlpha),
-                shape = RoundedCornerShape(24.dp)
-            ),
-        colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha)
-        ),
-        shape = RoundedCornerShape(24.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            // Oberer Gradient-Divider
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(2.dp)
-                    .background(
-                        brush = androidx.compose.ui.graphics.Brush.horizontalGradient(
-                            colors = listOf(
-                                AccentPurple.copy(alpha = 0.0f),
-                                AccentPurple.copy(alpha = 0.7f),
-                                AccentPurple.copy(alpha = 0.0f)
-                            )
-                        )
-                    )
-            )
-
-            Text(
-                "© 2025-2026",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 0.5.sp,
-                    shadow = Shadow(
-                        color = AccentPurple.copy(alpha = 0.5f),
-                        offset = Offset(0f, 2f),
-                        blurRadius = 4f
-                    )
-                ),
-                color = AccentPurple
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Zentrierte Spalte für "Made with ❤️" und Namen
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(
-                    "Made with",
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        shadow = Shadow(
-                            color = AccentPurple.copy(alpha = 0.5f),
-                            offset = Offset(0f, 2f),
-                            blurRadius = 3f
-                        )
-                    ),
-                    color = TextLight.copy(alpha = 0.9f)
-                )
-
-                Text(
-                    "❤️",
-                    fontSize = 28.sp,
-                    modifier = Modifier.shadow(
-                        elevation = 8.dp,
-                        spotColor = AccentPurple
-                    )
-                )
-
-                Text(
-                    "Francesco De Martino",
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 0.5.sp,
-                        shadow = Shadow(
-                            color = AccentPurple.copy(alpha = 0.6f),
-                            offset = Offset(0f, 2f),
-                            blurRadius = 5f
-                        )
-                    ),
-                    modifier = Modifier
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(
-                                    AccentPurple,
-                                    AccentPurple.copy(alpha = 0.7f)
-                                )
-                            ),
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    color = Color.White
-                )
-            }
-
-            // Unterer Gradient-Divider
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(2.dp)
-                    .background(
-                        brush = androidx.compose.ui.graphics.Brush.horizontalGradient(
-                            colors = listOf(
-                                AccentPurple.copy(alpha = 0.0f),
-                                AccentPurple.copy(alpha = 0.7f),
-                                AccentPurple.copy(alpha = 0.0f)
-                            )
-                        )
-                    )
-            )
         }
     }
 }
