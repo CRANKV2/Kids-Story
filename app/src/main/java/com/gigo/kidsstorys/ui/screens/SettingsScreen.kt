@@ -87,6 +87,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import com.gigo.kidsstorys.ui.theme.getCardBackgroundColor
 import java.io.File
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalDensity
 
 
 
@@ -103,6 +105,9 @@ fun SettingsScreen(
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+    
+    // ScrollVerhalten für die TopBar
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     // Initialisiere die State-Variablen mit den gespeicherten Werten
     var fontSize by remember { mutableStateOf(settingsManager.fontSize.toFloat()) }
@@ -183,14 +188,17 @@ fun SettingsScreen(
         }
 
         Scaffold(
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             containerColor = Color.Transparent,
             topBar = {
                 CenterAlignedTopAppBar(
+                    scrollBehavior = scrollBehavior,
                     title = {
                         Text(
                             stringResource(R.string.einstellungen),
                             style = MaterialTheme.typography.titleLarge.copy(
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
+                                fontSize = (45f / LocalDensity.current.density).sp
                             ),
                             color = Color.White
                         )
@@ -222,13 +230,9 @@ fun SettingsScreen(
                 )
             },
             snackbarHost = {
-                SnackbarHost(
-                    hostState = snackbarHostState,
-                    modifier = Modifier.padding(16.dp)
-                )
-            },
-
-            ) { paddingValues ->
+                SnackbarHost(hostState = snackbarHostState)
+            }
+        ) { paddingValues ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -240,7 +244,7 @@ fun SettingsScreen(
                 Text(
                     stringResource(R.string.hauptbildschirm_h1),
                     style = MaterialTheme.typography.headlineMedium,
-                    fontSize = 24.sp,
+                    fontSize = (55f / LocalDensity.current.density).sp,
                     fontWeight = FontWeight.Bold,
                     color = TextLight,
                     modifier = Modifier
@@ -367,6 +371,23 @@ fun SettingsScreen(
                         }
 
                         Spacer(modifier = Modifier.height(24.dp))
+
+                        // Trennlinie
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(2.dp)
+                                .background(
+                                    brush = Brush.horizontalGradient(
+                                        colors = listOf(
+                                            AccentPurple.copy(alpha = 0.0f),
+                                            AccentPurple.copy(alpha = 0.7f),
+                                            AccentPurple.copy(alpha = 0.0f)
+                                        )
+                                    )
+                                )
+                        )
+
 
                         // Hintergrundbild-Einstellung
                         Column {
@@ -497,11 +518,11 @@ fun SettingsScreen(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                // Leseansicht Titel
+                // Darstellung Titel
                 Text(
                     stringResource(R.string.darstellung_title),
                     style = MaterialTheme.typography.headlineMedium,
-                    fontSize = 28.sp,
+                    fontSize = (55f / LocalDensity.current.density).sp,
                     fontWeight = FontWeight.Bold,
                     color = TextLight,
                     modifier = Modifier
@@ -594,48 +615,18 @@ fun SettingsScreen(
                                 )
                             )
                         }
-                    }
 
-                Spacer(modifier = Modifier.height(32.dp))
-
-                // Leseansicht Titel
-                Text(
-                    stringResource(R.string.leseansicht),
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontSize = 28.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = TextLight,
-                    modifier = Modifier
-                        .padding(vertical = 16.dp)
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                )
-
-                // Leseansicht Card
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
-                    ),
-                    shape = RoundedCornerShape(16.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        Text(
-                            stringResource(R.string.leseansicht),
-                            style = MaterialTheme.typography.titleLarge,
-                            color = Color(0xFF9575CD)
-                        )
-
-                        // Nur noch Zeilenumbruch-Option
+                        // Zeilenumbruch-Option innerhalb der Darstellung Card
                         Row(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 12.dp, vertical = 8.dp),  // Padding für die Row
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Column {
+                            Column(
+                                modifier = Modifier.padding(end = 16.dp)  // Abstand zwischen Text und Switch
+                            ) {
                                 Text(
                                     stringResource(R.string.zeilenumbruch_empfohlen),
                                     style = MaterialTheme.typography.titleMedium,
@@ -660,7 +651,7 @@ fun SettingsScreen(
                             )
                         }
                     }
-                }
+
 
                 Spacer(modifier = Modifier.height(32.dp))
 
@@ -668,7 +659,7 @@ fun SettingsScreen(
                 Text(
                     stringResource(R.string.farbeinstellungen),
                     style = MaterialTheme.typography.headlineMedium,
-                    fontSize = 28.sp,
+                    fontSize = (55f / LocalDensity.current.density).sp,
                     fontWeight = FontWeight.Bold,
                     color = TextLight,
                     modifier = Modifier

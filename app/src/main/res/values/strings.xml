@@ -31,7 +31,7 @@
     <string name="schriftgroese_beim_lesen">Schriftgröße beim Lesen</string>
     <string name="schriftgroese_beim_lesen_context">Betrifft nur die Schriftgröße beim Lesen einer Geschichte</string>
     <string name="zeilenumbruch_empfohlen">Zeilenumbruch (empfohlen)</string>
-    <string name="automatischer_zeilenumbruch_beim_lesen">Automatischer Zeilenumbruch beim Lesen</string>
+    <string name="automatischer_zeilenumbruch_beim_lesen">Automatischer Zeilenumbruch</string>
     <string name="zeilenumbruch_setting">Text am Bildschirmrand umbrechen</string>
     <string name="farbeinstellungen">Farbeinstellungen</string>
     <string name="farbeinstellungen_h2">🎨 Farbeinstellungen</string>
