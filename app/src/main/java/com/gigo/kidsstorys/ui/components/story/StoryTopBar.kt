@@ -78,7 +78,7 @@ fun StoryTopBar(
                     color = Color.White
                 )
                 Text(
-                    "$storiesCount Geschichten",
+                    if (storiesCount == 1) "1 Geschichte" else "$storiesCount Geschichten",
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.White.copy(alpha = 0.8f)
                 )

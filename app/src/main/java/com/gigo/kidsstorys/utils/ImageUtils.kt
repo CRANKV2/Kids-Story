@@ -10,34 +10,52 @@ import java.io.File
 import java.io.FileOutputStream
 
 object ImageUtils {
+    private const val MAX_WIDTH = 1920
+    private const val MAX_HEIGHT = 1080
+    private const val JPEG_QUALITY = 85
+    private const val MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024 // 5MB
+
     fun processAndSaveImage(context: Context, uri: Uri): Boolean {
         return try {
             // Bild laden
-            val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri))
-            } else {
-                MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
-            }
-
-            // Bild auf maximale Größe skalieren (z.B. 1920x1080)
-            val scaledBitmap = scaleBitmap(bitmap, 1920, 1080)
-
-            // Bild im internen Speicher speichern
+            val bitmap = loadBitmapFromUri(context, uri)
+            
+            // Erste Skalierung basierend auf Dimensionen
+            var optimizedBitmap = scaleBitmap(bitmap, MAX_WIDTH, MAX_HEIGHT)
+            
+            // Komprimierung mit Qualitätsanpassung
+            var quality = JPEG_QUALITY
+            var fileSize: Long
             val file = File(context.filesDir, "background_image.jpg")
-            FileOutputStream(file).use { out ->
-                scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 85, out)
-            }
+            
+            do {
+                FileOutputStream(file).use { out ->
+                    optimizedBitmap.compress(Bitmap.CompressFormat.JPEG, quality, out)
+                }
+                fileSize = file.length()
+                quality -= 5
+            } while (fileSize > MAX_FILE_SIZE_BYTES && quality > 30)
 
             // Ursprüngliche Bitmaps freigeben
-            bitmap.recycle()
-            if (bitmap != scaledBitmap) {
-                scaledBitmap.recycle()
+            if (bitmap != optimizedBitmap) {
+                bitmap.recycle()
             }
-
+            
             true
         } catch (e: Exception) {
             e.printStackTrace()
             false
+        }
+    }
+
+    private fun loadBitmapFromUri(context: Context, uri: Uri): Bitmap {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri)) { decoder, _, _ ->
+                decoder.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
+                decoder.isMutableRequired = true
+            }
+        } else {
+            MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
         }
     }
 

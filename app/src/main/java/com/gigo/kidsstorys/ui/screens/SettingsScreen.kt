@@ -89,7 +89,7 @@ import com.gigo.kidsstorys.ui.theme.getCardBackgroundColor
 import java.io.File
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
-
+import androidx.compose.runtime.LaunchedEffect
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -105,7 +105,7 @@ fun SettingsScreen(
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
-    
+
     // ScrollVerhalten für die TopBar
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
@@ -139,11 +139,25 @@ fun SettingsScreen(
 
     val cardAlpha = settingsManager.cardAlpha.collectAsState(initial = 0.75f)
 
+    val backgroundImageFile = File(context.filesDir, "background_image.jpg")
+    var backgroundBitmap by remember { mutableStateOf<android.graphics.Bitmap?>(null) }
+
+    // Initialisiere das Bitmap, wenn die Datei existiert
+    LaunchedEffect(Unit) {
+        if (backgroundImageFile.exists()) {
+            backgroundBitmap = BitmapFactory.decodeFile(backgroundImageFile.absolutePath)
+        }
+    }
+
     // Bildverarbeitungs-Logik
     fun processSelectedImage(uri: Uri) {
         scope.launch {
             isProcessingImage = true
             val success = ImageUtils.processAndSaveImage(context, uri)
+            if (success) {
+                // Aktualisieren Sie das Bitmap nach erfolgreicher Speicherung
+                backgroundBitmap = BitmapFactory.decodeFile(backgroundImageFile.absolutePath)
+            }
             isProcessingImage = false
             showImagePickerDialog = false
 
@@ -152,7 +166,6 @@ fun SettingsScreen(
             } else {
                 "Fehler beim Speichern des Hintergrundbildes"
             }
-
             snackbarHostState.showSnackbar(message)
         }
     }
@@ -166,20 +179,11 @@ fun SettingsScreen(
         }
     }
 
-    // Vorschau des aktuellen Hintergrundbildes
-    val backgroundImageFile = remember {
-        File(context.filesDir, "background_image.jpg")
-    }
-
-    // Nach der backgroundImageFile Definition (ca. Zeile 164)
     Box(modifier = Modifier.fillMaxSize()) {
         // Hintergrundbild
-        if (backgroundImageFile.exists()) {
-            val bitmap = remember {
-                BitmapFactory.decodeFile(backgroundImageFile.absolutePath)
-            }
+        if (backgroundBitmap != null) {
             Image(
-                bitmap = bitmap.asImageBitmap(),
+                bitmap = backgroundBitmap!!.asImageBitmap(),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
@@ -240,38 +244,48 @@ fun SettingsScreen(
                     .padding(paddingValues)
                     .padding(16.dp)
             ) {
-                // Hauptbildschirm Sektion
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                // Darstellung Titel
                 Text(
-                    stringResource(R.string.hauptbildschirm_h1),
+                    stringResource(R.string.darstellung_title),
                     style = MaterialTheme.typography.headlineMedium,
-                    fontSize = (55f / LocalDensity.current.density).sp,
+                    fontSize = (70f / LocalDensity.current.density).sp,
                     fontWeight = FontWeight.Bold,
                     color = TextLight,
                     modifier = Modifier
-                        .padding(vertical = 12.dp)
+                        .padding(vertical = 16.dp)
                         .fillMaxWidth()
                         .wrapContentWidth(Alignment.CenterHorizontally)
                 )
 
-                // Hauptbildschirm Einstellungen
+                // Gemeinsame Darstellungseinstellungen Card
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .shadow(
+                            elevation = 8.dp * cardAlpha.value,
+                            spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                            ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
+                            shape = RoundedCornerShape(16.dp)
+                        ),
                     colors = CardDefaults.cardColors(
                         containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
                     ),
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Column(
-                        modifier = Modifier.padding(12.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         Text(
-                            stringResource(R.string.hauptbildschirm),
-                            style = MaterialTheme.typography.titleMedium,
+                            "Darstellung",
+                            style = MaterialTheme.typography.titleLarge,
                             color = Color(0xFF9575CD)
                         )
 
-                        // Titel-Schriftgröße
+                        // Titel-Schriftgröße (vorher in Hauptbildschirm)
                         Column {
                             Text(
                                 stringResource(R.string.titel_schriftgroesse),
@@ -313,22 +327,22 @@ fun SettingsScreen(
                             )
                         }
 
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(2.dp)
-                                .background(
-                                    brush = androidx.compose.ui.graphics.Brush.horizontalGradient(
-                                        colors = listOf(
-                                            AccentPurple.copy(alpha = 0.0f),
-                                            AccentPurple.copy(alpha = 0.7f),
-                                            AccentPurple.copy(alpha = 0.0f)
-                                        )
+                        // Trennlinie
+                        Box(modifier = Modifier
+                            .fillMaxWidth()
+                            .height(2.dp)
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    colors = listOf(
+                                        AccentPurple.copy(alpha = 0.0f),
+                                        AccentPurple.copy(alpha = 0.7f),
+                                        AccentPurple.copy(alpha = 0.0f)
                                     )
                                 )
+                            )
                         )
 
-                        // Vorschau-Schriftgröße
+                        // Vorschau-Schriftgröße (vorher in Hauptbildschirm)
                         Column {
                             Text(
                                 stringResource(R.string.vorschau_schriftgroesse),
@@ -370,193 +384,97 @@ fun SettingsScreen(
                             )
                         }
 
-                        Spacer(modifier = Modifier.height(24.dp))
-
                         // Trennlinie
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(2.dp)
-                                .background(
-                                    brush = Brush.horizontalGradient(
-                                        colors = listOf(
-                                            AccentPurple.copy(alpha = 0.0f),
-                                            AccentPurple.copy(alpha = 0.7f),
-                                            AccentPurple.copy(alpha = 0.0f)
-                                        )
+                        Box(modifier = Modifier
+                            .fillMaxWidth()
+                            .height(2.dp)
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    colors = listOf(
+                                        AccentPurple.copy(alpha = 0.0f),
+                                        AccentPurple.copy(alpha = 0.7f),
+                                        AccentPurple.copy(alpha = 0.0f)
                                     )
                                 )
+                            )
                         )
 
-
-                        // Hintergrundbild-Einstellung
+                        // Hintergrundbild-Einstellungen
                         Column {
                             Text(
                                 "Hintergrundbild",
-                                style = MaterialTheme.typography.titleMedium,
+                                style = MaterialTheme.typography.bodyLarge,
                                 color = TextLight
                             )
-                            Text(
-                                "Wähle ein Hintergrundbild für den Hauptbildschirm",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = TextLight.copy(alpha = 0.7f)
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-
+                            
                             Button(
                                 onClick = { imagePickerLauncher.launch("image/*") },
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .shadow(
-                                        elevation = 6.dp,
-                                        spotColor = AccentPurple,
-                                        shape = RoundedCornerShape(16.dp)
-                                    ),
-                                contentPadding = PaddingValues(vertical = 6.dp, horizontal = 12.dp),
+                                    .padding(vertical = 8.dp),
                                 colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color(0xFF353545)
-                                ),
-                                shape = RoundedCornerShape(16.dp)
+                                    containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
+                                )
                             ) {
                                 Text(
                                     "Hintergrundbild auswählen",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = TextLight,
-                                    modifier = Modifier.padding(vertical = 4.dp)
+                                    color = TextLight
                                 )
                             }
 
-                            // Image Picker Dialog
-                            if (showImagePickerDialog) {
-                                Dialog(onDismissRequest = { showImagePickerDialog = false }) {
-                                    Surface(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .wrapContentHeight()
-                                            .shadow(
-                                                elevation = 16.dp,
-                                                spotColor = AccentPurple,
-                                                shape = RoundedCornerShape(24.dp)
-                                            ),
-                                        shape = RoundedCornerShape(24.dp),
-                                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = cardAlpha.value)
-                                    ) {
-                                        Column(
-                                            modifier = Modifier.padding(24.dp),
-                                            horizontalAlignment = Alignment.CenterHorizontally
-                                        ) {
-                                            if (isProcessingImage) {
-                                                CircularProgressIndicator(color = AccentPurple)
-                                                Text(
-                                                    "Bild wird verarbeitet...",
-                                                    color = TextLight,
-                                                    modifier = Modifier.padding(top = 16.dp)
-                                                )
-                                            } else {
-                                                Text(
-                                                    "Hintergrundbild auswählen",
-                                                    style = MaterialTheme.typography.titleLarge,
-                                                    color = TextLight
-                                                )
-                                                Spacer(modifier = Modifier.height(16.dp))
-                                                Button(
-                                                    onClick = { imagePickerLauncher.launch("image/*") },
-                                                    colors = ButtonDefaults.buttonColors(
-                                                        containerColor = AccentPurple
-                                                    )
-                                                ) {
-                                                    Text("Aus Galerie wählen")
-                                                }
-                                            }
+                            // Vorschau des aktuellen Hintergrundbildes
+                            if (backgroundBitmap != null) {
+                                Spacer(modifier = Modifier.height(16.dp))
+
+                                Surface(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(120.dp)
+                                        .clip(RoundedCornerShape(16.dp))
+                                ) {
+                                    Image(
+                                        bitmap = backgroundBitmap!!.asImageBitmap(),
+                                        contentDescription = "Aktuelles Hintergrundbild",
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier.fillMaxSize()
+                                    )
+                                }
+
+                                TextButton(
+                                    onClick = {
+                                        scope.launch {
+                                            backgroundImageFile.delete()
+                                            backgroundBitmap = null
+                                            snackbarHostState.showSnackbar("Hintergrundbild wurde entfernt")
                                         }
-                                    }
+                                    },
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text(
+                                        "Hintergrundbild entfernen",
+                                        color = Color.Red.copy(alpha = 0.7f),
+                                        modifier = Modifier.wrapContentWidth(Alignment.End)
+                                    )
                                 }
                             }
                         }
 
-                        // Vorschau des aktuellen Hintergrundbildes
-                        if (backgroundImageFile.exists()) {
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            // Vorschau
-                            Surface(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(120.dp)
-                                    .clip(RoundedCornerShape(16.dp))
-                            ) {
-                                Image(
-                                    bitmap = remember {
-                                        BitmapFactory.decodeFile(backgroundImageFile.absolutePath)
-                                            .asImageBitmap()
-                                    },
-                                    contentDescription = "Aktuelles Hintergrundbild",
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier.fillMaxSize()
+                        // Trennlinie
+                        Box(modifier = Modifier
+                            .fillMaxWidth()
+                            .height(2.dp)
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    colors = listOf(
+                                        AccentPurple.copy(alpha = 0.0f),
+                                        AccentPurple.copy(alpha = 0.7f),
+                                        AccentPurple.copy(alpha = 0.0f)
+                                    )
                                 )
-                            }
-
-                            // Reset-Button
-                            TextButton(
-                                onClick = {
-                                    scope.launch {
-                                        backgroundImageFile.delete()
-                                        snackbarHostState.showSnackbar("Hintergrundbild wurde entfernt")
-                                    }
-                                },
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Text(
-                                    "Hintergrundbild entfernen",
-                                    color = Color.Red.copy(alpha = 0.7f),
-                                    modifier = Modifier.wrapContentWidth(Alignment.End)
-                                )
-                            }
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                // Darstellung Titel
-                Text(
-                    stringResource(R.string.darstellung_title),
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontSize = (55f / LocalDensity.current.density).sp,
-                    fontWeight = FontWeight.Bold,
-                    color = TextLight,
-                    modifier = Modifier
-                        .padding(vertical = 16.dp)
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                )
-
-                // Darstellungseinstellungen Card
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .shadow(
-                            elevation = 8.dp * cardAlpha.value,
-                            spotColor = AccentPurple.copy(alpha = cardAlpha.value),
-                            ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
-                            shape = RoundedCornerShape(16.dp)
-                        ),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
-                    ),
-                    shape = RoundedCornerShape(16.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        Text(
-                            "Darstellung",
-                            style = MaterialTheme.typography.titleLarge,
-                            color = Color(0xFF9575CD)
+                            )
                         )
 
-                        // Karten-Transparenz Einstellung
+                        // Karten-Transparenz (war bereits in Darstellung)
                         Column {
                             Text(
                                 "Karten-Transparenz",
@@ -600,27 +518,25 @@ fun SettingsScreen(
                         }
 
                         // Trennlinie
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(2.dp)
-                                .background(
-                                    brush = Brush.horizontalGradient(
-                                        colors = listOf(
-                                            AccentPurple.copy(alpha = 0.0f),
-                                            AccentPurple.copy(alpha = 0.7f),
-                                            AccentPurple.copy(alpha = 0.0f)
-                                        )
+                        Box(modifier = Modifier
+                            .fillMaxWidth()
+                            .height(2.dp)
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    colors = listOf(
+                                        AccentPurple.copy(alpha = 0.0f),
+                                        AccentPurple.copy(alpha = 0.7f),
+                                        AccentPurple.copy(alpha = 0.0f)
                                     )
                                 )
                             )
-                        }
+                        )
 
-                        // Zeilenumbruch-Option innerhalb der Darstellung Card
+                        // Zeilenumbruch-Option (war bereits in Darstellung)
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 12.dp, vertical = 8.dp),  // Padding für die Row
+                                .padding(horizontal = 12.dp, vertical = 8.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -651,7 +567,7 @@ fun SettingsScreen(
                             )
                         }
                     }
-
+                }
 
                 Spacer(modifier = Modifier.height(32.dp))
 
@@ -659,7 +575,7 @@ fun SettingsScreen(
                 Text(
                     stringResource(R.string.farbeinstellungen),
                     style = MaterialTheme.typography.headlineMedium,
-                    fontSize = (55f / LocalDensity.current.density).sp,
+                    fontSize = (70f / LocalDensity.current.density).sp,
                     fontWeight = FontWeight.Bold,
                     color = TextLight,
                     modifier = Modifier

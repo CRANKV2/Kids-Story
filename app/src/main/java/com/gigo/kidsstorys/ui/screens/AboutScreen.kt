@@ -39,6 +39,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -48,6 +49,7 @@ import com.gigo.kidsstorys.data.SettingsManager
 import com.gigo.kidsstorys.ui.theme.AccentPurple
 import com.gigo.kidsstorys.ui.theme.TextLight
 import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
+
 
 
 @RequiresApi(Build.VERSION_CODES.P)
@@ -110,6 +112,8 @@ fun AboutScreen(
                         .padding(16.dp)
                 )
 
+                Spacer(modifier = Modifier.height(32.dp))
+
                 // App Name
                 Text(
                     "Kids Storys",
@@ -133,6 +137,8 @@ fun AboutScreen(
                     style = MaterialTheme.typography.bodyMedium,
                     color = TextLight.copy(alpha = 0.7f)
                 )
+
+                Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
                     "Release: 10. Januar 2025",
@@ -164,7 +170,9 @@ fun AboutScreen(
                             color = TextLight,
                             textAlign = TextAlign.Center
                         )
-                        
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
                         Text(
                             "Francesco De Martino",
                             style = MaterialTheme.typography.titleLarge.copy(
