@@ -760,7 +760,7 @@ fun SettingsScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        "Build: 10. Januar 2025",
+                        "Build: Amethyst",
                         style = MaterialTheme.typography.bodySmall,
                         color = TextLight.copy(alpha = 0.5f)
                     )
