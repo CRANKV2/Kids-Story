@@ -91,35 +91,35 @@ fun StoryTopBar(
                 // View Toggle Button
                 FilledIconButton(
                     onClick = onViewToggle,
-                    modifier = Modifier.size(40.dp),
+                    modifier = Modifier.size(45.dp),
                     colors = IconButtonDefaults.filledIconButtonColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer
                     )
                 ) {
                     Icon(
                         painter = painterResource(
-                            id = if (isCompactView) R.drawable.ic_grid_view
-                            else R.drawable.ic_list_view
+                            id = if (isCompactView) R.drawable.grid_1
+                            else R.drawable.grid_2
                         ),
                         contentDescription = if (isCompactView) "Zur Listenansicht wechseln" 
                         else "Zur Rasteransicht wechseln",
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.size(24.dp)
+                        tint = Color.Unspecified,
+                        modifier = Modifier.size(18.dp)
                     )
                 }
                 
                 // Chat Button
                 FilledIconButton(
                     onClick = onChatClick,
-                    modifier = Modifier.size(40.dp),
+                    modifier = Modifier.size(45.dp),
                     colors = IconButtonDefaults.filledIconButtonColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer
                     )
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_ai_chat),
+                        painter = painterResource(id = R.drawable.ic_ai),
                         contentDescription = "KI Chat öffnen",
-                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                        tint = Color.Unspecified,
                         modifier = Modifier.size(24.dp)
                     )
                 }
@@ -127,15 +127,15 @@ fun StoryTopBar(
                 // Settings Button
                 FilledIconButton(
                     onClick = onSettingsClick,
-                    modifier = Modifier.size(40.dp),
+                    modifier = Modifier.size(45.dp),
                     colors = IconButtonDefaults.filledIconButtonColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer
                     )
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_settings),
+                        painter = painterResource(id = R.drawable.settings_icon),
                         contentDescription = "Einstellungen",
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        tint = Color.Unspecified,
                         modifier = Modifier.size(24.dp)
                     )
                 }

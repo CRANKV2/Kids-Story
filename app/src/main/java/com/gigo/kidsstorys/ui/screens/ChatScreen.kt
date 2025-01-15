@@ -75,18 +75,25 @@ fun ChatScreen(
         File(context.filesDir, "background_image.jpg")
     }
 
+    var backgroundBitmap by remember { mutableStateOf<android.graphics.Bitmap?>(null) }
+    val backgroundAlpha = remember { settingsManager.backgroundAlpha }
+
+    // Initialisiere das Bitmap
+    LaunchedEffect(Unit) {
+        if (backgroundImageFile.exists()) {
+            backgroundBitmap = BitmapFactory.decodeFile(backgroundImageFile.absolutePath)
+        }
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         // Hintergrundbild
-        if (backgroundImageFile.exists()) {
-            val bitmap = remember {
-                BitmapFactory.decodeFile(backgroundImageFile.absolutePath)
-            }
+        if (backgroundBitmap != null) {
             Image(
-                bitmap = bitmap.asImageBitmap(),
+                bitmap = backgroundBitmap!!.asImageBitmap(),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
-                alpha = 0.15f
+                alpha = backgroundAlpha
             )
         }
 
@@ -117,7 +124,7 @@ fun ChatScreen(
                         IconButton(
                             onClick = { navController.navigateUp() },
                             modifier = Modifier
-                                .size(32.dp),
+                                .size(40.dp),
                             content = {
                                 Box(
                                     modifier = Modifier
@@ -130,7 +137,7 @@ fun ChatScreen(
                                         contentDescription = "Zurück",
                                         tint = Color.White,
                                         modifier = Modifier
-                                            .size(20.dp)
+                                            .size(25.dp)
                                             .align(Alignment.Center)
                                     )
                                 }
@@ -146,7 +153,7 @@ fun ChatScreen(
                         IconButton(
                             onClick = { viewModel.clearChat() },
                             modifier = Modifier
-                                .size(32.dp),
+                                .size(40.dp),
                             content = {
                                 Box(
                                     modifier = Modifier
@@ -159,7 +166,7 @@ fun ChatScreen(
                                         contentDescription = "Chat löschen",
                                         tint = Color.White,
                                         modifier = Modifier
-                                            .size(20.dp)
+                                            .size(25.dp)
                                             .align(Alignment.Center)
                                     )
                                 }
@@ -336,7 +343,7 @@ fun ChatScreen(
                             placeholder = {
                                 Text(
                                     "Schreibe eine Nachricht...",
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                                 )
                             },
                             colors = TextFieldDefaults.colors(
@@ -346,7 +353,7 @@ fun ChatScreen(
                                 unfocusedIndicatorColor = Color.Transparent
                             ),
                             textStyle = MaterialTheme.typography.bodyLarge.copy(
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                             )
                         )
                         
@@ -360,7 +367,7 @@ fun ChatScreen(
                                 }
                             },
                             modifier = Modifier
-                                .size(32.dp),
+                                .size(40.dp),
                             enabled = messageText.isNotBlank()
                         ) {
                             Box(
@@ -377,7 +384,7 @@ fun ChatScreen(
                                     contentDescription = "Senden",
                                     tint = Color.White,
                                     modifier = Modifier
-                                        .size(20.dp)
+                                        .size(25.dp)
                                         .align(Alignment.Center)
                                 )
                             }

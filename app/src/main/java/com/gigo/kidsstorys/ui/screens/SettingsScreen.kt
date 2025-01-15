@@ -114,6 +114,7 @@ fun SettingsScreen(
     var wrapText by remember { mutableStateOf(settingsManager.wrapText) }
     var titleSize by remember { mutableStateOf(settingsManager.titleSize.toFloat()) }
     var previewSize by remember { mutableStateOf(settingsManager.previewSize.toFloat()) }
+    var backgroundAlpha by remember { mutableStateOf(settingsManager.backgroundAlpha) }
 
     // Farb-States werden aus den Preferences initialisiert
     var cardTitleColor by remember(userPreferences.cardTitleColor) {
@@ -187,7 +188,7 @@ fun SettingsScreen(
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
-                alpha = 0.15f
+                alpha = backgroundAlpha
             )
         }
 
@@ -426,7 +427,7 @@ fun SettingsScreen(
                             if (backgroundBitmap != null) {
                                 Spacer(modifier = Modifier.height(16.dp))
 
-                                Surface(
+                                Box(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(120.dp)
@@ -436,9 +437,45 @@ fun SettingsScreen(
                                         bitmap = backgroundBitmap!!.asImageBitmap(),
                                         contentDescription = "Aktuelles Hintergrundbild",
                                         contentScale = ContentScale.Crop,
-                                        modifier = Modifier.fillMaxSize()
+                                        modifier = Modifier.fillMaxSize(),
+                                        alpha = backgroundAlpha
                                     )
                                 }
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                // Hintergrund-Transparenz Einstellungen
+                                Text(
+                                    "Hintergrund-Transparenz",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = TextLight
+                                )
+                                
+                                Slider(
+                                    value = backgroundAlpha,
+                                    onValueChange = { 
+                                        backgroundAlpha = it
+                                        settingsManager.backgroundAlpha = it
+                                    },
+                                    valueRange = 0.1f..1f,
+                                    steps = 9,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 8.dp),
+                                    colors = SliderDefaults.colors(
+                                        thumbColor = AccentPurple,
+                                        activeTrackColor = AccentPurple,
+                                        inactiveTrackColor = AccentPurple.copy(alpha = 0.3f)
+                                    )
+                                )
+
+                                Text(
+                                    "${(backgroundAlpha * 100).toInt()}% Sichtbarkeit",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = TextLight,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    textAlign = TextAlign.Center
+                                )
 
                                 TextButton(
                                     onClick = {

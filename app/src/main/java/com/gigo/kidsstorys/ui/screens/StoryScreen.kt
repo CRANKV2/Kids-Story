@@ -24,8 +24,11 @@ import com.gigo.kidsstorys.ui.components.story.GridStoryLayout
 import com.gigo.kidsstorys.ui.components.story.CompactStoryLayout
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import com.gigo.kidsstorys.R
 import java.io.File
 
 @Composable
@@ -47,18 +50,29 @@ fun StoryScreen(
     val backgroundImageFile = remember {
         File(localContext.filesDir, "background_image.jpg")
     }
+    var backgroundBitmap by remember { mutableStateOf<android.graphics.Bitmap?>(null) }
+    var backgroundAlpha by remember { mutableStateOf(settingsManager.backgroundAlpha) }
+
+    LaunchedEffect(Unit) {
+        settingsManager.backgroundAlphaFlow.collect { newAlpha ->
+            backgroundAlpha = newAlpha
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        if (backgroundImageFile.exists()) {
+            backgroundBitmap = BitmapFactory.decodeFile(backgroundImageFile.absolutePath)
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        if (backgroundImageFile.exists()) {
-            val bitmap = remember {
-                BitmapFactory.decodeFile(backgroundImageFile.absolutePath)
-            }
+        if (backgroundBitmap != null) {
             Image(
-                bitmap = bitmap.asImageBitmap(),
+                bitmap = backgroundBitmap!!.asImageBitmap(),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
-                alpha = 0.15f
+                alpha = backgroundAlpha
             )
         }
 
@@ -80,11 +94,16 @@ fun StoryScreen(
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = { showAddDialog = true },
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.padding(24.dp),
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 ) {
-                    Text("+", fontSize = 24.sp)
+                    Icon(
+                        painter = painterResource(id = R.drawable.fab_add_icon),  // Stelle sicher, dass du eine ic_add.xml in deinen Ressourcen hast
+                        contentDescription = "Geschichte hinzufügen",
+                        tint = Color.Unspecified,
+                        modifier = Modifier.size(40.dp)
+                    )
                 }
             },
             floatingActionButtonPosition = FabPosition.Center,
@@ -99,7 +118,7 @@ fun StoryScreen(
                         contentDescription = null,
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop,
-                        alpha = 0.15f
+                        alpha = backgroundAlpha
                     )
                 }
 

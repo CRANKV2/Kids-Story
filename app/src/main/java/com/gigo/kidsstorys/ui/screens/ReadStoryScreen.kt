@@ -85,6 +85,8 @@ fun ReadStoryScreen(
     val backgroundImageFile = remember {
         File(context.filesDir, "background_image.jpg")
     }
+    var backgroundBitmap by remember { mutableStateOf<android.graphics.Bitmap?>(null) }
+    val backgroundAlpha = remember { settingsManager.backgroundAlpha }
 
     val cardAlpha = settingsManager.cardAlpha.collectAsState(initial = 0.75f)
 
@@ -96,22 +98,25 @@ fun ReadStoryScreen(
         fontSize.value = userPreferences.fontSize.toFloat()
     }
 
+    LaunchedEffect(Unit) {
+        if (backgroundImageFile.exists()) {
+            backgroundBitmap = BitmapFactory.decodeFile(backgroundImageFile.absolutePath)
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
         // Hintergrundbild
-        if (backgroundImageFile.exists()) {
-            val bitmap = remember {
-                BitmapFactory.decodeFile(backgroundImageFile.absolutePath)
-            }
+        if (backgroundBitmap != null) {
             Image(
-                bitmap = bitmap.asImageBitmap(),
+                bitmap = backgroundBitmap!!.asImageBitmap(),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
-                alpha = 0.15f
+                alpha = backgroundAlpha
             )
         }
 
