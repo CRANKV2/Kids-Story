@@ -15,6 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gigo.kidsstorys.R
+import com.gigo.kidsstorys.ui.theme.AccentPurple
 import com.gigo.kidsstorys.ui.theme.TextLight
 
 @Composable
@@ -32,9 +33,9 @@ fun EmptyStateView() {
                 .shadow(
                     elevation = 16.dp,
                     shape = CircleShape,
-                    spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+                    spotColor = AccentPurple,
                 ),
-            color = Color(0xFF2D2D3A),
+            color = Color.Transparent,
             shape = CircleShape
         ) {
             Box(
@@ -44,7 +45,7 @@ fun EmptyStateView() {
                 Image(
                     painter = painterResource(id = R.drawable.empty_state_icon),
                     contentDescription = "Keine Geschichten",
-                    modifier = Modifier.size(100.dp)
+                    modifier = Modifier.size(145.dp)
                 )
             }
         }

@@ -9,7 +9,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.*
 import androidx.core.content.ContextCompat
 import com.gigo.kidsstorys.ui.components.PermissionDialog
-import com.gigo.kidsstorys.ui.components.ThankYouDialog
 
 @Composable
 fun RequestStoragePermission(
@@ -62,14 +61,5 @@ fun RequestStoragePermission(
                 onConfirm = { launcher.launch(permissions) }
             )
         }
-    }
-
-    if (showThankYouDialog) {
-        ThankYouDialog(
-            onDismiss = {
-                showThankYouDialog = false
-                onPermissionGranted()
-            }
-        )
     }
 } 

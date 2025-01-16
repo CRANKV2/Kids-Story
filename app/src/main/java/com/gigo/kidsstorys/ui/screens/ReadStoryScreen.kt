@@ -46,6 +46,10 @@ import java.io.File
 import androidx.compose.foundation.Image
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.ui.text.style.TextAlign
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -128,7 +132,43 @@ fun ReadStoryScreen(
                 modifier = Modifier.fillMaxSize(),
                 topBar = {
                     TopAppBar(
-                        title = { Text(currentStory.title, color = Color.White) },
+                        title = {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                IconButton(
+                                    onClick = { onBack() }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.ArrowBack,
+                                        contentDescription = "Zurück",
+                                        tint = Color.White
+                                    )
+                                }
+
+                                Text(
+                                    text = currentStory.title,
+                                    style = MaterialTheme.typography.titleLarge,
+                                    color = titleColor,
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+
+                                IconButton(
+                                    onClick = { showEditDialog = true }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Edit,
+                                        contentDescription = "Bearbeiten",
+                                        tint = Color.White
+                                    )
+                                }
+                            }
+                        },
                         navigationIcon = {
                             IconButton(onClick = onBack) {
                                 Icon(
@@ -266,13 +306,13 @@ fun ReadStoryScreen(
                                 .fillMaxWidth()
                                 .padding(16.dp)
                                 .shadow(
-                                    elevation = 16.dp * cardAlpha.value,
-                                    spotColor = AccentPurple.copy(alpha = cardAlpha.value),
-                                    ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
+                                    elevation = 16.dp,
+                                    spotColor = AccentPurple,
+                                    ambientColor = AccentPurple,
                                     shape = RoundedCornerShape(24.dp)
                                 ),
                             shape = RoundedCornerShape(24.dp),
-                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = cardAlpha.value)
+                            color = Color(0xFF2D2D3A)
                         ) {
                             Column(
                                 modifier = Modifier
@@ -304,13 +344,13 @@ fun ReadStoryScreen(
                                         .fillMaxWidth()
                                         .padding(vertical = 8.dp)
                                         .shadow(
-                                            elevation = 8.dp * cardAlpha.value,
-                                            spotColor = AccentPurple.copy(alpha = cardAlpha.value),
-                                            ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
+                                            elevation = 8.dp,
+                                            spotColor = AccentPurple,
+                                            ambientColor = AccentPurple,
                                             shape = RoundedCornerShape(16.dp)
                                         ),
                                     colors = ButtonDefaults.filledTonalButtonColors(
-                                        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = cardAlpha.value)
+                                        containerColor = MaterialTheme.colorScheme.primaryContainer
                                     ),
                                     shape = RoundedCornerShape(16.dp)
                                 ) {
@@ -330,13 +370,13 @@ fun ReadStoryScreen(
                                         .fillMaxWidth()
                                         .padding(vertical = 8.dp)
                                         .shadow(
-                                            elevation = 8.dp * cardAlpha.value,
-                                            spotColor = AccentPurple.copy(alpha = cardAlpha.value),
-                                            ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
+                                            elevation = 8.dp,
+                                            spotColor = AccentPurple,
+                                            ambientColor = AccentPurple,
                                             shape = RoundedCornerShape(16.dp)
                                         ),
                                     colors = ButtonDefaults.filledTonalButtonColors(
-                                        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = cardAlpha.value)
+                                        containerColor = MaterialTheme.colorScheme.primaryContainer
                                     ),
                                     shape = RoundedCornerShape(16.dp)
                                 ) {
@@ -360,13 +400,13 @@ fun ReadStoryScreen(
                                 .padding(horizontal = 8.dp)
                                 .wrapContentHeight()
                                 .shadow(
-                                    elevation = 16.dp * cardAlpha.value,
-                                    spotColor = AccentPurple.copy(alpha = cardAlpha.value),
-                                    ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
+                                    elevation = 16.dp,
+                                    spotColor = AccentPurple,
+                                    ambientColor = AccentPurple,
                                     shape = RoundedCornerShape(24.dp)
                                 ),
                             shape = RoundedCornerShape(24.dp),
-                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = cardAlpha.value)
+                            color = Color(0xFF2D2D3A)
                         ) {
                             Column(
                                 modifier = Modifier
@@ -453,13 +493,13 @@ fun ReadStoryScreen(
                                         modifier = Modifier
                                             .weight(1f)
                                             .shadow(
-                                                elevation = 8.dp * cardAlpha.value,
-                                                spotColor = AccentPurple.copy(alpha = cardAlpha.value),
-                                                ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
+                                                elevation = 8.dp,
+                                                spotColor = AccentPurple,
+                                                ambientColor = AccentPurple,
                                                 shape = RoundedCornerShape(20.dp)
                                             ),
                                         colors = ButtonDefaults.filledTonalButtonColors(
-                                            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = cardAlpha.value)
+                                            containerColor = MaterialTheme.colorScheme.primaryContainer
                                         ),
                                         shape = RoundedCornerShape(20.dp)
                                     ) {
@@ -485,13 +525,13 @@ fun ReadStoryScreen(
                                 .padding(horizontal = 8.dp)
                                 .wrapContentHeight()
                                 .shadow(
-                                    elevation = 16.dp * cardAlpha.value,
-                                    spotColor = AccentPurple.copy(alpha = cardAlpha.value),
-                                    ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
+                                    elevation = 16.dp,
+                                    spotColor = AccentPurple,
+                                    ambientColor = AccentPurple,
                                     shape = RoundedCornerShape(24.dp)
                                 ),
                             shape = RoundedCornerShape(24.dp),
-                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = cardAlpha.value)
+                            color = Color(0xFF2D2D3A)
                         ) {
                             Column(
                                 modifier = Modifier
@@ -578,13 +618,13 @@ fun ReadStoryScreen(
                                         modifier = Modifier
                                             .weight(1f)
                                             .shadow(
-                                                elevation = 8.dp * cardAlpha.value,
-                                                spotColor = AccentPurple.copy(alpha = cardAlpha.value),
-                                                ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
+                                                elevation = 8.dp,
+                                                spotColor = AccentPurple,
+                                                ambientColor = AccentPurple,
                                                 shape = RoundedCornerShape(20.dp)
                                             ),
                                         colors = ButtonDefaults.filledTonalButtonColors(
-                                            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = cardAlpha.value)
+                                            containerColor = MaterialTheme.colorScheme.primaryContainer
                                         ),
                                         shape = RoundedCornerShape(20.dp)
                                     ) {
@@ -603,4 +643,4 @@ fun ReadStoryScreen(
             }
         }
     }
-} 
+}

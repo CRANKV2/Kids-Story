@@ -1,11 +1,18 @@
 package com.gigo.kidsstorys.ui.components.story
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -19,131 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.gigo.kidsstorys.R
-import com.gigo.kidsstorys.ui.theme.*
+import com.gigo.kidsstorys.ui.theme.AccentPurple
 
-@Composable
-fun StoryTutorialDialog(
-    onDismiss: () -> Unit,
-    isDarkTheme: Boolean
-) {
-    var currentTipIndex by remember { mutableStateOf(0) }
-    val tips = listOf(
-        "Tippe auf + um eine neue Geschichte zu erstellen",
-        "Tippe auf eine Geschichte um sie zu lesen",
-        "Tippe auf ⚙️ um die Einstellungen zu öffnen",
-        "Tippe auf ⋮ um eine Geschichte zu bearbeiten oder zu löschen",
-        "In den Einstellungen kannst du Textgrößen und Farben anpassen"
-    )
-
-    Dialog(onDismissRequest = onDismiss) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .shadow(
-                    elevation = 8.dp,
-                    shape = RoundedCornerShape(24.dp),
-                    ambientColor = Color(0xFF9575CD)
-                ),
-            shape = RoundedCornerShape(24.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = if (isDarkTheme) Color(0xFF2D2D3A) else Color(0xFFF5F5F5)
-            )
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    stringResource(R.string.tipps_tricks),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 24.dp),
-                    textAlign = TextAlign.Center,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = TextLight
-                )
-
-                Text(
-                    text = tips[currentTipIndex],
-                    textAlign = TextAlign.Center,
-                    fontSize = 20.sp,
-                    color = TextLight,
-                    modifier = Modifier.padding(bottom = 32.dp)
-                )
-                
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(
-                        onClick = { if (currentTipIndex > 0) currentTipIndex-- },
-                        modifier = Modifier
-                            .size(64.dp)
-                            .background(
-                                color = if (isDarkTheme) Color(0xFF353545) else Color(0xFFEEEEEE),
-                                shape = CircleShape
-                            )
-                    ) {
-                        Text(
-                            stringResource(R.string.tipps_tricks_back),
-                            fontSize = 32.sp
-                        )
-                    }
-                    
-                    Text(
-                        "${currentTipIndex + 1}/${tips.size}",
-                        fontSize = 18.sp,
-                        color = TextLight
-                    )
-                    
-                    IconButton(
-                        onClick = { if (currentTipIndex < tips.size - 1) currentTipIndex++ },
-                        modifier = Modifier
-                            .size(64.dp)
-                            .background(
-                                color = if (isDarkTheme) Color(0xFF353545) else Color(0xFFEEEEEE),
-                                shape = CircleShape
-                            )
-                    ) {
-                        Text(
-                            stringResource(R.string.tipps_tricks_forward),
-                            fontSize = 32.sp
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                Button(
-                    onClick = onDismiss,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary
-                    ),
-                    shape = RoundedCornerShape(16.dp),
-                    modifier = Modifier
-                        .fillMaxWidth(0.7f)
-                        .height(50.dp)
-                        .shadow(
-                            elevation = 4.dp,
-                            shape = RoundedCornerShape(16.dp),
-                            spotColor = MaterialTheme.colorScheme.primary
-                        )
-                ) {
-                    Text(
-                        stringResource(R.string.verstanden),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
-        }
-    }
-}
 
 @Composable
 fun StoryDeleteDialog(
@@ -217,12 +101,12 @@ fun StoryDeleteDialog(
                         },
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.filledTonalButtonColors(
-                            containerColor = Color(0xFFBA1A1A).copy(alpha = 0.12f)
+                            containerColor = Color(0xFFDC4614).copy(alpha = 0.12f)
                         )
                     ) {
                         Text(
                             stringResource(R.string.loeschen),
-                            color = Color(0xFFBA1A1A),
+                            color = Color(0xFFDC4614),
                             fontSize = 16.sp
                         )
                     }

@@ -13,14 +13,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App.Starting"
         tools:targetApi="31"
-        android:versionCode="3"
-        android:versionName="1.1.1">
+        android:versionCode="4"
+        android:versionName="1.1.2">
         <meta-data
             android:name="VERSION_NAME"
-            android:value="1.1.1" />
+            android:value="1.1.2" />
         <meta-data
             android:name="VERSION_CODE"
-            android:value="3" />
+            android:value="4" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

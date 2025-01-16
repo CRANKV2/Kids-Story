@@ -32,7 +32,12 @@ fun StoryCategoryDropdown(
                 "Das magische Spielzeug, das nachts zum Leben erwacht",
                 "Der vergessliche Zauberer und sein sprechender Hut",
                 "Eine Fee, die keine Flügel mag",
-                "Der mutige Kobold im Zaubergarten"
+                "Der mutige Kobold im Zaubergarten",
+                "Der sprechende Baum im verzauberten Wald",
+                "Die Reise zum Zentrum der Erde mit magischen Tieren",
+                "Der unsichtbare Freund und seine Abenteuer",
+                "Das verzauberte Haustier, das sprechen kann",
+                "Die magische Schatzsuche im eigenen Garten"
             )
         ),
         StoryCategory(
@@ -43,7 +48,12 @@ fun StoryCategoryDropdown(
                 "Das schüchterne Löwenbaby auf Freundschaftssuche",
                 "Die Maus, die Katzen das Fürchten lehrt",
                 "Ein Hund und sein Abenteuer im Hundepark",
-                "Die weise alte Schildkröte und ihre Geschichten"
+                "Die weise alte Schildkröte und ihre Geschichten",
+                "Der kleine Vogel, der das Fliegen lernt",
+                "Die Katze, die in den Zoo ausbüxt",
+                "Der Hamster, der ein Rockstar werden will",
+                "Das Pony, das sich verlaufen hat",
+                "Der Goldfisch, der sich etwas wünscht"
             )
         ),
         StoryCategory(
@@ -54,7 +64,12 @@ fun StoryCategoryDropdown(
                 "Das Raumschiff mit den bunten Sternenlichtern",
                 "Abenteuer auf dem Regenbogenplaneten",
                 "Der verlorene Satellit findet neue Freunde",
-                "Eine Reise durch die Milchstraße"
+                "Eine Reise durch die Milchstraße",
+                "Die Sternenfee und das Geheimnis des Kometen",
+                "Der Mondhase und seine Abenteuer im Weltall",
+                "Die Suche nach dem verlorenen Planeten",
+                "Der Roboter, der Freunde sucht",
+                "Picknick im Weltall"
             )
         ),
         StoryCategory(
@@ -65,7 +80,12 @@ fun StoryCategoryDropdown(
                 "Das Abenteuer beim Gemüse probieren",
                 "Ein regnerischer Tag wird zum Spielparadies",
                 "Die aufregende Reise mit dem Schulbus",
-                "Der geheimnisvolle Dachboden"
+                "Der geheimnisvolle Dachboden",
+                "Der Besuch beim Arzt macht Spaß",
+                "Zelten im Garten mit Freunden",
+                "Ein Ausflug in den Zoo",
+                "Backen mit Oma",
+                "Verloren im Supermarkt"
             )
         ),
         StoryCategory(
@@ -76,7 +96,12 @@ fun StoryCategoryDropdown(
                 "Der Drache, der Blumen züchtet",
                 "Eine Geschichte über einen verträumten Ritter",
                 "Die Meerjungfrau in der Badewanne",
-                "Der Zauberspiegel im Kinderzimmer"
+                "Der Zauberspiegel im Kinderzimmer",
+                "Der Prinz, der Angst im Dunkeln hat",
+                "Die sprechenden Tiere im Wald",
+                "Das fliegende Bett",
+                "Der Junge, der mit Tieren sprechen kann",
+                "Die magische Reise in ein Bilderbuch"
             )
         )
     )

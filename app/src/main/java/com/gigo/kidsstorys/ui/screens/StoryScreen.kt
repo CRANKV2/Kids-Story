@@ -1,34 +1,45 @@
 package com.gigo.kidsstorys.ui.screens
 
 
-import androidx.compose.foundation.layout.*
-
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import com.gigo.kidsstorys.data.models.Story
-import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
-import com.gigo.kidsstorys.ui.components.*
-import com.gigo.kidsstorys.data.SettingsManager
-import com.gigo.kidsstorys.ui.components.story.EmptyStateView
-import com.gigo.kidsstorys.ui.components.story.StoryTutorialDialog
-import com.gigo.kidsstorys.ui.components.story.StoryDeleteDialog
-import com.gigo.kidsstorys.ui.components.story.StoryTopBar
-import com.gigo.kidsstorys.ui.components.story.GridStoryLayout
-import com.gigo.kidsstorys.ui.components.story.CompactStoryLayout
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.gigo.kidsstorys.R
+import com.gigo.kidsstorys.data.SettingsManager
+import com.gigo.kidsstorys.data.models.Story
+import com.gigo.kidsstorys.ui.components.AddStoryDialog
+import com.gigo.kidsstorys.ui.components.StoryOptionsDialog
+import com.gigo.kidsstorys.ui.components.story.CompactStoryLayout
+import com.gigo.kidsstorys.ui.components.story.EmptyStateView
+import com.gigo.kidsstorys.ui.components.story.GridStoryLayout
+import com.gigo.kidsstorys.ui.components.story.StoryDeleteDialog
+import com.gigo.kidsstorys.ui.components.story.StoryTopBar
+import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
 import java.io.File
 
 @Composable
@@ -175,7 +186,7 @@ fun StoryScreen(
                         )
                     }
 
-                    if (showDeleteDialog) {
+                    if (showDeleteDialog && storyToDelete != null) {
                         StoryDeleteDialog(
                             onConfirm = {
                                 storyToDelete?.let { story ->
@@ -188,13 +199,6 @@ fun StoryScreen(
                                 showDeleteDialog = false
                                 storyToDelete = null
                             },
-                            isDarkTheme = isDarkTheme
-                        )
-                    }
-
-                    if (showTutorial) {
-                        StoryTutorialDialog(
-                            onDismiss = { showTutorial = false },
                             isDarkTheme = isDarkTheme
                         )
                     }
