@@ -46,6 +46,7 @@ import java.io.File
 import androidx.compose.foundation.Image
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -195,17 +196,11 @@ fun ReadStoryScreen(
                                 style = MaterialTheme.typography.headlineMedium.copy(
                                     fontWeight = FontWeight.Bold
                                 ),
-                                color = titleColor
+                                color = titleColor,
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center
                             )
                             Spacer(modifier = Modifier.height(16.dp))
-                            AssistChip(
-                                onClick = { },
-                                label = { Text(stringResource(R.string.read_story_screen_geschichte)) },
-                                colors = AssistChipDefaults.assistChipColors(
-                                    containerColor = Color(0xFF353545).copy(alpha = cardAlpha.value),
-                                    labelColor = AccentPurple.copy(alpha = maxOf(cardAlpha.value + 0.2f, 1f))
-                                )
-                            )
                         }
                     }
 
@@ -296,7 +291,7 @@ fun ReadStoryScreen(
                                 )
 
                                 FilledTonalButton(
-                                    onClick = { 
+                                    onClick = {
                                         showEditDialog = false
                                         showContentEditDialog = true
                                     },
@@ -322,7 +317,7 @@ fun ReadStoryScreen(
                                 }
 
                                 FilledTonalButton(
-                                    onClick = { 
+                                    onClick = {
                                         showEditDialog = false
                                         showTitleEditDialog = true
                                     },
