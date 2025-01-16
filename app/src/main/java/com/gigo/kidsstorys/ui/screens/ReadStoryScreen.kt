@@ -46,10 +46,6 @@ import java.io.File
 import androidx.compose.foundation.Image
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.ui.text.style.TextAlign
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,14 +60,14 @@ fun ReadStoryScreen(
     var showEditDialog by remember { mutableStateOf(false) }
     var showContentEditDialog by remember { mutableStateOf(false) }
     var showTitleEditDialog by remember { mutableStateOf(false) }
-    
+
     val context = LocalContext.current
     val settingsManager = remember { SettingsManager.getInstance(context) }
     val fontSize = remember { mutableStateOf(settingsManager.fontSize.toFloat()) }
     val wrapText = settingsManager.wrapText
     val verticalScrollState = rememberScrollState()
     val horizontalScrollState = rememberScrollState()
-    
+
     // Farben aus den Preferences
     val titleColor = remember(userPreferences.storyTitleColor) {
         Color(userPreferences.storyTitleColor.toInt())
@@ -127,48 +123,12 @@ fun ReadStoryScreen(
         story?.let { currentStory ->
             var currentTitle by remember { mutableStateOf(currentStory.title) }
             var currentContent by remember { mutableStateOf(currentStory.content) }
-            
+
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
                 topBar = {
                     TopAppBar(
-                        title = {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                IconButton(
-                                    onClick = { onBack() }
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.ArrowBack,
-                                        contentDescription = "Zurück",
-                                        tint = Color.White
-                                    )
-                                }
-
-                                Text(
-                                    text = currentStory.title,
-                                    style = MaterialTheme.typography.titleLarge,
-                                    color = titleColor,
-                                    modifier = Modifier.weight(1f),
-                                    textAlign = TextAlign.Center
-                                )
-
-                                IconButton(
-                                    onClick = { showEditDialog = true }
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Edit,
-                                        contentDescription = "Bearbeiten",
-                                        tint = Color.White
-                                    )
-                                }
-                            }
-                        },
+                        title = { Text(currentStory.title, color = Color.White) },
                         navigationIcon = {
                             IconButton(onClick = onBack) {
                                 Icon(
