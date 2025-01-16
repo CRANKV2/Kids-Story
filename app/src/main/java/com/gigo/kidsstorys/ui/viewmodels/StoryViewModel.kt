@@ -58,7 +58,10 @@ class StoryViewModel(
 
     fun addStory(title: String, content: String) {
         viewModelScope.launch {
-            val story = Story(title = title, content = content)
+            val story = Story(
+                title = title,
+                content = content
+            )
             storyDao.insertStory(story)
         }
     }

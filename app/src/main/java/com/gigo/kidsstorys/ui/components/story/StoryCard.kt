@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -34,6 +35,10 @@ import androidx.compose.ui.unit.sp
 import com.gigo.kidsstorys.R
 import com.gigo.kidsstorys.data.SettingsManager
 import com.gigo.kidsstorys.data.models.Story
+import android.graphics.BitmapFactory
+import androidx.compose.foundation.Image
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -47,7 +52,6 @@ fun ModernStoryCard(
     titleSize: Int,
     modifier: Modifier = Modifier
 ) {
-    // SettingsManager für die Transparenz
     val context = LocalContext.current
     val settingsManager = remember { SettingsManager.getInstance(context) }
     val cardAlpha = settingsManager.cardAlpha.collectAsState(initial = 0.75f)
@@ -55,6 +59,7 @@ fun ModernStoryCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
+            .height(180.dp)
             .combinedClickable(
                 onClick = onCardClick,
                 onLongClick = onOptionsClick
@@ -64,9 +69,9 @@ fun ModernStoryCard(
         ),
         shape = RoundedCornerShape(16.dp)
     ) {
-        // Füge einen transparenten Hintergrund hinzu für bessere Lesbarkeit
         Box(
             modifier = Modifier
+                .fillMaxSize()
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
@@ -77,7 +82,9 @@ fun ModernStoryCard(
                 )
         ) {
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -91,33 +98,49 @@ fun ModernStoryCard(
                         modifier = Modifier.weight(1f)
                     )
 
-                    Spacer(modifier = Modifier.width(8.dp))
-
                     IconButton(
                         onClick = onOptionsClick,
-                        modifier = Modifier
-                            .size(36.dp)
-                            .padding(0.dp)
+                        modifier = Modifier.size(36.dp)
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_more),
                             contentDescription = "Optionen",
                             modifier = Modifier.size(24.dp),
-                            tint = titleColor // Passt die Icon-Farbe an die Titel-Farbe an
+                            tint = titleColor
                         )
                     }
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Text(
-                    text = story.content,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = previewColor,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis,
-                    fontSize = previewSize.sp
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f)
+                ) {
+                    if (story.imagePath != null) {
+                        val bitmap = remember(story.imagePath) {
+                            BitmapFactory.decodeFile(story.imagePath)
+                        }
+                        bitmap?.let {
+                            Image(
+                                bitmap = it.asImageBitmap(),
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
+                    } else {
+                        Text(
+                            text = story.content,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = previewColor,
+                            maxLines = 3,
+                            overflow = TextOverflow.Ellipsis,
+                            fontSize = previewSize.sp
+                        )
+                    }
+                }
             }
         }
     }
