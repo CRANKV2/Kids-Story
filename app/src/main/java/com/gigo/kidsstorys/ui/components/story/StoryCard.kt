@@ -45,7 +45,6 @@ fun ModernStoryCard(
     previewColor: Color,
     previewSize: Int,
     titleSize: Int,
-    isCompactView: Boolean,
     modifier: Modifier = Modifier
 ) {
     // SettingsManager für die Transparenz

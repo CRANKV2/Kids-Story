@@ -77,8 +77,7 @@ fun AppNavigation(
         // In deiner Navigation
         composable("about") {
             AboutScreen(
-                navController = navController,
-                isDarkTheme = isDarkTheme
+                navController = navController
             )
         }
     }

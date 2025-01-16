@@ -11,10 +11,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -27,17 +23,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.gigo.kidsstorys.R
-import com.gigo.kidsstorys.data.models.Story
-import com.gigo.kidsstorys.ui.components.story.StoryDeleteDialog
 import com.gigo.kidsstorys.ui.theme.AccentPurple
 
 @Composable
 fun StoryOptionsDialog(
-    story: Story,
     onDismiss: () -> Unit,
     onEdit: () -> Unit,
-    onDelete: () -> Unit,
-    isDarkTheme: Boolean
+    onDelete: () -> Unit
 ) {
     Dialog(onDismissRequest = onDismiss) {
         Surface(

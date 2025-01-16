@@ -55,7 +55,6 @@ fun GridStoryLayout(
                             previewColor = previewColor,
                             previewSize = SettingsManager.getInstance(LocalContext.current).previewSize,
                             titleSize = titleSize,
-                            isCompactView = isCompactView,
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
@@ -80,7 +79,6 @@ fun GridStoryLayout(
                             previewColor = previewColor,
                             previewSize = SettingsManager.getInstance(LocalContext.current).previewSize,
                             titleSize = titleSize,
-                            isCompactView = isCompactView,
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
@@ -119,7 +117,6 @@ fun CompactStoryLayout(
                 previewColor = previewColor,
                 previewSize = SettingsManager.getInstance(LocalContext.current).previewSize,
                 titleSize = titleSize,
-                isCompactView = isCompactView,
                 modifier = Modifier.fillMaxWidth()
             )
         }

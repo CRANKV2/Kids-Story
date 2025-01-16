@@ -19,7 +19,6 @@ data class StoryCategory(
 
 @Composable
 fun StoryCategoryDropdown(
-    modifier: Modifier = Modifier,
     onCategorySelected: (List<String>) -> Unit,
     hasBackground: Boolean
 ) {

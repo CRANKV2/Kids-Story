@@ -32,8 +32,7 @@ import com.gigo.kidsstorys.ui.theme.AccentPurple
 @Composable
 fun StoryDeleteDialog(
     onConfirm: () -> Unit,
-    onDismiss: () -> Unit,
-    isDarkTheme: Boolean
+    onDismiss: () -> Unit
 ) {
     Dialog(onDismissRequest = onDismiss) {
         Surface(

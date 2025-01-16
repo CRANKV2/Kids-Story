@@ -172,17 +172,15 @@ fun StoryScreen(
 
                     selectedStory?.let { story ->
                         StoryOptionsDialog(
-                            story = story,
                             onDismiss = { selectedStory = null },
-                            onEdit = { 
+                            onEdit = {
                                 navController.navigate("readStory/${story.id}")
                             },
                             onDelete = {
                                 storyToDelete = story
                                 showDeleteDialog = true
                                 selectedStory = null
-                            },
-                            isDarkTheme = isDarkTheme
+                            }
                         )
                     }
 
@@ -198,8 +196,7 @@ fun StoryScreen(
                             onDismiss = {
                                 showDeleteDialog = false
                                 storyToDelete = null
-                            },
-                            isDarkTheme = isDarkTheme
+                            }
                         )
                     }
                 }

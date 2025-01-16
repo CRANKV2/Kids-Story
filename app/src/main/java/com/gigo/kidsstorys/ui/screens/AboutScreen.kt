@@ -39,26 +39,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.gigo.kidsstorys.R
 import com.gigo.kidsstorys.data.SettingsManager
 import com.gigo.kidsstorys.ui.theme.AccentPurple
 import com.gigo.kidsstorys.ui.theme.TextLight
-import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
-
 
 
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(
-    navController: NavController,
-    isDarkTheme: Boolean,
-    viewModel: StoryViewModel = viewModel(factory = StoryViewModel.Factory)
+    navController: NavController
 ) {
     val context = LocalContext.current
     val settingsManager = remember { SettingsManager.getInstance(context) }

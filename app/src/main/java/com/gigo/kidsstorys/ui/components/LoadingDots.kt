@@ -14,7 +14,7 @@ object LoadingDots {
         val dots = listOf(".", ".", ".")
         val infiniteTransition = rememberInfiniteTransition(label = "loading")
         
-        val dotAnimations = dots.mapIndexed { index, _ ->
+        val dotAnimations = List(dots.size) { index ->
             infiniteTransition.animateFloat(
                 initialValue = 0f,
                 targetValue = 10f,

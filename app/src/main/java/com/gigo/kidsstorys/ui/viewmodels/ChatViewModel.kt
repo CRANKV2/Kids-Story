@@ -1,25 +1,23 @@
 package com.gigo.kidsstorys.ui.viewmodels
 
+import PromptUtils
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.ai.client.generativeai.GenerativeModel
-import com.google.ai.client.generativeai.type.generationConfig
 import com.gigo.kidsstorys.BuildConfig
-import com.gigo.kidsstorys.data.models.ChatMessage
+import com.gigo.kidsstorys.KidsStorysApp
 import com.gigo.kidsstorys.data.dao.ChatMessageDao
+import com.gigo.kidsstorys.data.models.ChatMessage
 import com.gigo.kidsstorys.data.models.toEntity
 import com.gigo.kidsstorys.data.models.toMessage
+import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.type.generationConfig
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.SharingStarted
-import com.gigo.kidsstorys.KidsStorysApp
-import kotlinx.coroutines.TimeoutCancellationException
-import java.io.IOException
-import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.launch
 
 class ChatViewModel(
     private val chatMessageDao: ChatMessageDao = KidsStorysApp.getInstance().database.chatMessageDao()
