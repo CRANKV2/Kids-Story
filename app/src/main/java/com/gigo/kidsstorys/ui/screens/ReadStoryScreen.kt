@@ -1,5 +1,6 @@
 package com.gigo.kidsstorys.ui.screens
 
+import StoryImageEditDialog
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -68,6 +69,14 @@ import com.gigo.kidsstorys.data.SettingsManager
 import com.gigo.kidsstorys.ui.theme.AccentPurple
 import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
 import java.io.File
+import android.net.Uri
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
+import androidx.compose.runtime.rememberCoroutineScope
+import com.gigo.kidsstorys.utils.ImageUtils
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,6 +91,10 @@ fun ReadStoryScreen(
     var showEditDialog by remember { mutableStateOf(false) }
     var showContentEditDialog by remember { mutableStateOf(false) }
     var showTitleEditDialog by remember { mutableStateOf(false) }
+    var showImagePicker by remember { mutableStateOf(false) }
+    var isProcessingImage by remember { mutableStateOf(false) }
+    var showImageEditDialog by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
 
     val context = LocalContext.current
     val settingsManager = remember { SettingsManager.getInstance(context) }
@@ -126,6 +139,38 @@ fun ReadStoryScreen(
         }
     }
 
+    // Bildverarbeitungs-Logik (analog zu SettingsScreen)
+    fun processSelectedImage(uri: Uri) {
+        scope.launch {
+            isProcessingImage = true
+            story?.let { currentStory ->
+                val imageFile = File(context.filesDir, "story_${currentStory.id}_image.jpg")
+                val success = ImageUtils.processAndSaveImage(
+                    context,
+                    uri,
+                    imageFile
+                )
+                if (success) {
+                    viewModel.updateStoryImage(currentStory.id, imageFile.absolutePath)
+                    Toast.makeText(
+                        context,
+                        "Klicke auf das Bild, um es zu ändern oder zu entfernen",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+            isProcessingImage = false
+            showImagePicker = false
+        }
+    }
+
+    // Image Picker Launcher
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let { processSelectedImage(it) }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -150,7 +195,7 @@ fun ReadStoryScreen(
                 modifier = Modifier.fillMaxSize(),
                 topBar = {
                     TopAppBar(
-                        title = { Text(currentStory.title, color = Color.White) },
+                        title = { Text("Geschichte", color = Color.White) },
                         navigationIcon = {
                             IconButton(onClick = onBack) {
                                 Icon(
@@ -185,17 +230,58 @@ fun ReadStoryScreen(
                     )
                 },
                 containerColor = Color.Transparent
-            ) { padding ->
+            ) { paddingValues ->
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(padding)
+                        .padding(paddingValues)
                 ) {
+                    // Bild oder Button-Bereich
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(if (story?.imagePath != null) 200.dp else 56.dp)
+                            .padding(horizontal = 16.dp, vertical = 4.dp)
+                    ) {
+                        if (story?.imagePath != null) {
+                            // Bild anzeigen mit standard Image composable
+                            val bitmap = remember(story?.imagePath) {
+                                BitmapFactory.decodeFile(story?.imagePath)
+                            }
+                            bitmap?.let {
+                                Image(
+                                    bitmap = it.asImageBitmap(),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .clip(RoundedCornerShape(8.dp))
+                                        .clickable { showImageEditDialog = true },
+                                    contentScale = ContentScale.Crop
+                                )
+                            }
+                        } else {
+                            // Button anzeigen
+                            FilledTonalButton(
+                                onClick = { imagePickerLauncher.launch("image/*") },
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = ButtonDefaults.filledTonalButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                                )
+                            ) {
+                                Text(
+                                    "Bild zur Geschichte hinzufügen",
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    fontSize = 16.sp
+                                )
+                            }
+                        }
+                    }
+
                     // Titel-Sektion
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp)
+                            .padding(horizontal = 16.dp, vertical = 4.dp)
                             .shadow(
                                 elevation = 16.dp * cardAlpha.value,
                                 shape = RoundedCornerShape(24.dp),
@@ -221,7 +307,7 @@ fun ReadStoryScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 textAlign = TextAlign.Center
                             )
-                            Spacer(modifier = Modifier.height(16.dp))
+                            Spacer(modifier = Modifier.height(8.dp))
                         }
                     }
 
@@ -230,7 +316,7 @@ fun ReadStoryScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
-                            .padding(16.dp)
+                            .padding(horizontal = 16.dp, vertical = 4.dp)
                             .shadow(
                                 elevation = 16.dp * cardAlpha.value,
                                 shape = RoundedCornerShape(24.dp),
@@ -615,6 +701,23 @@ fun ReadStoryScreen(
                             }
                         }
                     }
+                }
+
+                // Dialog für die Bildbearbeitung
+                if (showImageEditDialog) {
+                    StoryImageEditDialog(
+                        onDismiss = { showImageEditDialog = false },
+                        onChangeImage = {
+                            imagePickerLauncher.launch("image/*")
+                            showImageEditDialog = false
+                        },
+                        onRemoveImage = {
+                            story?.let { currentStory ->
+                                viewModel.removeStoryImage(currentStory.id)
+                            }
+                            showImageEditDialog = false
+                        }
+                    )
                 }
             }
         }

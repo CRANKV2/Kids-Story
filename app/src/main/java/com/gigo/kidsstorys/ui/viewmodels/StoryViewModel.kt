@@ -1,6 +1,9 @@
 package com.gigo.kidsstorys.ui.viewmodels
 
+import android.app.Application
+import android.util.Log
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -16,11 +19,14 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.io.File
+import kotlinx.coroutines.flow.first
 
 class StoryViewModel(
     private val storyDao: StoryDao,
-    private val userPreferencesRepository: UserPreferencesRepository
-) : ViewModel() {
+    private val userPreferencesRepository: UserPreferencesRepository,
+    application: Application
+) : AndroidViewModel(application) {
 
     private val _selectedStory = MutableStateFlow<Story?>(null)
     val selectedStory = _selectedStory.asStateFlow()
@@ -108,13 +114,47 @@ class StoryViewModel(
         }
     }
 
+    fun updateStoryImage(storyId: Int, imagePath: String?) {
+        viewModelScope.launch {
+            try {
+                val story = storyDao.getStoryById(storyId).first()
+                story?.let {
+                    val updatedStory = it.copy(imagePath = imagePath)
+                    storyDao.updateStory(updatedStory)
+                }
+            } catch (e: Exception) {
+                Log.e("StoryViewModel", "Error updating story image", e)
+            }
+        }
+    }
+
+    fun removeStoryImage(storyId: Int) {
+        viewModelScope.launch {
+            try {
+                val story = storyDao.getStoryById(storyId).first()
+                story?.let {
+                    // Lösche die Bilddatei
+                    it.imagePath?.let { path ->
+                        File(path).delete()
+                    }
+                    // Update Story ohne Bild
+                    val updatedStory = it.copy(imagePath = null)
+                    storyDao.updateStory(updatedStory)
+                }
+            } catch (e: Exception) {
+                Log.e("StoryViewModel", "Error removing story image", e)
+            }
+        }
+    }
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = KidsStorysApp.getInstance()
                 StoryViewModel(
                     storyDao = application.database.storyDao(),
-                    userPreferencesRepository = application.userPreferencesRepository
+                    userPreferencesRepository = application.userPreferencesRepository,
+                    application = application
                 )
             }
         }

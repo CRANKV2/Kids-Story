@@ -146,20 +146,17 @@ fun SettingsScreen(
     fun processSelectedImage(uri: Uri) {
         scope.launch {
             isProcessingImage = true
-            val success = ImageUtils.processAndSaveImage(context, uri)
+            val backgroundFile = File(context.filesDir, "background_image.jpg")
+            val success = ImageUtils.processAndSaveImage(
+                context, 
+                uri,
+                backgroundFile  // Für Hintergrundbild immer diese Datei verwenden
+            )
             if (success) {
-                // Aktualisieren Sie das Bitmap nach erfolgreicher Speicherung
-                backgroundBitmap = BitmapFactory.decodeFile(backgroundImageFile.absolutePath)
+                backgroundBitmap = BitmapFactory.decodeFile(backgroundFile.absolutePath)
             }
             isProcessingImage = false
             showImagePickerDialog = false
-
-            val message = if (success) {
-                "Hintergrundbild wurde erfolgreich gespeichert"
-            } else {
-                "Fehler beim Speichern des Hintergrundbildes"
-            }
-            snackbarHostState.showSnackbar(message)
         }
     }
 

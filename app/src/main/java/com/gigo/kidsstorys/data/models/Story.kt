@@ -5,9 +5,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "stories")
 data class Story(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val title: String,
-    val content: String,
-    val createdAt: Long = System.currentTimeMillis()
+    @PrimaryKey val id: Int = 0,
+    var title: String,
+    var content: String,
+    var imagePath: String? = null,
+    var timestamp: Long = System.currentTimeMillis()
 ) 

@@ -15,7 +15,7 @@ object ImageUtils {
     private const val JPEG_QUALITY = 85
     private const val MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024 // 5MB
 
-    fun processAndSaveImage(context: Context, uri: Uri): Boolean {
+    fun processAndSaveImage(context: Context, uri: Uri, outputFile: File): Boolean {
         return try {
             // Bild laden
             val bitmap = loadBitmapFromUri(context, uri)
@@ -26,21 +26,15 @@ object ImageUtils {
             // Komprimierung mit Qualitätsanpassung
             var quality = JPEG_QUALITY
             var fileSize: Long
-            val file = File(context.filesDir, "background_image.jpg")
             
             do {
-                FileOutputStream(file).use { out ->
+                FileOutputStream(outputFile).use { out ->
                     optimizedBitmap.compress(Bitmap.CompressFormat.JPEG, quality, out)
                 }
-                fileSize = file.length()
+                fileSize = outputFile.length()
                 quality -= 5
-            } while (fileSize > MAX_FILE_SIZE_BYTES && quality > 30)
+            } while (fileSize > MAX_FILE_SIZE_BYTES && quality > 5)
 
-            // Ursprüngliche Bitmaps freigeben
-            if (bitmap != optimizedBitmap) {
-                bitmap.recycle()
-            }
-            
             true
         } catch (e: Exception) {
             e.printStackTrace()
