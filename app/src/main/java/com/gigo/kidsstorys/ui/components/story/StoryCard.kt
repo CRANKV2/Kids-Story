@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
@@ -63,7 +64,7 @@ fun ModernStoryCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(180.dp)
+            .wrapContentHeight()
             .combinedClickable(
                 onClick = onCardClick,
                 onLongClick = onLongClick
@@ -91,7 +92,7 @@ fun ModernStoryCard(
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
                     .padding(16.dp)
             ) {
                 Row(
@@ -125,8 +126,8 @@ fun ModernStoryCard(
 
                 Box(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f)
+                        .fillMaxWidth()
+                        .height(200.dp)
                 ) {
                     if (story.imagePath != null) {
                         val bitmap = remember(story.imagePath) {
@@ -137,7 +138,7 @@ fun ModernStoryCard(
                                 bitmap = it.asImageBitmap(),
                                 contentDescription = null,
                                 modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.Crop
+                                contentScale = ContentScale.Fit
                             )
                         }
                     } else {
