@@ -888,7 +888,7 @@ fun SettingsScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        "Build: Amethyst",
+                        "Build: Stardust 1.1.3",
                         style = MaterialTheme.typography.bodySmall,
                         color = TextLight.copy(alpha = 0.5f)
                     )

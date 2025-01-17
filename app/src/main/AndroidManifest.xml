@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.gigo.kidsstorys"
+    android:versionCode="113"
+    android:versionName="1.1.3">
 
     <application
         android:name=".KidsStorysApp"
@@ -12,15 +15,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.App.Starting"
-        tools:targetApi="31"
-        android:versionCode="4"
-        android:versionName="1.1.2">
+        tools:targetApi="31">
         <meta-data
             android:name="VERSION_NAME"
-            android:value="1.1.2" />
+            android:value="1.1.3" />
         <meta-data
             android:name="VERSION_CODE"
-            android:value="4" />
+            android:value="113" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
