@@ -41,7 +41,17 @@ import com.gigo.kidsstorys.ui.components.story.StoryDeleteDialog
 import com.gigo.kidsstorys.ui.components.story.StoryTopBar
 import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
 import java.io.File
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StoryScreen(
     navController: NavController,
@@ -63,6 +73,8 @@ fun StoryScreen(
     }
     var backgroundBitmap by remember { mutableStateOf<android.graphics.Bitmap?>(null) }
     var backgroundAlpha by remember { mutableStateOf(settingsManager.backgroundAlpha) }
+    var selectedStories by remember { mutableStateOf(setOf<Int>()) }
+    var isSelectionMode by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         settingsManager.backgroundAlphaFlow.collect { newAlpha ->
@@ -89,32 +101,91 @@ fun StoryScreen(
 
         Scaffold(
             topBar = {
-                StoryTopBar(
-                    storiesCount = stories.size,
-                    isCompactView = isCompactView,
-                    onViewToggle = { 
-                        isCompactView = !isCompactView
-                        settingsManager.isCompactView = isCompactView
-                    },
-                    onChatClick = { navController.navigate("chat") },
-                    onSettingsClick = { navController.navigate("settings") }
-                )
+                if (isSelectionMode) {
+                    TopAppBar(
+                        title = {
+                            Text(
+                                "${selectedStories.size} ausgewählt",
+                                color = Color.White
+                            )
+                        },
+                        actions = {
+                            TextButton(
+                                onClick = {
+                                    selectedStories = if (selectedStories.size == stories.size) {
+                                        emptySet()
+                                    } else {
+                                        stories.map { it.id }.toSet()
+                                    }
+                                }
+                            ) {
+                                Text(
+                                    if (selectedStories.size == stories.size) "Alle abwählen" else "Alle auswählen",
+                                    color = Color.White
+                                )
+                            }
+
+                            IconButton(
+                                onClick = {
+                                    viewModel.deleteStories(selectedStories.toList())
+                                    isSelectionMode = false
+                                    selectedStories = emptySet()
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = "Löschen",
+                                    tint = Color.White
+                                )
+                            }
+
+                            IconButton(
+                                onClick = {
+                                    isSelectionMode = false
+                                    selectedStories = emptySet()
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = "Schließen",
+                                    tint = Color.White
+                                )
+                            }
+                        },
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = MaterialTheme.colorScheme.primary
+                        )
+                    )
+                } else {
+                    StoryTopBar(
+                        storiesCount = stories.size,
+                        isCompactView = isCompactView,
+                        onViewToggle = {
+                            isCompactView = !isCompactView
+                            settingsManager.isCompactView = isCompactView
+                        },
+                        onChatClick = { navController.navigate("chat") },
+                        onSettingsClick = { navController.navigate("settings") }
+                    )
+                }
             },
 
 
             floatingActionButton = {
-                FloatingActionButton(
-                    onClick = { showAddDialog = true },
-                    modifier = Modifier.padding(24.dp),
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.fab_add_icon),  // Stelle sicher, dass du eine ic_add.xml in deinen Ressourcen hast
-                        contentDescription = "Geschichte hinzufügen",
-                        tint = Color.Unspecified,
-                        modifier = Modifier.size(40.dp)
-                    )
+                if (!isSelectionMode) {
+                    FloatingActionButton(
+                        onClick = { showAddDialog = true },
+                        modifier = Modifier.padding(24.dp),
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.fab_add_icon),  // Stelle sicher, dass du eine ic_add.xml in deinen Ressourcen hast
+                            contentDescription = "Geschichte hinzufügen",
+                            tint = Color.Unspecified,
+                            modifier = Modifier.size(40.dp)
+                        )
+                    }
                 }
             },
             floatingActionButtonPosition = FabPosition.Center,
@@ -146,15 +217,51 @@ fun StoryScreen(
                                 stories = stories,
                                 userPreferences = userPreferences,
                                 isCompactView = isCompactView,
-                                onStoryClick = { story -> navController.navigate("readStory/${story.id}") },
-                                onOptionsClick = { story -> selectedStory = story }
+                                onStoryClick = { story -> 
+                                    if (isSelectionMode) {
+                                        selectedStories = if (selectedStories.contains(story.id)) {
+                                            selectedStories - story.id
+                                        } else {
+                                            selectedStories + story.id
+                                        }
+                                    } else {
+                                        navController.navigate("readStory/${story.id}")
+                                    }
+                                },
+                                onLongClick = { story ->
+                                    if (!isSelectionMode) {
+                                        isSelectionMode = true
+                                        selectedStories = setOf(story.id)
+                                    }
+                                },
+                                onOptionsClick = { story -> 
+                                    if (!isSelectionMode) {
+                                        selectedStory = story
+                                    }
+                                }
                             )
                         } else {
                             CompactStoryLayout(
                                 stories = stories,
                                 userPreferences = userPreferences,
                                 isCompactView = isCompactView,
-                                onStoryClick = { story -> navController.navigate("readStory/${story.id}") },
+                                onStoryClick = { story -> 
+                                    if (isSelectionMode) {
+                                        selectedStories = if (selectedStories.contains(story.id)) {
+                                            selectedStories - story.id
+                                        } else {
+                                            selectedStories + story.id
+                                        }
+                                    } else {
+                                        navController.navigate("readStory/${story.id}")
+                                    }
+                                },
+                                onLongClick = { story ->
+                                    if (!isSelectionMode) {
+                                        isSelectionMode = true
+                                        selectedStories = setOf(story.id)
+                                    }
+                                },
                                 onOptionsClick = { story -> selectedStory = story }
                             )
                         }

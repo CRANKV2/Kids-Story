@@ -1,6 +1,8 @@
 package com.gigo.kidsstorys.ui.components.story
 
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
@@ -12,8 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -27,6 +30,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -35,10 +40,7 @@ import androidx.compose.ui.unit.sp
 import com.gigo.kidsstorys.R
 import com.gigo.kidsstorys.data.SettingsManager
 import com.gigo.kidsstorys.data.models.Story
-import android.graphics.BitmapFactory
-import androidx.compose.foundation.Image
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
+import com.gigo.kidsstorys.ui.theme.AccentPurple
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -46,10 +48,12 @@ fun ModernStoryCard(
     story: Story,
     onCardClick: () -> Unit,
     onOptionsClick: () -> Unit,
+    onLongClick: () -> Unit,
     titleColor: Color,
     previewColor: Color,
     previewSize: Int,
     titleSize: Int,
+    isSelected: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -62,11 +66,16 @@ fun ModernStoryCard(
             .height(180.dp)
             .combinedClickable(
                 onClick = onCardClick,
-                onLongClick = onOptionsClick
+                onLongClick = onLongClick
+            )
+            .background(
+                color = if (isSelected) {
+                    Color(0xFF9C27B0).copy(alpha = cardAlpha.value)
+                } else {
+                    Color(0xFF353545).copy(alpha = cardAlpha.value)
+                },
+                shape = RoundedCornerShape(16.dp)
             ),
-        colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF353545).copy(alpha = cardAlpha.value)
-        ),
         shape = RoundedCornerShape(16.dp)
     ) {
         Box(
@@ -98,16 +107,18 @@ fun ModernStoryCard(
                         modifier = Modifier.weight(1f)
                     )
 
-                    IconButton(
-                        onClick = onOptionsClick,
-                        modifier = Modifier.size(36.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_more),
-                            contentDescription = "Optionen",
-                            modifier = Modifier.size(24.dp),
-                            tint = titleColor
-                        )
+                    if (!isSelected) {
+                        IconButton(
+                            onClick = onOptionsClick,
+                            modifier = Modifier.size(36.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_more),
+                                contentDescription = "Optionen",
+                                modifier = Modifier.size(24.dp),
+                                tint = titleColor
+                            )
+                        }
                     }
                 }
 
@@ -140,6 +151,20 @@ fun ModernStoryCard(
                             fontSize = previewSize.sp
                         )
                     }
+                }
+            }
+
+            if (isSelected) {
+                Box(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .align(Alignment.TopEnd)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.CheckCircle,
+                        contentDescription = "Ausgewählt",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
                 }
             }
         }

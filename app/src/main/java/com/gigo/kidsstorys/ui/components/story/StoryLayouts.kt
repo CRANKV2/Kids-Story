@@ -21,6 +21,9 @@ fun GridStoryLayout(
     isCompactView: Boolean,
     onStoryClick: (Story) -> Unit,
     onOptionsClick: (Story) -> Unit,
+    isSelectionMode: Boolean = false,
+    selectedStories: Set<Int> = emptySet(),
+    onLongClick: (Story) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
@@ -50,11 +53,15 @@ fun GridStoryLayout(
                         ModernStoryCard(
                             story = story,
                             onCardClick = { onStoryClick(story) },
-                            onOptionsClick = { onOptionsClick(story) },
+                            onOptionsClick = { 
+                                if (!isSelectionMode) onOptionsClick(story)
+                            },
+                            onLongClick = { onLongClick(story) },
                             titleColor = titleColor,
                             previewColor = previewColor,
                             previewSize = SettingsManager.getInstance(LocalContext.current).previewSize,
                             titleSize = titleSize,
+                            isSelected = selectedStories.contains(story.id),
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
@@ -74,11 +81,15 @@ fun GridStoryLayout(
                         ModernStoryCard(
                             story = story,
                             onCardClick = { onStoryClick(story) },
-                            onOptionsClick = { onOptionsClick(story) },
+                            onOptionsClick = { 
+                                if (!isSelectionMode) onOptionsClick(story)
+                            },
+                            onLongClick = { onLongClick(story) },
                             titleColor = titleColor,
                             previewColor = previewColor,
                             previewSize = SettingsManager.getInstance(LocalContext.current).previewSize,
                             titleSize = titleSize,
+                            isSelected = selectedStories.contains(story.id),
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
@@ -95,6 +106,9 @@ fun CompactStoryLayout(
     isCompactView: Boolean,
     onStoryClick: (Story) -> Unit,
     onOptionsClick: (Story) -> Unit,
+    isSelectionMode: Boolean = false,
+    selectedStories: Set<Int> = emptySet(),
+    onLongClick: (Story) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -112,11 +126,15 @@ fun CompactStoryLayout(
             ModernStoryCard(
                 story = story,
                 onCardClick = { onStoryClick(story) },
-                onOptionsClick = { onOptionsClick(story) },
+                onOptionsClick = { 
+                    if (!isSelectionMode) onOptionsClick(story)
+                },
+                onLongClick = { onLongClick(story) },
                 titleColor = titleColor,
                 previewColor = previewColor,
                 previewSize = SettingsManager.getInstance(LocalContext.current).previewSize,
                 titleSize = titleSize,
+                isSelected = selectedStories.contains(story.id),
                 modifier = Modifier.fillMaxWidth()
             )
         }

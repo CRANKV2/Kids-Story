@@ -151,6 +151,19 @@ class StoryViewModel(
         }
     }
 
+    fun deleteStories(storyIds: List<Int>) {
+        viewModelScope.launch {
+            storyIds.forEach { id ->
+                // Sammle den Flow und hole die Story
+                storyDao.getStoryById(id).collect { story ->
+                    story?.let {
+                        deleteStory(it)
+                    }
+                }
+            }
+        }
+    }
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
