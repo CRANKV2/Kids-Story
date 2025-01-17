@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -65,6 +66,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -429,58 +431,6 @@ fun ChatScreen(
 }
 
 @Composable
-fun ChatInputBox(
-    messageText: String,
-    onMessageChange: (String) -> Unit,
-    onSendClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Surface(
-        modifier = modifier,
-        color = Color(0xFF2D2D3A),
-        shadowElevation = 8.dp
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            TextField(
-                value = messageText,
-                onValueChange = onMessageChange,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 8.dp),
-                colors = TextFieldDefaults.colors(
-                    unfocusedContainerColor = Color(0xFF353545),
-                    focusedContainerColor = Color(0xFF353545),
-                    unfocusedTextColor = Color.White,
-                    focusedTextColor = Color.White
-                ),
-                placeholder = {
-                    Text(
-                        "Schreibe eine Nachricht...",
-                        color = Color.White.copy(alpha = 0.6f)
-                    )
-                }
-            )
-            
-            IconButton(
-                onClick = onSendClick,
-                enabled = messageText.isNotBlank()
-            ) {
-                Icon(
-                    Icons.AutoMirrored.Filled.Send,
-                    contentDescription = "Senden",
-                    tint = if (messageText.isNotBlank()) AccentPurple else Color.Gray
-                )
-            }
-        }
-    }
-}
-
-@Composable
 fun ChatMessageItem(
     message: ChatMessage,
     onSaveStory: (String, String, String?) -> Unit
@@ -535,12 +485,23 @@ fun ChatMessageItem(
                 )
                 .clickable(enabled = !isUserMessage) { showPopup = true }
         ) {
-            Text(
-                text = message.content,
-                modifier = Modifier.padding(8.dp),
-                color = Color.White.copy(alpha = maxOf(cardAlpha.value + 0.2f, 1f)),
-                fontSize = 14.sp
-            )
+            SelectionContainer {
+                Box(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onTap = { if (!isUserMessage) showPopup = true }
+                            )
+                        }
+                ) {
+                    Text(
+                        text = message.content,
+                        color = Color.White.copy(alpha = 0.9f),
+                        fontSize = 14.sp
+                    )
+                }
+            }
         }
 
         // Erstes Popup (Speichern?)
@@ -705,52 +666,6 @@ fun ChatMessageItem(
     }
 }
 
-data class ChatMessage(
-    val content: String,
-    val isUser: Boolean,
-    val timestamp: Long = System.currentTimeMillis()
-) 
-
-@Composable
-fun ChatMessage(
-    message: ChatMessage,
-    modifier: Modifier = Modifier
-) {
-    val isUserMessage = message.isUser
-    val backgroundColor = if (isUserMessage) {
-        MaterialTheme.colorScheme.primaryContainer
-    } else {
-        MaterialTheme.colorScheme.secondaryContainer
-    }
-    
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(
-                start = if (isUserMessage) 40.dp else 8.dp,
-                end = if (isUserMessage) 8.dp else 40.dp,
-                top = 4.dp,
-                bottom = 4.dp
-            )
-    ) {
-        Surface(
-            shape = RoundedCornerShape(12.dp),
-            color = backgroundColor,
-            modifier = Modifier
-                .align(if (isUserMessage) Alignment.CenterEnd else Alignment.CenterStart)
-                .clickable { } // Macht die Box klickbar für Copy-Funktion
-        ) {
-            SelectionContainer { // Dies macht den Text selektierbar
-                Text(
-                    text = message.content,
-                    modifier = Modifier.padding(12.dp),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.bodyLarge
-                )
-            }
-        }
-    }
-} 
 
 @Composable
 fun MessageCarousel(
@@ -800,4 +715,4 @@ fun MessageCarousel(
             }
         }
     }
-} 
+}
