@@ -2,7 +2,10 @@ package com.gigo.kidsstorys.ui.screens
 
 import LoadingDots
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,6 +39,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -57,6 +61,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
@@ -79,6 +84,7 @@ import com.gigo.kidsstorys.ui.components.StoryCategoryDropdown
 import com.gigo.kidsstorys.ui.theme.AccentPurple
 import com.gigo.kidsstorys.ui.viewmodels.ChatViewModel
 import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
+import com.gigo.kidsstorys.utils.ImageUtils
 import java.io.File
 
 @Composable
@@ -286,10 +292,11 @@ fun ChatScreen(
                         items(messages) { message ->
                             ChatMessageItem(
                                 message = message,
-                                onSaveStory = { title, content ->
+                                onSaveStory = { title, content, imagePath ->
                                     storyViewModel.addStory(
                                         title = title,
-                                        content = content
+                                        content = content,
+                                        imagePath = imagePath
                                     )
                                     Toast.makeText(
                                         context,
@@ -476,7 +483,7 @@ fun ChatInputBox(
 @Composable
 fun ChatMessageItem(
     message: ChatMessage,
-    onSaveStory: (String, String) -> Unit
+    onSaveStory: (String, String, String?) -> Unit
 ) {
     val context = LocalContext.current
     val settingsManager = remember { SettingsManager.getInstance(context) }
@@ -486,11 +493,22 @@ fun ChatMessageItem(
     var showPopup by remember { mutableStateOf(false) }
     var showTitleDialog by remember { mutableStateOf(false) }
     var title by remember { mutableStateOf("") }
+    var selectedImagePath by remember { mutableStateOf<String?>(null) }
 
     val backgroundColor = if (isUserMessage) {
         Color(0xFF353545).copy(alpha = cardAlpha.value)
     } else {
         Color(0xFF42424E).copy(alpha = cardAlpha.value)
+    }
+
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            val tempFile = File(context.filesDir, "temp_story_image_${System.currentTimeMillis()}.jpg")
+            ImageUtils.processAndSaveImage(context, uri, tempFile)
+            selectedImagePath = tempFile.absolutePath
+        }
     }
 
     Box(
@@ -581,11 +599,54 @@ fun ChatMessageItem(
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
-                            "Titel für die Geschichte",
+                            "Geschichte speichern",
                             style = MaterialTheme.typography.titleMedium,
                             color = Color.White
                         )
+                        
                         Spacer(modifier = Modifier.height(16.dp))
+                        
+                        // Bildauswahl-Button
+                        FilledTonalButton(
+                            onClick = { imagePickerLauncher.launch("image/*") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 16.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = AccentPurple
+                            )
+                        ) {
+                            Text(
+                                if (selectedImagePath == null) "Bild hinzufügen" else "Bild ändern",
+                                color = Color.White
+                            )
+                        }
+
+                        // Bildvorschau
+                        if (selectedImagePath != null) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(200.dp)
+                                    .padding(bottom = 16.dp)
+                            ) {
+                                val bitmap = remember(selectedImagePath) {
+                                    BitmapFactory.decodeFile(selectedImagePath)
+                                }
+                                bitmap?.let {
+                                    Image(
+                                        bitmap = it.asImageBitmap(),
+                                        contentDescription = null,
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .clip(RoundedCornerShape(8.dp))
+                                            .clickable { imagePickerLauncher.launch("image/*") },
+                                        contentScale = ContentScale.Crop
+                                    )
+                                }
+                            }
+                        }
+
                         OutlinedTextField(
                             value = title,
                             onValueChange = { title = it },
@@ -601,24 +662,32 @@ fun ChatMessageItem(
                             ),
                             modifier = Modifier.fillMaxWidth()
                         )
+                        
                         Spacer(modifier = Modifier.height(16.dp))
+                        
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.End
                         ) {
-                            TextButton(onClick = { 
-                                showTitleDialog = false
-                                title = ""
-                            }) {
+                            TextButton(
+                                onClick = { 
+                                    showTitleDialog = false
+                                    title = ""
+                                    selectedImagePath = null
+                                }
+                            ) {
                                 Text("Abbrechen", color = Color.White)
                             }
+                            
                             Spacer(modifier = Modifier.width(8.dp))
+                            
                             Button(
                                 onClick = {
                                     if (title.isNotBlank()) {
-                                        onSaveStory(title, message.content)  // Hier übergeben wir beide Parameter
+                                        onSaveStory(title, message.content, selectedImagePath)
                                         showTitleDialog = false
                                         title = ""
+                                        selectedImagePath = null
                                     }
                                 },
                                 enabled = title.isNotBlank(),
