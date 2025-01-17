@@ -67,15 +67,14 @@ fun ModernStoryCard(
             .combinedClickable(
                 onClick = onCardClick,
                 onLongClick = onLongClick
-            )
-            .background(
-                color = if (isSelected) {
-                    Color(0xFF9C27B0).copy(alpha = cardAlpha.value)
-                } else {
-                    Color(0xFF353545).copy(alpha = cardAlpha.value)
-                },
-                shape = RoundedCornerShape(16.dp)
             ),
+        colors = CardDefaults.cardColors(
+            containerColor = if (isSelected) {
+                AccentPurple.copy(alpha = cardAlpha.value)
+            } else {
+                Color(0xFF353545).copy(alpha = cardAlpha.value)
+            }
+        ),
         shape = RoundedCornerShape(16.dp)
     ) {
         Box(

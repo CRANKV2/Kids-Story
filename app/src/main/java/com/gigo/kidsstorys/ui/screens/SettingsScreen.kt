@@ -1,5 +1,6 @@
 package com.gigo.kidsstorys.ui.screens
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -108,7 +109,7 @@ fun SettingsScreen(
     var previewSize by remember { mutableStateOf(settingsManager.previewSize.toFloat()) }
     var backgroundAlpha by remember { mutableStateOf(settingsManager.backgroundAlpha) }
 
-    // Farb-States werden aus den Preferences initialisiert
+    // Farb-States werden aus den Preferences initialised
     var cardTitleColor by remember(userPreferences.cardTitleColor) {
         mutableStateOf(Color(userPreferences.cardTitleColor.toInt()))
     }
@@ -760,6 +761,107 @@ fun SettingsScreen(
                 }
 
                 Spacer(modifier = Modifier.height(32.dp))
+
+                // Problembehandlung-Sektion
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .shadow(
+                            elevation = 8.dp * cardAlpha.value,
+                            spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                            ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
+                            shape = RoundedCornerShape(16.dp)
+                        ),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp)
+                    ) {
+                        Text(
+                            "Problembehandlung",
+                            style = MaterialTheme.typography.titleMedium,
+                            textAlign = TextAlign.Center,
+                            color = TextLight,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 10.dp)
+                        )
+                        
+                        Text(
+                            "Diese Funktionen können bei Problemen mit der App helfen. Das Löschen des Cache entfernt nur temporäre Dateien. Deine Geschichten, Bilder, der Hintergrund und alle Einstellungen bleiben dabei erhalten.",
+                            style = MaterialTheme.typography.bodySmall,
+                            textAlign = TextAlign.Center,
+                            color = TextLight.copy(alpha = 0.8f),
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Button(
+                                onClick = {
+                                    try {
+                                        // Interner Cache
+                                        context.cacheDir.deleteRecursively()
+                                        // Externer Cache
+                                        context.externalCacheDir?.deleteRecursively()
+                                        // Temporäre Dateien
+                                        context.filesDir.listFiles()?.forEach { file ->
+                                            if (!file.name.endsWith(".jpg") && !file.name.endsWith(".db")) {
+                                                file.delete()
+                                            }
+                                        }
+                                        scope.launch {
+                                            snackbarHostState.showSnackbar("Cache wurde gelöscht")
+                                        }
+                                    } catch (e: Exception) {
+                                        scope.launch {
+                                            snackbarHostState.showSnackbar("Fehler beim Löschen des Cache")
+                                        }
+                                    }
+                                },
+                                modifier = Modifier.weight(1f),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = AccentPurple
+                                )
+                            ) {
+                                Text(
+                                    "Cache löschen",
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+
+                            Button(
+                                onClick = {
+                                    val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+                                    intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                    intent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    context.startActivity(intent)
+                                    Runtime.getRuntime().exit(0)
+                                },
+                                modifier = Modifier.weight(1f),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = AccentPurple
+                                )
+                            ) {
+                                Text(
+                                    "App neu starten",
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
 
                 // Über die App Button
                 Button(

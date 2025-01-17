@@ -31,7 +31,7 @@ class SettingsManager private constructor(context: Context) {
         
         private const val DEFAULT_CARD_ALPHA = 1.0f
         private const val DEFAULT_BACKGROUND_ALPHA = 1.0f
-        private const val DEFAULT_FONT_SIZE = 16
+        private const val DEFAULT_FONT_SIZE = 14
         private const val DEFAULT_WRAP_TEXT = true
         private const val DEFAULT_TITLE_SIZE = 15
         private const val DEFAULT_PREVIEW_SIZE = 12
