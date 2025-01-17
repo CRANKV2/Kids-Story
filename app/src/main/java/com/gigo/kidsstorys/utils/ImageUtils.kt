@@ -1,17 +1,13 @@
-@file:Suppress("SpellCheckingInspection")
-
 package com.gigo.kidsstorys.utils
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import java.io.File
 import java.io.FileOutputStream
-import kotlin.math.min
 
 object ImageUtils {
     private const val MAX_WIDTH = 1920
@@ -21,34 +17,25 @@ object ImageUtils {
 
     fun processAndSaveImage(context: Context, uri: Uri, outputFile: File): Boolean {
         return try {
-            context.contentResolver.openInputStream(uri)?.use { inputStream ->
-                val originalBitmap = BitmapFactory.decodeStream(inputStream)
-
-                // Behalte die originale Größe bei
-                val maxHeight = 1920 // Maximale Höhe, aber groß genug
-                val maxWidth = 1080  // Maximale Breite, aber groß genug
-
-                val scaleFactor = when {
-                    originalBitmap.height > maxHeight || originalBitmap.width > maxWidth -> {
-                        val heightScale = maxHeight.toFloat() / originalBitmap.height
-                        val widthScale = maxWidth.toFloat() / originalBitmap.width
-                        min(heightScale, widthScale)
-                    }
-                    else -> 1f
-                }
-
-                val finalBitmap = Bitmap.createScaledBitmap(
-                    originalBitmap,
-                    (originalBitmap.width * scaleFactor).toInt(),
-                    (originalBitmap.height * scaleFactor).toInt(),
-                    true
-                )
-
+            // Bild laden
+            val bitmap = loadBitmapFromUri(context, uri)
+            
+            // Erste Skalierung basierend auf Dimensionen
+            var optimizedBitmap = scaleBitmap(bitmap, MAX_WIDTH, MAX_HEIGHT)
+            
+            // Komprimierung mit Qualitätsanpassung
+            var quality = JPEG_QUALITY
+            var fileSize: Long
+            
+            do {
                 FileOutputStream(outputFile).use { out ->
-                    finalBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+                    optimizedBitmap.compress(Bitmap.CompressFormat.JPEG, quality, out)
                 }
-                true
-            } ?: false
+                fileSize = outputFile.length()
+                quality -= 5
+            } while (fileSize > MAX_FILE_SIZE_BYTES && quality > 5)
+
+            true
         } catch (e: Exception) {
             e.printStackTrace()
             false
@@ -83,4 +70,4 @@ object ImageUtils {
             source
         }
     }
-}
+} 

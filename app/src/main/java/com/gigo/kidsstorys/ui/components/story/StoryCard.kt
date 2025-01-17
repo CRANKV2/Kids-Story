@@ -125,10 +125,17 @@ fun ModernStoryCard(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                // Dynamische Box-Höhe basierend auf Bildverfügbarkeit
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(200.dp)
+                        .then(
+                            if (story.imagePath != null) {
+                                Modifier.height(200.dp)
+                            } else {
+                                Modifier.height(100.dp)
+                            }
+                        )
                         .clip(RoundedCornerShape(16.dp))
                 ) {
                     if (story.imagePath != null) {
@@ -150,7 +157,8 @@ fun ModernStoryCard(
                             color = previewColor,
                             maxLines = 3,
                             overflow = TextOverflow.Ellipsis,
-                            fontSize = previewSize.sp
+                            fontSize = previewSize.sp,
+                            modifier = Modifier.padding(8.dp)
                         )
                     }
                 }

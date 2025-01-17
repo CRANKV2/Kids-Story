@@ -241,19 +241,6 @@ fun SettingsScreen(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                // Darstellung Titel
-                Text(
-                    stringResource(R.string.darstellung_title),
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontSize = (70f / LocalDensity.current.density).sp,
-                    fontWeight = FontWeight.Bold,
-                    color = TextLight,
-                    modifier = Modifier
-                        .padding(vertical = 16.dp)
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                )
-
                 // Gemeinsame Darstellungseinstellungen Card
                 Card(
                     modifier = Modifier
@@ -600,20 +587,6 @@ fun SettingsScreen(
                 }
 
                 Spacer(modifier = Modifier.height(32.dp))
-
-                // Farbeinstellungen Sektion
-                Text(
-                    stringResource(R.string.farbeinstellungen),
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontSize = (70f / LocalDensity.current.density).sp,
-                    fontWeight = FontWeight.Bold,
-                    color = TextLight,
-                    modifier = Modifier
-                        .padding(vertical = 16.dp)
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.CenterHorizontally)
-                )
-
 
                 // Neue Karte für Farbeinstellungen
                 Card(

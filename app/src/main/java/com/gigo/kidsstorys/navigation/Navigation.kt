@@ -56,7 +56,8 @@ fun AppNavigation(
             val storyId = backStackEntry.arguments?.getString("storyId")?.toIntOrNull() ?: -1
             ReadStoryScreen(
                 storyId = storyId,
-                onBack = { navController.navigateUp() }
+                onBack = { navController.navigateUp() },
+                isDarkTheme = isDarkTheme
             )
         }
         
