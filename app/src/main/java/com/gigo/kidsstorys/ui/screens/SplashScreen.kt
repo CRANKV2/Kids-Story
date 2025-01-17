@@ -1,6 +1,8 @@
+// SplashScreen.kt
 package com.gigo.kidsstorys.ui.screens
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -26,35 +28,42 @@ fun SplashScreen(
     onTimeout: () -> Unit,
     onFirstLaunch: () -> Unit
 ) {
+    val context = LocalContext.current
+    val sharedPrefs = remember { context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE) }
+    val isFirstLaunch = remember { sharedPrefs.getBoolean("is_first_launch", true) }
+
     var startAnimation by remember { mutableStateOf(false) }
     val alphaAnim = animateFloatAsState(
         targetValue = if (startAnimation) 1f else 0f,
-        animationSpec = tween(
-            durationMillis = 1000
-        ),
+        animationSpec = tween(durationMillis = 1000),
         label = "Alpha Animation"
     )
 
-    val context = LocalContext.current
-    val sharedPrefs = remember {
-        context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-    }
-    val isFirstLaunch = remember {
-        sharedPrefs.getBoolean("is_first_launch", true)
-    }
-
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(Unit) {
         startAnimation = true
         delay(1500)
-        
-        if (isFirstLaunch) {
-            sharedPrefs.edit().putBoolean("is_first_launch", false).apply()
-            onFirstLaunch()
-        } else {
-            onTimeout()
-        }
+        handleLaunch(isFirstLaunch, sharedPrefs, onFirstLaunch, onTimeout)
     }
 
+    SplashContent(isDarkTheme, alphaAnim.value)
+}
+
+private fun handleLaunch(
+    isFirstLaunch: Boolean,
+    sharedPrefs: SharedPreferences,
+    onFirstLaunch: () -> Unit,
+    onTimeout: () -> Unit
+) {
+    if (isFirstLaunch) {
+        sharedPrefs.edit().putBoolean("is_first_launch", false).apply()
+        onFirstLaunch()
+    } else {
+        onTimeout()
+    }
+}
+
+@Composable
+private fun SplashContent(isDarkTheme: Boolean, alpha: Float) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -68,7 +77,7 @@ fun SplashScreen(
             Text(
                 text = stringResource(R.string.books),
                 fontSize = 72.sp,
-                modifier = Modifier.alpha(alphaAnim.value)
+                modifier = Modifier.alpha(alpha)
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
@@ -76,8 +85,8 @@ fun SplashScreen(
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = if (isDarkTheme) TextLight else AccentPurple,
-                modifier = Modifier.alpha(alphaAnim.value)
+                modifier = Modifier.alpha(alpha)
             )
         }
     }
-} 
+}
