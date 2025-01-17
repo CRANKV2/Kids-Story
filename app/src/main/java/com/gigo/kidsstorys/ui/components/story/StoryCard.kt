@@ -29,6 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
@@ -128,6 +129,7 @@ fun ModernStoryCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
+                        .clip(RoundedCornerShape(16.dp))
                 ) {
                     if (story.imagePath != null) {
                         val bitmap = remember(story.imagePath) {
@@ -138,7 +140,7 @@ fun ModernStoryCard(
                                 bitmap = it.asImageBitmap(),
                                 contentDescription = null,
                                 modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.Fit
+                                contentScale = ContentScale.Crop
                             )
                         }
                     } else {

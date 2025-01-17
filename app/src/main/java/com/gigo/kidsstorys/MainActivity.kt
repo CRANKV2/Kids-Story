@@ -1,7 +1,6 @@
 package com.gigo.kidsstorys
 
 import android.os.Bundle
-import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.*
@@ -16,11 +15,6 @@ import androidx.navigation.compose.rememberNavController
 import com.gigo.kidsstorys.navigation.AppNavigation
 import com.gigo.kidsstorys.ui.screens.*
 import com.gigo.kidsstorys.ui.theme.KidsStorysTheme
-import com.gigo.kidsstorys.data.SettingsManager
-import com.gigo.kidsstorys.utils.RequestStoragePermission
-import android.widget.Toast
-import android.app.Activity
-import androidx.compose.ui.platform.LocalContext
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,8 +68,7 @@ fun MainContent() {
                 val storyId = backStackEntry.arguments?.getString("storyId")?.toIntOrNull() ?: return@composable
                 ReadStoryScreen(
                     storyId = storyId,
-                    onBack = { navController.navigateUp() },
-                    isDarkTheme = isDarkMode
+                    onBack = { navController.navigateUp() }
                 )
             }
             composable(

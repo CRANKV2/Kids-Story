@@ -1,11 +1,19 @@
+@file:Suppress("SpellCheckingInspection")
+
 package com.gigo.kidsstorys.ui.screens
 
 import StoryImageEditDialog
 import android.graphics.BitmapFactory
+import android.net.Uri
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.rememberTransformableState
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,17 +50,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -68,22 +81,15 @@ import com.gigo.kidsstorys.R
 import com.gigo.kidsstorys.data.SettingsManager
 import com.gigo.kidsstorys.ui.theme.AccentPurple
 import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
-import java.io.File
-import android.net.Uri
-import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.clickable
-import androidx.compose.runtime.rememberCoroutineScope
 import com.gigo.kidsstorys.utils.ImageUtils
 import kotlinx.coroutines.launch
+import java.io.File
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ReadStoryScreen(
     storyId: Int,
     onBack: () -> Unit,
-    isDarkTheme: Boolean,
     viewModel: StoryViewModel = viewModel(factory = StoryViewModel.Factory)
 ) {
     val story by viewModel.selectedStory.collectAsState()
@@ -98,7 +104,7 @@ fun ReadStoryScreen(
 
     val context = LocalContext.current
     val settingsManager = remember { SettingsManager.getInstance(context) }
-    val fontSize = remember { mutableStateOf(settingsManager.fontSize.toFloat()) }
+    val fontSize = remember { mutableFloatStateOf(settingsManager.fontSize.toFloat()) }
     val wrapText = settingsManager.wrapText
     val verticalScrollState = rememberScrollState()
     val horizontalScrollState = rememberScrollState()
@@ -109,12 +115,6 @@ fun ReadStoryScreen(
     }
     val textColor = remember(userPreferences.storyTextColor) {
         Color(userPreferences.storyTextColor.toInt())
-    }
-
-    // Neuer Scale-State für Zoom
-    var scale by remember { mutableStateOf(1f) }
-    val scaleState = rememberTransformableState { zoomChange, _, _ ->
-        scale = (scale * zoomChange).coerceIn(0.5f..3f)
     }
 
     val backgroundImageFile = remember {
@@ -130,7 +130,7 @@ fun ReadStoryScreen(
     }
 
     LaunchedEffect(userPreferences.fontSize) {
-        fontSize.value = userPreferences.fontSize.toFloat()
+        fontSize.floatValue = userPreferences.fontSize
     }
 
     LaunchedEffect(Unit) {
@@ -240,38 +240,59 @@ fun ReadStoryScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(if (story?.imagePath != null) 200.dp else 56.dp)
+                            .height(200.dp)
                             .padding(horizontal = 16.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(8.dp))
                     ) {
                         if (story?.imagePath != null) {
-                            // Bild anzeigen mit standard Image composable
+                            var offsetY by remember { mutableFloatStateOf(0f) }
+                            var isDragging by remember { mutableStateOf(false) }
+                            val context = LocalContext.current
+                            
                             val bitmap = remember(story?.imagePath) {
                                 BitmapFactory.decodeFile(story?.imagePath)
                             }
                             bitmap?.let {
+                                val imageRatio = it.height.toFloat() / it.width.toFloat()
                                 Image(
                                     bitmap = it.asImageBitmap(),
                                     contentDescription = null,
                                     modifier = Modifier
-                                        .fillMaxSize()
-                                        .clip(RoundedCornerShape(8.dp))
-                                        .clickable { showImageEditDialog = true },
-                                    contentScale = ContentScale.Crop
-                                )
-                            }
-                        } else {
-                            // Button anzeigen
-                            FilledTonalButton(
-                                onClick = { imagePickerLauncher.launch("image/*") },
-                                modifier = Modifier.fillMaxWidth(),
-                                colors = ButtonDefaults.filledTonalButtonColors(
-                                    containerColor = MaterialTheme.colorScheme.primaryContainer
-                                )
-                            ) {
-                                Text(
-                                    "Bild zur Geschichte hinzufügen",
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    fontSize = 16.sp
+                                        .fillMaxWidth()
+                                        .scale(1.5f)
+                                        .graphicsLayer { 
+                                            translationY = offsetY 
+                                        }
+                                        .combinedClickable(
+                                            onClick = { showImageEditDialog = true },
+                                            onLongClick = {
+                                                isDragging = true
+                                                Toast.makeText(
+                                                    context,
+                                                    "Ziehe das Bild nach oben oder unten um den Ausschnitt anzupassen",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                        )
+                                        .pointerInput(Unit) {
+                                            detectVerticalDragGestures(
+                                                onDragEnd = {
+                                                    if (isDragging) {
+                                                        Toast.makeText(
+                                                            context,
+                                                            "Bildposition gespeichert",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        isDragging = false
+                                                    }
+                                                }
+                                            ) { _, dragAmount ->
+                                                if (isDragging) {
+                                                    offsetY = (offsetY + dragAmount).coerceIn(-200f, 200f)
+                                                }
+                                            }
+                                        },
+                                    contentScale = ContentScale.FillWidth
                                 )
                             }
                         }
@@ -337,7 +358,7 @@ fun ReadStoryScreen(
                                 Text(
                                     text = currentStory.content,
                                     style = MaterialTheme.typography.bodyLarge.copy(
-                                        fontSize = fontSize.value.sp
+                                        fontSize = fontSize.floatValue.sp
                                     ),
                                     color = textColor,
                                     modifier = Modifier
@@ -348,7 +369,7 @@ fun ReadStoryScreen(
                                 Text(
                                     text = currentStory.content,
                                     style = MaterialTheme.typography.bodyLarge.copy(
-                                        fontSize = fontSize.value.sp
+                                        fontSize = fontSize.floatValue.sp
                                     ),
                                     color = textColor,
                                     modifier = Modifier
