@@ -42,15 +42,41 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.gigo.kidsstorys.R
 import com.gigo.kidsstorys.ui.theme.AccentPurple
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import android.graphics.BitmapFactory
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
+import java.io.File
+import com.gigo.kidsstorys.utils.ImageUtils
 
 @Composable
 fun AddStoryDialog(
     onDismissRequest: () -> Unit,
-    onConfirm: (String, String) -> Unit
+    onConfirm: (String, String, String?) -> Unit
 ) {
     var title by remember { mutableStateOf("") }
     var story by remember { mutableStateOf("") }
+    var selectedImagePath by remember { mutableStateOf<String?>(null) }
+    val context = LocalContext.current
     val scrollState = rememberScrollState()
+
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            val tempFile = File(context.filesDir, "temp_story_image_${System.currentTimeMillis()}.jpg")
+            ImageUtils.processAndSaveImage(context, uri, tempFile)
+            selectedImagePath = tempFile.absolutePath
+        }
+    }
 
     LaunchedEffect(story) {
         scrollState.animateScrollTo(scrollState.maxValue)
@@ -92,6 +118,45 @@ fun AddStoryDialog(
                     color = Color.White,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
+
+                FilledTonalButton(
+                    onClick = { imagePickerLauncher.launch("image/*") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    colors = ButtonDefaults.filledTonalButtonColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer
+                    )
+                ) {
+                    Text(
+                        if (selectedImagePath == null) "Bild hinzufügen" else "Bild ändern",
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                }
+
+                if (selectedImagePath != null) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .padding(bottom = 16.dp)
+                    ) {
+                        val bitmap = remember(selectedImagePath) {
+                            BitmapFactory.decodeFile(selectedImagePath)
+                        }
+                        bitmap?.let {
+                            Image(
+                                bitmap = it.asImageBitmap(),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .clickable { imagePickerLauncher.launch("image/*") },
+                                contentScale = ContentScale.Crop
+                            )
+                        }
+                    }
+                }
 
                 OutlinedTextField(
                     value = title,
@@ -163,7 +228,7 @@ fun AddStoryDialog(
                     }
 
                     FilledTonalButton(
-                        onClick = { onConfirm(title, story) },
+                        onClick = { onConfirm(title, story, selectedImagePath) },
                         enabled = title.isNotBlank() && story.isNotBlank(),
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.filledTonalButtonColors(

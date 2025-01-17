@@ -163,8 +163,8 @@ fun StoryScreen(
                     if (showAddDialog) {
                         AddStoryDialog(
                             onDismissRequest = { showAddDialog = false },
-                            onConfirm = { title, content ->
-                                viewModel.addStory(title, content)
+                            onConfirm = { title, content, imagePath ->
+                                viewModel.addStory(title, content, imagePath)
                                 showAddDialog = false
                             }
                         )
