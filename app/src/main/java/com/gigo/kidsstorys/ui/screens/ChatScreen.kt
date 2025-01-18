@@ -1,6 +1,6 @@
 package com.gigo.kidsstorys.ui.screens
 
-import LoadingDots
+import com.gigo.kidsstorys.ui.components.LoadingDots
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.widget.Toast
@@ -58,7 +58,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -100,7 +99,6 @@ fun ChatScreen(
     val error by viewModel.error.collectAsState()
     var messageText by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current

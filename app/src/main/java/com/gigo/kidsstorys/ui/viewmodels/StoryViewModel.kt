@@ -4,23 +4,22 @@ import android.app.Application
 import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.gigo.kidsstorys.KidsStorysApp
-import com.gigo.kidsstorys.data.models.Story
-import com.gigo.kidsstorys.data.dao.StoryDao
 import com.gigo.kidsstorys.data.UserPreferences
 import com.gigo.kidsstorys.data.UserPreferencesRepository
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
+import com.gigo.kidsstorys.data.dao.StoryDao
+import com.gigo.kidsstorys.data.models.Story
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import java.io.File
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import java.io.File
 
 class StoryViewModel(
     private val storyDao: StoryDao,
@@ -80,14 +79,6 @@ class StoryViewModel(
         }
     }
 
-    fun updateStoryTitle(story: Story, newTitle: String) {
-        viewModelScope.launch {
-            val updatedStory = story.copy(title = newTitle)
-            storyDao.updateStory(updatedStory)
-            loadStory(story.id)
-        }
-    }
-
     fun updateCardTitleColor(color: Color) {
         viewModelScope.launch {
             userPreferencesRepository.updateCardTitleColor(color)
@@ -112,11 +103,6 @@ class StoryViewModel(
         }
     }
 
-    fun updateFontSize(newSize: Float) {
-        viewModelScope.launch {
-            userPreferencesRepository.updateFontSize(newSize)
-        }
-    }
 
     fun updateStoryImage(storyId: Int, imagePath: String?) {
         viewModelScope.launch {

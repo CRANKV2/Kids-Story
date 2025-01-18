@@ -1,6 +1,6 @@
 package com.gigo.kidsstorys.navigation
 
-import OnboardingScreen
+import com.gigo.kidsstorys.ui.screens.OnboardingScreen
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
@@ -47,8 +47,7 @@ fun AppNavigation(
 
         composable("stories") {
             StoryScreen(
-                navController = navController,
-                isDarkTheme = isDarkTheme
+                navController = navController
             )
         }
         
@@ -56,15 +55,13 @@ fun AppNavigation(
             val storyId = backStackEntry.arguments?.getString("storyId")?.toIntOrNull() ?: -1
             ReadStoryScreen(
                 storyId = storyId,
-                onBack = { navController.navigateUp() },
-                isDarkTheme = isDarkTheme
+                onBack = { navController.navigateUp() }
             )
         }
         
         composable("settings") {
             SettingsScreen(
-                navController = navController,
-                isDarkTheme = isDarkTheme
+                navController = navController
             )
         }
         

@@ -1,3 +1,5 @@
+@file:Suppress("SameParameterValue")
+
 package com.gigo.kidsstorys.utils
 
 import android.content.Context
@@ -21,7 +23,7 @@ object ImageUtils {
             val bitmap = loadBitmapFromUri(context, uri)
             
             // Erste Skalierung basierend auf Dimensionen
-            var optimizedBitmap = scaleBitmap(bitmap, MAX_WIDTH, MAX_HEIGHT)
+            val optimizedBitmap = scaleBitmap(bitmap, MAX_WIDTH, MAX_HEIGHT)
             
             // Komprimierung mit Qualitätsanpassung
             var quality = JPEG_QUALITY
@@ -42,6 +44,7 @@ object ImageUtils {
         }
     }
 
+    @Suppress("DEPRECATION")
     private fun loadBitmapFromUri(context: Context, uri: Uri): Bitmap {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri)) { decoder, _, _ ->

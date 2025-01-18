@@ -14,6 +14,7 @@ android {
     defaultConfig {
         applicationId = "com.gigo.kidsstorys"
         minSdk = 24
+        //noinspection OldTargetApi
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -42,14 +43,17 @@ dependencies {
     implementation(libs.androidx.material3)
     
     // Neue Dependencies
+    //noinspection UseTomlInstead,GradleDependency
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    //noinspection UseTomlInstead,GradleDependency
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation(libs.androidx.navigation.compose.v277)
 
     // Implement Firebase for Login
-    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
-    implementation("com.google.firebase:firebase-analytics")
+    //noinspection GradleDependency
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.android.gms:play-services-auth:20.7.0' // Für Google Sign-In
 

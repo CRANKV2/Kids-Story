@@ -1,3 +1,6 @@
+package com.gigo.kidsstorys.ui.components
+
+import android.annotation.SuppressLint
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
@@ -9,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 object LoadingDots {
+    @SuppressLint("UseOfNonLambdaOffsetOverload")
     @Composable
     operator fun invoke() {
         val dots = listOf(".", ".", ".")

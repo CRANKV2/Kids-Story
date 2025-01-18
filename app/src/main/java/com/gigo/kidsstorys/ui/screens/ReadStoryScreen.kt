@@ -1,11 +1,15 @@
 package com.gigo.kidsstorys.ui.screens
 
-import StoryImageEditDialog
+import com.gigo.kidsstorys.ui.components.StoryImageEditDialog
 import android.graphics.BitmapFactory
+import android.net.Uri
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.rememberTransformableState
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,8 +46,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,22 +74,15 @@ import com.gigo.kidsstorys.R
 import com.gigo.kidsstorys.data.SettingsManager
 import com.gigo.kidsstorys.ui.theme.AccentPurple
 import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
-import java.io.File
-import android.net.Uri
-import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.clickable
-import androidx.compose.runtime.rememberCoroutineScope
 import com.gigo.kidsstorys.utils.ImageUtils
 import kotlinx.coroutines.launch
+import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReadStoryScreen(
     storyId: Int,
     onBack: () -> Unit,
-    isDarkTheme: Boolean,
     viewModel: StoryViewModel = viewModel(factory = StoryViewModel.Factory)
 ) {
     val story by viewModel.selectedStory.collectAsState()
@@ -98,7 +97,7 @@ fun ReadStoryScreen(
 
     val context = LocalContext.current
     val settingsManager = remember { SettingsManager.getInstance(context) }
-    val fontSize = remember { mutableStateOf(settingsManager.fontSize.toFloat()) }
+    val fontSize = remember { mutableFloatStateOf(settingsManager.fontSize.toFloat()) }
     val wrapText = settingsManager.wrapText
     val verticalScrollState = rememberScrollState()
     val horizontalScrollState = rememberScrollState()
@@ -109,12 +108,6 @@ fun ReadStoryScreen(
     }
     val textColor = remember(userPreferences.storyTextColor) {
         Color(userPreferences.storyTextColor.toInt())
-    }
-
-    // Neuer Scale-State für Zoom
-    var scale by remember { mutableStateOf(1f) }
-    val scaleState = rememberTransformableState { zoomChange, _, _ ->
-        scale = (scale * zoomChange).coerceIn(0.5f..3f)
     }
 
     val backgroundImageFile = remember {
@@ -130,7 +123,7 @@ fun ReadStoryScreen(
     }
 
     LaunchedEffect(userPreferences.fontSize) {
-        fontSize.value = userPreferences.fontSize.toFloat()
+        fontSize.floatValue = userPreferences.fontSize
     }
 
     LaunchedEffect(Unit) {
@@ -337,7 +330,7 @@ fun ReadStoryScreen(
                                 Text(
                                     text = currentStory.content,
                                     style = MaterialTheme.typography.bodyLarge.copy(
-                                        fontSize = fontSize.value.sp
+                                        fontSize = fontSize.floatValue.sp
                                     ),
                                     color = textColor,
                                     modifier = Modifier
@@ -348,7 +341,7 @@ fun ReadStoryScreen(
                                 Text(
                                     text = currentStory.content,
                                     style = MaterialTheme.typography.bodyLarge.copy(
-                                        fontSize = fontSize.value.sp
+                                        fontSize = fontSize.floatValue.sp
                                     ),
                                     color = textColor,
                                     modifier = Modifier

@@ -29,13 +29,11 @@ fun ColorPicker(
 ) {
     val colors = listOf(
         Color(0xFFE2E2E2), // Weiß
-        Color(0xFFBBBBBB), // Hellgrau
         Color(0xFF9575CD), // Lila
         Color(0xFF64B5F6), // Blau
         Color(0xFF81C784), // Grün
         Color(0xFFFFB74D), // Orange
         Color(0xFFE57373), // Rot
-        Color(0xFFBA68C8)  // Pink
     )
 
     Column(

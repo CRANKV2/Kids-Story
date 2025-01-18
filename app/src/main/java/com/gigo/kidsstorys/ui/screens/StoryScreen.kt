@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 package com.gigo.kidsstorys.ui.screens
 
 
@@ -32,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -67,7 +70,6 @@ import java.io.File
 @Composable
 fun StoryScreen(
     navController: NavController,
-    isDarkTheme: Boolean,
     viewModel: StoryViewModel = viewModel(factory = StoryViewModel.Factory)
 ) {
     val localContext = LocalContext.current
@@ -78,13 +80,12 @@ fun StoryScreen(
     var selectedStory by remember { mutableStateOf<Story?>(null) }
     var showDeleteDialog by remember { mutableStateOf(false) }
     var storyToDelete by remember { mutableStateOf<Story?>(null) }
-    var showTutorial by remember { mutableStateOf(false) }
     var isCompactView by remember { mutableStateOf(settingsManager.isCompactView) }
     val backgroundImageFile = remember {
         File(localContext.filesDir, "background_image.jpg")
     }
     var backgroundBitmap by remember { mutableStateOf<android.graphics.Bitmap?>(null) }
-    var backgroundAlpha by remember { mutableStateOf(settingsManager.backgroundAlpha) }
+    var backgroundAlpha by remember { mutableFloatStateOf(settingsManager.backgroundAlpha) }
     var selectedStories by remember { mutableStateOf(setOf<Int>()) }
     var isSelectionMode by remember { mutableStateOf(false) }
     var showCreateOptions by remember { mutableStateOf(false) }
@@ -230,8 +231,7 @@ fun StoryScreen(
                             GridStoryLayout(
                                 stories = stories,
                                 userPreferences = userPreferences,
-                                isCompactView = isCompactView,
-                                onStoryClick = { story -> 
+                                onStoryClick = { story ->
                                     if (isSelectionMode) {
                                         selectedStories = if (selectedStories.contains(story.id)) {
                                             selectedStories - story.id
@@ -242,15 +242,15 @@ fun StoryScreen(
                                         navController.navigate("readStory/${story.id}")
                                     }
                                 },
+                                onOptionsClick = { story ->
+                                    if (!isSelectionMode) {
+                                        selectedStory = story
+                                    }
+                                },
                                 onLongClick = { story ->
                                     if (!isSelectionMode) {
                                         isSelectionMode = true
                                         selectedStories = setOf(story.id)
-                                    }
-                                },
-                                onOptionsClick = { story -> 
-                                    if (!isSelectionMode) {
-                                        selectedStory = story
                                     }
                                 }
                             )
@@ -258,8 +258,7 @@ fun StoryScreen(
                             CompactStoryLayout(
                                 stories = stories,
                                 userPreferences = userPreferences,
-                                isCompactView = isCompactView,
-                                onStoryClick = { story -> 
+                                onStoryClick = { story ->
                                     if (isSelectionMode) {
                                         selectedStories = if (selectedStories.contains(story.id)) {
                                             selectedStories - story.id
@@ -270,13 +269,13 @@ fun StoryScreen(
                                         navController.navigate("readStory/${story.id}")
                                     }
                                 },
+                                onOptionsClick = { story -> selectedStory = story },
                                 onLongClick = { story ->
                                     if (!isSelectionMode) {
                                         isSelectionMode = true
                                         selectedStories = setOf(story.id)
                                     }
-                                },
-                                onOptionsClick = { story -> selectedStory = story }
+                                }
                             )
                         }
                     }

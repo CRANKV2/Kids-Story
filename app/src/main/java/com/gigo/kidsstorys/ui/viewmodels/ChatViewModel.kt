@@ -1,6 +1,6 @@
 package com.gigo.kidsstorys.ui.viewmodels
 
-import PromptUtils
+import com.gigo.kidsstorys.utils.PromptUtils
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gigo.kidsstorys.BuildConfig
@@ -92,7 +92,4 @@ class ChatViewModel(
         }
     }
 
-    fun clearError() {
-        _error.value = null
-    }
-} 
+}

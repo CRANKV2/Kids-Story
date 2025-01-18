@@ -1,3 +1,5 @@
+package com.gigo.kidsstorys.utils
+
 object PromptUtils {
 
     // Liste der Basisregeln für den KI-Assistenten.

@@ -57,12 +57,6 @@ class UserPreferencesRepository(
         }
     }
 
-    suspend fun updateFontSize(newSize: Float) {
-        dataStore.edit { preferences ->
-            preferences[FONT_SIZE] = newSize
-        }
-    }
-
     val userPreferencesFlow: Flow<UserPreferences> = dataStore.data.map { preferences ->
         UserPreferences(
             fontSize = preferences[FONT_SIZE] ?: 16f,

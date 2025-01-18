@@ -8,7 +8,7 @@ import androidx.room.Room
 
 class MyApplication : Application() {
     lateinit var database: StoryDatabase
-    lateinit var userPreferencesRepository: UserPreferencesRepository
+    private lateinit var userPreferencesRepository: UserPreferencesRepository
 
     private val dataStore by preferencesDataStore(name = "user_preferences")
 

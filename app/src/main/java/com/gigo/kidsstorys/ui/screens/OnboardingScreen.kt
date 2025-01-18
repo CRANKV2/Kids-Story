@@ -1,3 +1,5 @@
+package com.gigo.kidsstorys.ui.screens
+
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

@@ -51,7 +51,7 @@ fun EmptyStateView() {
                 contentAlignment = Alignment.Center
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.empty_state_icon),
+                    painter = painterResource(id = R.drawable.app_icon),
                     contentDescription = "Keine Geschichten",
                     modifier = Modifier.size(145.dp)
                 )

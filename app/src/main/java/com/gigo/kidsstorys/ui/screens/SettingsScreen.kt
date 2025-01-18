@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection", "NAME_SHADOWING")
+
 package com.gigo.kidsstorys.ui.screens
 
 import android.content.Intent
@@ -5,11 +7,8 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,7 +23,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -53,6 +51,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -61,11 +60,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -92,7 +89,6 @@ import java.io.File
 @Composable
 fun SettingsScreen(
     navController: NavController,
-    isDarkTheme: Boolean,
     viewModel: StoryViewModel = viewModel(factory = StoryViewModel.Factory)
 ) {
     val userPreferences by viewModel.userPreferences.collectAsState()
@@ -106,11 +102,10 @@ fun SettingsScreen(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     // Initialisiere die State-Variablen mit den gespeicherten Werten
-    var fontSize by remember { mutableStateOf(settingsManager.fontSize.toFloat()) }
     var wrapText by remember { mutableStateOf(settingsManager.wrapText) }
-    var titleSize by remember { mutableStateOf(settingsManager.titleSize.toFloat()) }
-    var previewSize by remember { mutableStateOf(settingsManager.previewSize.toFloat()) }
-    var backgroundAlpha by remember { mutableStateOf(settingsManager.backgroundAlpha) }
+    var titleSize by remember { mutableFloatStateOf(settingsManager.titleSize.toFloat()) }
+    var previewSize by remember { mutableFloatStateOf(settingsManager.previewSize.toFloat()) }
+    var backgroundAlpha by remember { mutableFloatStateOf(settingsManager.backgroundAlpha) }
 
     // Farb-States werden aus den Preferences initialised
     var cardTitleColor by remember(userPreferences.cardTitleColor) {
@@ -128,8 +123,6 @@ fun SettingsScreen(
 
     // Füge diese Zeile hinzu
     val coroutineScope = rememberCoroutineScope()
-
-    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
     var showImagePickerDialog by remember { mutableStateOf(false) }
     var isProcessingImage by remember { mutableStateOf(false) }
@@ -671,7 +664,7 @@ fun SettingsScreen(
                                 .fillMaxWidth()
                                 .height(2.dp)
                                 .background(
-                                    brush = androidx.compose.ui.graphics.Brush.horizontalGradient(
+                                    brush = Brush.horizontalGradient(
                                         colors = listOf(
                                             AccentPurple.copy(alpha = 0.0f),
                                             AccentPurple.copy(alpha = 0.7f),
@@ -885,54 +878,5 @@ fun SettingsScreen(
         }
     }
 
-    @Composable
-    fun ColorButton(
-        color: Color,
-        isSelected: Boolean,
-        onClick: () -> Unit,
-        modifier: Modifier = Modifier
-    ) {
-        Box(
-            modifier = modifier
-                .size(40.dp)
-                .clip(CircleShape)
-                .background(color)
-                .border(
-                    width = if (isSelected) 3.dp else 0.dp,
-                    color = if (color.luminance() > 0.5f) Color.Black else Color.White,
-                    shape = CircleShape
-                )
-                .clickable(onClick = onClick),
-            contentAlignment = Alignment.Center
-        ) {
-            if (isSelected) {
-                Text(
-                    text = stringResource(R.string.color_picker_checked),
-                    fontSize = 20.sp,
-                    color = if (color.luminance() > 0.5f) Color.Black else Color.White
-                )
-            }
-        }
-    }
-
-    // Verwendung in der ColorPicker-Komponente:
-    @Composable
-    fun ColorPicker(
-        colors: List<Color>,
-        selectedColor: Color,
-        onColorSelected: (Color) -> Unit
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            colors.forEach { color ->
-                ColorButton(
-                    color = color,
-                    isSelected = selectedColor == color,
-                    onClick = { onColorSelected(color) }
-                )
-            }
-        }
-    }
 }
 

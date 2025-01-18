@@ -18,7 +18,6 @@ import com.gigo.kidsstorys.data.UserPreferences
 fun GridStoryLayout(
     stories: List<Story>,
     userPreferences: UserPreferences,
-    isCompactView: Boolean,
     onStoryClick: (Story) -> Unit,
     onOptionsClick: (Story) -> Unit,
     isSelectionMode: Boolean = false,
@@ -103,7 +102,6 @@ fun GridStoryLayout(
 fun CompactStoryLayout(
     stories: List<Story>,
     userPreferences: UserPreferences,
-    isCompactView: Boolean,
     onStoryClick: (Story) -> Unit,
     onOptionsClick: (Story) -> Unit,
     isSelectionMode: Boolean = false,
