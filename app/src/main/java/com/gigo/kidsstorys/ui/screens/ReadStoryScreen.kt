@@ -3,30 +3,12 @@ package com.gigo.kidsstorys.ui.screens
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,32 +16,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.gigo.kidsstorys.R
 import com.gigo.kidsstorys.data.SettingsManager
 import com.gigo.kidsstorys.ui.components.dialogs.ContentEditDialog
 import com.gigo.kidsstorys.ui.components.dialogs.EditDialog
+import com.gigo.kidsstorys.ui.components.dialogs.ImageEditDialog
 import com.gigo.kidsstorys.ui.components.dialogs.TitleEditDialog
-import com.gigo.kidsstorys.ui.theme.AccentPurple
+import com.gigo.kidsstorys.ui.components.story.StoryContent
+import com.gigo.kidsstorys.ui.components.story.StoryImage
+import com.gigo.kidsstorys.ui.components.story.StoryTitle
+import com.gigo.kidsstorys.ui.components.topbar.StoryTopBar
 import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
 import com.gigo.kidsstorys.utils.rememberImagePicker
 import java.io.File
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReadStoryScreen(
     storyId: Int,
@@ -77,9 +53,7 @@ fun ReadStoryScreen(
     val settingsManager = remember { SettingsManager.getInstance(context) }
     val fontSize = remember { mutableFloatStateOf(settingsManager.fontSize.toFloat()) }
     val wrapText = settingsManager.wrapText
-    val verticalScrollState = rememberScrollState()
-    val horizontalScrollState = rememberScrollState()
-
+    
     // Farben aus den Preferences
     val titleColor = remember(userPreferences.storyTitleColor) {
         Color(userPreferences.storyTitleColor.toInt())
@@ -100,8 +74,8 @@ fun ReadStoryScreen(
         context = context,
         story = story,
         viewModel = viewModel
-    ) { imagePath ->
-        // Hier können Sie direkt den Code ausführen, der nach der Bildverarbeitung laufen soll
+    ) { _ ->
+        // Bildverarbeitung Callback
     }
 
     var currentTitle by remember(story) { mutableStateOf(story?.title ?: "") }
@@ -138,174 +112,39 @@ fun ReadStoryScreen(
         }
 
         story?.let { currentStory ->
-            Scaffold(
-                modifier = Modifier.fillMaxSize(),
-                topBar = {
-                    TopAppBar(
-                        title = { Text("Geschichte", color = Color.White) },
-                        navigationIcon = {
-                            IconButton(onClick = onBack) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_arrow_back),
-                                    contentDescription = "Zurück",
-                                    tint = Color.White
-                                )
-                            }
-                        },
-                        actions = {
-                            IconButton(onClick = { showEditDialog = true }) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_edit),
-                                    contentDescription = "Bearbeiten",
-                                    tint = Color.White
-                                )
-                            }
-                        },
-                        colors = TopAppBarDefaults.topAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = cardAlpha.value),
-                            navigationIconContentColor = Color.White
-                        ),
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp, vertical = 8.dp)
-                            .shadow(
-                                elevation = 8.dp * cardAlpha.value,
-                                shape = RoundedCornerShape(24.dp),
-                                ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
-                                spotColor = AccentPurple.copy(alpha = cardAlpha.value)
-                            )
-                            .clip(RoundedCornerShape(24.dp))
-                    )
-                },
-                containerColor = Color.Transparent
-            ) { paddingValues ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues)
-                ) {
-                    // Bild oder Button-Bereich
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(if (story?.imagePath != null) 200.dp else 56.dp)
-                            .padding(horizontal = 16.dp, vertical = 4.dp)
-                    ) {
-                        if (story?.imagePath != null) {
-                            // Bild anzeigen mit standard Image composable
-                            val bitmap = remember(story?.imagePath) {
-                                BitmapFactory.decodeFile(story?.imagePath)
-                            }
-                            bitmap?.let {
-                                Image(
-                                    bitmap = it.asImageBitmap(),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .clip(RoundedCornerShape(8.dp))
-                                        .clickable { showImageEditDialog = true },
-                                    contentScale = ContentScale.Crop
-                                )
-                            }
-                        } else {
-                            // Button anzeigen
-                            FilledTonalButton(
-                                onClick = { imagePickerLauncher() },
-                                modifier = Modifier.fillMaxWidth(),
-                                colors = ButtonDefaults.filledTonalButtonColors(
-                                    containerColor = MaterialTheme.colorScheme.primaryContainer
-                                )
-                            ) {
-                                Text(
-                                    "Bild zur Geschichte hinzufügen",
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    fontSize = 16.sp
-                                )
-                            }
-                        }
-                    }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 8.dp)
+            ) {
+                StoryTopBar(
+                    onBack = onBack,
+                    onEdit = { showEditDialog = true },
+                    cardAlpha = cardAlpha.value
+                )
 
-                    // Titel-Sektion
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 4.dp)
-                            .shadow(
-                                elevation = 16.dp * cardAlpha.value,
-                                shape = RoundedCornerShape(24.dp),
-                                spotColor = AccentPurple.copy(alpha = cardAlpha.value),
-                                ambientColor = AccentPurple.copy(alpha = cardAlpha.value)
-                            ),
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
-                        ),
-                        shape = RoundedCornerShape(24.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .padding(20.dp)
-                                .background(Color.Transparent)
-                        ) {
-                            Text(
-                                text = currentTitle,
-                                style = MaterialTheme.typography.headlineMedium.copy(
-                                    fontWeight = FontWeight.Bold
-                                ),
-                                color = titleColor,
-                                modifier = Modifier.fillMaxWidth(),
-                                textAlign = TextAlign.Center
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                        }
-                    }
+                StoryImage(
+                    imagePath = story?.imagePath,
+                    onImageClick = { showImageEditDialog = true },
+                    onAddImage = { imagePickerLauncher() }
+                )
 
-                    // Geschichte-Sektion
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .padding(horizontal = 16.dp, vertical = 4.dp)
-                            .shadow(
-                                elevation = 16.dp * cardAlpha.value,
-                                shape = RoundedCornerShape(24.dp),
-                                spotColor = AccentPurple.copy(alpha = cardAlpha.value),
-                                ambientColor = AccentPurple.copy(alpha = cardAlpha.value)
-                            ),
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
-                        ),
-                        shape = RoundedCornerShape(24.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .background(Color.Transparent)
-                        ) {
-                            if (wrapText) {
-                                Text(
-                                    text = currentStory.content,
-                                    style = MaterialTheme.typography.bodyLarge.copy(
-                                        fontSize = fontSize.floatValue.sp
-                                    ),
-                                    color = textColor,
-                                    modifier = Modifier
-                                        .verticalScroll(verticalScrollState)
-                                        .padding(8.dp)
-                                )
-                            } else {
-                                Text(
-                                    text = currentStory.content,
-                                    style = MaterialTheme.typography.bodyLarge.copy(
-                                        fontSize = fontSize.floatValue.sp
-                                    ),
-                                    color = textColor,
-                                    modifier = Modifier
-                                        .horizontalScroll(horizontalScrollState)
-                                        .padding(8.dp)
-                                )
-                            }
-                        }
-                    }
-                }
+                StoryTitle(
+                    title = currentTitle,
+                    titleColor = titleColor,
+                    cardAlpha = cardAlpha.value,
+                    onDoubleClick = { showTitleEditDialog = true }
+                )
+
+                StoryContent(
+                    content = currentStory.content,
+                    textColor = textColor,
+                    fontSize = fontSize.floatValue,
+                    wrapText = wrapText,
+                    cardAlpha = cardAlpha.value,
+                    onDoubleClick = { showContentEditDialog = true },
+                    modifier = Modifier.weight(1f)
+                )
             }
         }
     }
@@ -345,5 +184,21 @@ fun ReadStoryScreen(
                 }
             )
         }
+    }
+
+    if (showImageEditDialog) {
+        ImageEditDialog(
+            onDismiss = { showImageEditDialog = false },
+            onChangeImage = {
+                imagePickerLauncher()
+                showImageEditDialog = false
+            },
+            onRemoveImage = {
+                story?.let { currentStory ->
+                    viewModel.updateStoryImage(currentStory.id, null)
+                }
+                showImageEditDialog = false
+            }
+        )
     }
 }

@@ -2,10 +2,22 @@ package com.gigo.kidsstorys.ui.components.dialogs
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,13 +26,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.gigo.kidsstorys.ui.theme.AccentPurple
 
@@ -36,8 +43,8 @@ fun TitleEditDialog(
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp)
                 .wrapContentHeight()
+                .padding(8.dp)
                 .shadow(
                     elevation = 16.dp,
                     spotColor = AccentPurple,
@@ -50,21 +57,13 @@ fun TitleEditDialog(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(24.dp)
+                    .padding(16.dp)
                     .imePadding(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     "Titel bearbeiten",
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 0.5.sp,
-                        shadow = Shadow(
-                            color = AccentPurple.copy(alpha = 0.5f),
-                            offset = Offset(0f, 2f),
-                            blurRadius = 4f
-                        )
-                    ),
+                    style = MaterialTheme.typography.titleLarge,
                     color = Color.White,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
@@ -83,9 +82,8 @@ fun TitleEditDialog(
                             color = Color.White.copy(alpha = 0.5f),
                             shape = RoundedCornerShape(8.dp)
                         ),
-                    textStyle = TextStyle(
-                        color = Color.White,
-                        fontSize = 16.sp
+                    textStyle = MaterialTheme.typography.bodyLarge.copy(
+                        color = Color.White
                     ),
                     singleLine = true,
                     decorationBox = { innerTextField ->
@@ -109,7 +107,7 @@ fun TitleEditDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     TextButton(
                         onClick = onDismiss,
@@ -117,33 +115,20 @@ fun TitleEditDialog(
                     ) {
                         Text(
                             "Abbrechen",
-                            color = Color.White,
-                            fontSize = 16.sp
+                            color = Color.White
                         )
                     }
 
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    FilledTonalButton(
+                    Button(
                         onClick = { onSave(title) },
-                        modifier = Modifier
-                            .weight(1f)
-                            .shadow(
-                                elevation = 8.dp,
-                                spotColor = AccentPurple,
-                                ambientColor = AccentPurple,
-                                shape = RoundedCornerShape(20.dp)
-                            ),
-                        colors = ButtonDefaults.filledTonalButtonColors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer
-                        ),
-                        shape = RoundedCornerShape(20.dp)
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = AccentPurple
+                        )
                     ) {
                         Text(
                             "Speichern",
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold
+                            color = Color.White
                         )
                     }
                 }
