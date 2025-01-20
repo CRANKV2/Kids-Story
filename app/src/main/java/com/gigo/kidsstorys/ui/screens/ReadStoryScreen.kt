@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -22,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gigo.kidsstorys.data.SettingsManager
 import com.gigo.kidsstorys.ui.components.dialogs.ContentEditDialog
@@ -53,7 +53,7 @@ fun ReadStoryScreen(
     val settingsManager = remember { SettingsManager.getInstance(context) }
     val fontSize = remember { mutableFloatStateOf(settingsManager.fontSize.toFloat()) }
     val wrapText = settingsManager.wrapText
-    
+
     // Farben aus den Preferences
     val titleColor = remember(userPreferences.storyTitleColor) {
         Color(userPreferences.storyTitleColor.toInt())
