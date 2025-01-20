@@ -65,7 +65,7 @@ fun StoryTopBar(
             // Linke Seite: Titel und Zähler
             Column {
                 Text(
-                    "Geschichten",
+                    "Kids Story's",
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.5.sp,

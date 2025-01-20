@@ -1,16 +1,19 @@
 package com.gigo.kidsstorys.ui.components.dialogs
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,94 +30,76 @@ fun EditDialog(
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
-                .shadow(
-                    elevation = 16.dp,
-                    spotColor = AccentPurple,
-                    ambientColor = AccentPurple,
-                    shape = RoundedCornerShape(24.dp)
-                ),
+                .padding(16.dp),
             shape = RoundedCornerShape(24.dp),
             color = Color(0xFF2D2D3A)
         ) {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
+                Text(
+                    "Bearbeiten",
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    textAlign = TextAlign.Center
+                )
+
+                FilledTonalButton(
+                    onClick = onTitleEdit,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                        .fillMaxWidth(0.8f)
+                        .padding(vertical = 8.dp)
+                        .shadow(
+                            elevation = 8.dp,
+                            spotColor = AccentPurple,
+                            ambientColor = AccentPurple,
+                            shape = RoundedCornerShape(16.dp)
+                        ),
+                    colors = ButtonDefaults.filledTonalButtonColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer
+                    ),
+                    shape = RoundedCornerShape(16.dp)
                 ) {
                     Text(
-                        "Was möchtest du bearbeiten?",
-                        style = MaterialTheme.typography.titleLarge.copy(
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = 0.5.sp,
-                            textAlign = TextAlign.Center,
-                            shadow = Shadow(
-                                color = AccentPurple.copy(alpha = 0.5f),
-                                offset = Offset(0f, 2f),
-                                blurRadius = 4f
-                            )
-                        ),
-                        color = Color.White,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 16.dp),
-                        textAlign = TextAlign.Center
+                        "Titel Bearbeiten",
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
                     )
-
-                    FilledTonalButton(
-                        onClick = onContentEdit,
-                        modifier = Modifier
-                            .fillMaxWidth(0.8f)
-                            .padding(vertical = 8.dp)
-                            .shadow(
-                                elevation = 8.dp,
-                                spotColor = AccentPurple,
-                                ambientColor = AccentPurple,
-                                shape = RoundedCornerShape(16.dp)
-                            ),
-                        colors = ButtonDefaults.filledTonalButtonColors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer
-                        ),
-                        shape = RoundedCornerShape(16.dp)
-                    ) {
-                        Text(
-                            "Geschichte bearbeiten",
-                            fontSize = 18.sp,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-
-                    FilledTonalButton(
-                        onClick = onTitleEdit,
-                        modifier = Modifier
-                            .fillMaxWidth(0.8f)
-                            .padding(vertical = 8.dp)
-                            .shadow(
-                                elevation = 8.dp,
-                                spotColor = AccentPurple,
-                                ambientColor = AccentPurple,
-                                shape = RoundedCornerShape(16.dp)
-                            ),
-                        colors = ButtonDefaults.filledTonalButtonColors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer
-                        ),
-                        shape = RoundedCornerShape(16.dp)
-                    ) {
-                        Text(
-                            "Titel bearbeiten",
-                            fontSize = 18.sp,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            textAlign = TextAlign.Center
-                        )
-                    }
                 }
+
+                FilledTonalButton(
+                    onClick = onContentEdit,
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .padding(vertical = 8.dp)
+                        .shadow(
+                            elevation = 8.dp,
+                            spotColor = AccentPurple,
+                            ambientColor = AccentPurple,
+                            shape = RoundedCornerShape(16.dp)
+                        ),
+                    colors = ButtonDefaults.filledTonalButtonColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer
+                    ),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Text(
+                        "Geschichte Bearbeiten",
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+
+                Text(
+                    "Tipp: Doppelklick auf Titel oder Geschichte zum schnellen Bearbeiten",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.White.copy(alpha = 0.7f),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(top = 16.dp)
+                )
             }
         }
     }
