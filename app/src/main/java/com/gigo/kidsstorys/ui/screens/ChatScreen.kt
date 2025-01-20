@@ -228,27 +228,29 @@ fun ChatScreen(
                     ) {
                         Spacer(modifier = Modifier.height(16.dp))
                         
-                        Text(
-                            "Hallo! \nIch bin DeMa \uD83D\uDE0A \n\nDein\nKI-Geschichtenhelfer!",
-                            style = MaterialTheme.typography.titleLarge,
-                            color = Color.White,
-                            textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Spacer(modifier = Modifier.height(12.dp))
+                        if (backgroundImageFile.exists()) {
+                            // Nur Card anzeigen wenn Hintergrundbild existiert
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .shadow(
+                                        elevation = 8.dp,
+                                        spotColor = AccentPurple.copy(alpha = 0.85f),
+                                        ambientColor = AccentPurple.copy(alpha = 0.85f),
+                                        shape = RoundedCornerShape(24.dp)
+                                    ),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = Color(0xFF2D2D3A).copy(alpha = 0.85f)
+                                ),
+                                shape = RoundedCornerShape(24.dp)
+                            ) {
+                                WelcomeContent()
+                            }
+                        } else {
+                            // Direkt Content ohne Card wenn kein Hintergrundbild
+                            WelcomeContent()
+                        }
                         
-                        Text(
-                            "Erzähl mir, was für eine Geschichte du erschaffen möchtest! \nIch helfe dir dabei, magische Abenteuer zu gestalten. ✨",
-                            color = Color.White.copy(alpha = 0.8f),
-                            textAlign = TextAlign.Center
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        
-                        Text(
-                            "Zum Beispiel:",
-                            color = Color.White,
-                            textAlign = TextAlign.Center
-                        )
                         Spacer(modifier = Modifier.height(8.dp))
                         
                         var currentExamples by remember { mutableStateOf(listOf<String>()) }
@@ -712,5 +714,38 @@ fun MessageCarousel(
                 }
             }
         }
+    }
+}
+
+// Ausgelagerte Welcome-Content Composable
+@Composable
+private fun WelcomeContent() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            "Hallo!\nIch bin DeMa 😊\n\nDein\nKI-Geschichtenhelfer!",
+            style = MaterialTheme.typography.titleLarge,
+            color = Color.White,
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        
+        Text(
+            "Erzähl mir, was für eine Geschichte du erschaffen möchtest!\nIch helfe dir dabei, magische Abenteuer zu gestalten. ✨",
+            color = Color.White.copy(alpha = 0.8f),
+            textAlign = TextAlign.Center
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        Text(
+            "Zum Beispiel:",
+            color = Color.White,
+            textAlign = TextAlign.Center
+        )
     }
 }
