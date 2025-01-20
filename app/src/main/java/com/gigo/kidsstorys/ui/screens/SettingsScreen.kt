@@ -1,4 +1,4 @@
-@file:Suppress("SpellCheckingInspection", "NAME_SHADOWING")
+@file:Suppress("SpellCheckingInspection")
 
 package com.gigo.kidsstorys.ui.screens
 
@@ -121,13 +121,10 @@ fun SettingsScreen(
         mutableStateOf(Color(userPreferences.storyTextColor.toInt()))
     }
 
-    // Füge diese Zeile hinzu
-    val coroutineScope = rememberCoroutineScope()
-
     var showImagePickerDialog by remember { mutableStateOf(false) }
     var isProcessingImage by remember { mutableStateOf(false) }
 
-    val cardAlpha = settingsManager.cardAlpha.collectAsState(initial = 0.75f)
+    val cardAlpha = settingsManager.cardAlpha.collectAsState(initial = 1.0f)
 
     val backgroundImageFile = File(context.filesDir, "background_image.jpg")
     var backgroundBitmap by remember { mutableStateOf<android.graphics.Bitmap?>(null) }
@@ -263,8 +260,8 @@ fun SettingsScreen(
                         Column {
                             Text(
                                 stringResource(R.string.titel_schriftgroesse),
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = TextLight
+                                style = MaterialTheme.typography.titleMedium,
+                                color = Color.White
                             )
                             Text(
                                 stringResource(R.string.schriftgroesse_der_titel_in_der_bersicht),
@@ -377,8 +374,8 @@ fun SettingsScreen(
                         Column {
                             Text(
                                 "Hintergrundbild",
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = TextLight
+                                style = MaterialTheme.typography.titleMedium,
+                                color = Color.White
                             )
                             
                             Button(
@@ -486,45 +483,42 @@ fun SettingsScreen(
 
                         // Karten-Transparenz (war bereits in Darstellung)
                         Column {
-                            Text(
-                                "Karten-Transparenz",
-                                style = MaterialTheme.typography.titleMedium,
-                                color = TextLight
-                            )
-                            Text(
-                                "Stelle die Transparenz aller Karten in der App ein (0% = unsichtbar, 100% = voll sichtbar)",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = TextLight.copy(alpha = 0.7f)
-                            )
 
-                            val cardAlpha by settingsManager.cardAlpha.collectAsState(initial = 0.75f)
-
-                            Slider(
-                                value = cardAlpha,
-                                onValueChange = { newAlpha ->
-                                    coroutineScope.launch {
-                                        settingsManager.updateCardAlpha(newAlpha)
-                                    }
-                                },
-                                valueRange = 0f..1f,
-                                steps = 9, // 10 Schritte (0, 0.1, 0.2, ..., 0.9, 1.0)
+                            Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(vertical = 8.dp),
-                                colors = SliderDefaults.colors(
-                                    thumbColor = AccentPurple,
-                                    activeTrackColor = AccentPurple,
-                                    inactiveTrackColor = AccentPurple.copy(alpha = 0.3f)
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Column {
+                                    Text(
+                                        "Karten Transparenz",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = Color.White
+                                    )
+                                    Text(
+                                        "Transparenz der Karten ein- oder ausschalten",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = Color.White.copy(alpha = 0.7f)
+                                    )
+                                }
+                                
+                                Switch(
+                                    checked = cardAlpha.value < 1.0f,
+                                    onCheckedChange = { isTransparent ->
+                                        scope.launch {
+                                            settingsManager.updateCardAlpha(if (isTransparent) 0.0f else 1.0f)
+                                        }
+                                    },
+                                    colors = SwitchDefaults.colors(
+                                        checkedThumbColor = AccentPurple,
+                                        checkedTrackColor = AccentPurple.copy(alpha = 0.5f),
+                                        uncheckedThumbColor = Color.Gray,
+                                        uncheckedTrackColor = Color.Gray.copy(alpha = 0.5f)
+                                    )
                                 )
-                            )
-
-                            Text(
-                                "Aktuelle Transparenz: ${(cardAlpha * 100).toInt()}%",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = TextLight,
-                                modifier = Modifier.fillMaxWidth(),
-                                textAlign = TextAlign.Center
-                            )
+                            }
                         }
 
                         // Trennlinie
@@ -542,11 +536,12 @@ fun SettingsScreen(
                             )
                         )
 
+
                         // Zeilenumbruch-Option (war bereits in Darstellung)
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 12.dp, vertical = 8.dp),
+                                .padding(vertical = 8.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -556,12 +551,12 @@ fun SettingsScreen(
                                 Text(
                                     stringResource(R.string.zeilenumbruch_empfohlen),
                                     style = MaterialTheme.typography.titleMedium,
-                                    color = TextLight
+                                    color = Color.White
                                 )
                                 Text(
                                     stringResource(R.string.automatischer_zeilenumbruch_beim_lesen),
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = TextLight.copy(alpha = 0.7f)
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = Color.White.copy(alpha = 0.7f)
                                 )
                             }
                             Switch(
@@ -572,7 +567,9 @@ fun SettingsScreen(
                                 },
                                 colors = SwitchDefaults.colors(
                                     checkedThumbColor = AccentPurple,
-                                    checkedTrackColor = AccentPurple.copy(alpha = 0.5f)
+                                    checkedTrackColor = AccentPurple.copy(alpha = 0.5f),
+                                    uncheckedThumbColor = Color.Gray,
+                                    uncheckedTrackColor = Color.Gray.copy(alpha = 0.5f)
                                 )
                             )
                         }
@@ -751,9 +748,9 @@ fun SettingsScreen(
                     ) {
                         Text(
                             "Problembehandlung",
-                            style = MaterialTheme.typography.titleMedium,
                             textAlign = TextAlign.Center,
-                            color = TextLight,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color.White,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(bottom = 10.dp)
