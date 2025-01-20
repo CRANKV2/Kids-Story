@@ -1,6 +1,5 @@
 package com.gigo.kidsstorys.ui.screens
 
-import com.gigo.kidsstorys.ui.components.LoadingDots
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.widget.Toast
@@ -8,6 +7,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -16,17 +16,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.ime
-import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -81,6 +78,7 @@ import androidx.navigation.NavController
 import com.gigo.kidsstorys.R
 import com.gigo.kidsstorys.data.SettingsManager
 import com.gigo.kidsstorys.data.models.ChatMessage
+import com.gigo.kidsstorys.ui.components.LoadingDots
 import com.gigo.kidsstorys.ui.components.StoryCategoryDropdown
 import com.gigo.kidsstorys.ui.theme.AccentPurple
 import com.gigo.kidsstorys.ui.viewmodels.ChatViewModel
@@ -221,7 +219,6 @@ fun ChatScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .imePadding() // Wichtig für Keyboard-Handling
             ) {
                 if (messages.isEmpty()) {
                     Column(
@@ -294,8 +291,7 @@ fun ChatScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(horizontal = 16.dp)
-                            .padding(bottom = 115.dp)
-                            .windowInsetsPadding(WindowInsets.ime) // Keyboard-Anpassung
+                            .padding(bottom = 90.dp)
                     ) {
                         items(messages) { message ->
                             ChatMessageItem(
@@ -352,17 +348,27 @@ fun ChatScreen(
                     }
                 }
 
-                // Chat Input Bar - jetzt am unteren Rand fixiert
+                // Chat Input Bar
                 Surface(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .fillMaxWidth()
-                        .padding(20.dp)
+                        .padding(horizontal = 16.dp)
+                        .offset(y = (-8).dp)
                         .shadow(
-                            elevation = 16.dp * cardAlpha.value,
+                            elevation = 4.dp * cardAlpha.value,
                             spotColor = AccentPurple.copy(alpha = cardAlpha.value),
                             ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
                             shape = RoundedCornerShape(24.dp)
+                        )
+                        .then(
+                            if (cardAlpha.value < 1.0f) {
+                                Modifier.border(
+                                    width = 1.dp,
+                                    color = AccentPurple.copy(alpha = 0.5f),
+                                    shape = RoundedCornerShape(24.dp)
+                                )
+                            } else Modifier
                         ),
                     color = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value),
                     shape = RoundedCornerShape(24.dp)
