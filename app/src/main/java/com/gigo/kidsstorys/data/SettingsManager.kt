@@ -16,7 +16,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 class SettingsManager private constructor(context: Context) {
     private val sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     private val dataStore = context.dataStore
-    private val cARDALPHA = floatPreferencesKey("card_alpha")
+    private val cardAlphaVal = floatPreferencesKey("card_alpha")
     private val _backgroundAlphaFlow = MutableStateFlow(DEFAULT_BACKGROUND_ALPHA)
     val backgroundAlphaFlow: StateFlow<Float> = _backgroundAlphaFlow
 
@@ -30,7 +30,7 @@ class SettingsManager private constructor(context: Context) {
         private const val KEY_BACKGROUND_ALPHA = "background_alpha"
         
         private const val DEFAULT_CARD_ALPHA = 1.0f
-        private const val DEFAULT_BACKGROUND_ALPHA = 1.0f
+        private const val DEFAULT_BACKGROUND_ALPHA = 0.8f
         private const val DEFAULT_FONT_SIZE = 14
         private const val DEFAULT_WRAP_TEXT = true
         private const val DEFAULT_TITLE_SIZE = 15
@@ -75,7 +75,7 @@ class SettingsManager private constructor(context: Context) {
 
     val cardAlpha: Flow<Float> = dataStore.data
         .map { preferences ->
-            preferences[cARDALPHA] ?: DEFAULT_CARD_ALPHA
+            preferences[cardAlphaVal] ?: DEFAULT_CARD_ALPHA
         }
 
     fun updateTitleSize(size: Int) {
@@ -88,7 +88,7 @@ class SettingsManager private constructor(context: Context) {
 
     suspend fun updateCardAlpha(alpha: Float) {
         dataStore.edit { preferences ->
-            preferences[cARDALPHA] = alpha
+            preferences[cardAlphaVal] = alpha
         }
     }
 }
