@@ -121,7 +121,7 @@ fun ChatScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Hintergrundbild
+        // Hintergrundbild oder Fallback
         if (backgroundBitmap != null) {
             Image(
                 bitmap = backgroundBitmap!!.asImageBitmap(),
@@ -129,6 +129,12 @@ fun ChatScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
                 alpha = backgroundAlpha
+            )
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.onPrimaryContainer) // Verwendet AMOLED Schwarz
             )
         }
 
@@ -240,7 +246,7 @@ fun ChatScreen(
                                         shape = RoundedCornerShape(24.dp)
                                     ),
                                 colors = CardDefaults.cardColors(
-                                    containerColor = Color(0xFF2D2D3A).copy(alpha = 0.85f)
+                                    containerColor = Color(0xFF2D2D3A).copy(alpha = 0.95f)
                                 ),
                                 shape = RoundedCornerShape(24.dp)
                             ) {
@@ -251,7 +257,7 @@ fun ChatScreen(
                             WelcomeContent()
                         }
                         
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(10.dp))
                         
                         var currentExamples by remember { mutableStateOf(listOf<String>()) }
                         Box(
@@ -737,7 +743,7 @@ private fun WelcomeContent() {
         
         Text(
             "\nErzähl mir, was für eine Geschichte du erschaffen möchtest!\n\nIch helfe dir dabei, magische Abenteuer zu gestalten. ✨",
-            color = Color.White.copy(alpha = 0.8f),
+            color = Color.White.copy(alpha = 0.85f),
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(16.dp))

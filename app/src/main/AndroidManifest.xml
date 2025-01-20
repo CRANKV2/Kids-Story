@@ -27,8 +27,9 @@
             android:value="113" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:theme="@style/Theme.StoryApp">
+            android:theme="@style/Theme.StoryApp"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

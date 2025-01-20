@@ -164,7 +164,7 @@ fun SettingsScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Hintergrundbild
+        // Hintergrundbild oder Fallback
         if (backgroundBitmap != null) {
             Image(
                 bitmap = backgroundBitmap!!.asImageBitmap(),
@@ -172,6 +172,12 @@ fun SettingsScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
                 alpha = backgroundAlpha
+            )
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.onPrimaryContainer)
             )
         }
 
