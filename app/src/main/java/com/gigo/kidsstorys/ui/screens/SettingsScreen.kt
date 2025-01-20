@@ -9,6 +9,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -246,6 +247,15 @@ fun SettingsScreen(
                             spotColor = AccentPurple.copy(alpha = cardAlpha.value),
                             ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
                             shape = RoundedCornerShape(16.dp)
+                        )
+                        .then(
+                            if (cardAlpha.value < 1.0f) {
+                                Modifier.border(
+                                    width = 1.dp,
+                                    color = AccentPurple.copy(alpha = 0.5f),
+                                    shape = RoundedCornerShape(16.dp)
+                                )
+                            } else Modifier
                         ),
                     colors = CardDefaults.cardColors(
                         containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
@@ -593,6 +603,15 @@ fun SettingsScreen(
                             spotColor = AccentPurple.copy(alpha = cardAlpha.value),
                             ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
                             shape = RoundedCornerShape(16.dp)
+                        )
+                        .then(
+                            if (cardAlpha.value < 1.0f) {
+                                Modifier.border(
+                                    width = 1.dp,
+                                    color = AccentPurple.copy(alpha = 0.5f),
+                                    shape = RoundedCornerShape(16.dp)
+                                )
+                            } else Modifier
                         ),
                     colors = CardDefaults.cardColors(
                         containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
@@ -744,6 +763,15 @@ fun SettingsScreen(
                             spotColor = AccentPurple.copy(alpha = cardAlpha.value),
                             ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
                             shape = RoundedCornerShape(16.dp)
+                        )
+                        .then(
+                            if (cardAlpha.value < 1.0f) {
+                                Modifier.border(
+                                    width = 1.dp,
+                                    color = AccentPurple.copy(alpha = 0.5f),
+                                    shape = RoundedCornerShape(16.dp)
+                                )
+                            } else Modifier
                         ),
                     colors = CardDefaults.cardColors(
                         containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)

@@ -104,7 +104,7 @@ fun StoryTopBar(
                         contentDescription = if (isCompactView) "Zur Listenansicht wechseln" 
                         else "Zur Rasteransicht wechseln",
                         tint = Color.Unspecified,
-                        modifier = Modifier.size(18.dp)
+                        modifier = Modifier.size(27.dp)
                     )
                 }
                 
@@ -113,14 +113,14 @@ fun StoryTopBar(
                     onClick = onChatClick,
                     modifier = Modifier.size(45.dp),
                     colors = IconButtonDefaults.filledIconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer
+                        containerColor = MaterialTheme.colorScheme.primaryContainer
                     )
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_ai),
                         contentDescription = "KI Chat öffnen",
                         tint = Color.Unspecified,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(27.dp)
                     )
                 }
                 
@@ -136,7 +136,7 @@ fun StoryTopBar(
                         painter = painterResource(id = R.drawable.settings_icon),
                         contentDescription = "Einstellungen",
                         tint = Color.Unspecified,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(27.dp)
                     )
                 }
             }

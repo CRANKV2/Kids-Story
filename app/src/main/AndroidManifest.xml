@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.gigo.kidsstorys"
-    android:versionCode="113"
-    android:versionName="1.1.3"
+    android:versionCode="120"
+    android:versionName="1.2.0"
     android:installLocation="auto">
 
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
@@ -21,10 +21,10 @@
         tools:targetApi="34">
         <meta-data
             android:name="VERSION_NAME"
-            android:value="1.1.3" />
+            android:value="1.2.0" />
         <meta-data
             android:name="VERSION_CODE"
-            android:value="113" />
+            android:value="120" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.StoryApp"

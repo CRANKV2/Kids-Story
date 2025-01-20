@@ -43,6 +43,7 @@ import com.gigo.kidsstorys.R
 import com.gigo.kidsstorys.data.SettingsManager
 import com.gigo.kidsstorys.data.models.Story
 import com.gigo.kidsstorys.ui.theme.AccentPurple
+import androidx.compose.foundation.border
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -69,6 +70,15 @@ fun ModernStoryCard(
             .combinedClickable(
                 onClick = onCardClick,
                 onLongClick = onLongClick
+            )
+            .then(
+                if (cardAlpha.value < 1.0f) {
+                    Modifier.border(
+                        width = 1.dp,
+                        color = AccentPurple.copy(alpha = 0.5f),
+                        shape = RoundedCornerShape(24.dp)
+                    )
+                } else Modifier
             ),
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected) {

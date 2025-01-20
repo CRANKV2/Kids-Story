@@ -35,7 +35,7 @@ fun StoryTopBar(
                 spotColor = AccentPurple.copy(alpha = cardAlpha)
             ),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0x002D2D3A).copy(alpha = cardAlpha)
+            containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha)
         ),
         shape = RoundedCornerShape(24.dp)
     ) {
