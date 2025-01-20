@@ -12,7 +12,8 @@ private val DarkColorScheme = darkColorScheme(
     onPrimary = TextLight,
     onSecondary = TextLight,
     onBackground = TextLight,
-    onSurface = TextLight
+    onSurface = TextLight,
+    onPrimaryContainer = AmoledBlack
 )
 
 @Composable

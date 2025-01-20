@@ -81,7 +81,7 @@ fun StoryOptionsDialog(
                 ) {
                     Text(
                         stringResource(R.string.bearbeiten),
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         fontSize = 16.sp
                     )
                 }

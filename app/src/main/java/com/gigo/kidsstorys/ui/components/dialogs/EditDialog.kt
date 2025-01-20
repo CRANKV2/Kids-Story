@@ -43,7 +43,7 @@ fun EditDialog(
                 Text(
                     "Bearbeiten",
                     fontSize = 18.sp,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     textAlign = TextAlign.Center
                 )
 

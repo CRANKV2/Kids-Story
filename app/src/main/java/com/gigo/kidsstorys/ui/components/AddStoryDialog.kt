@@ -130,7 +130,7 @@ fun AddStoryDialog(
                 ) {
                     Text(
                         if (selectedImagePath == null) "Bild hinzufügen" else "Bild ändern",
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
 
@@ -237,7 +237,7 @@ fun AddStoryDialog(
                     ) {
                         Text(
                             stringResource(R.string.speichern),
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            color = MaterialTheme.colorScheme.onPrimary,
                             fontSize = 14.sp
                         )
                     }

@@ -3,23 +3,27 @@ package com.gigo.kidsstorys.ui.screens
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.gigo.kidsstorys.R
-import com.gigo.kidsstorys.ui.theme.AccentPurple
-import com.gigo.kidsstorys.ui.theme.TextLight
 import kotlinx.coroutines.delay
 
 @Composable
@@ -35,13 +39,13 @@ fun SplashScreen(
     var startAnimation by remember { mutableStateOf(false) }
     val alphaAnim = animateFloatAsState(
         targetValue = if (startAnimation) 1f else 0f,
-        animationSpec = tween(durationMillis = 1000),
+        animationSpec = tween(durationMillis = 1500),
         label = "Alpha Animation"
     )
 
     LaunchedEffect(Unit) {
         startAnimation = true
-        delay(1500)
+        delay(1000)
         handleLaunch(isFirstLaunch, sharedPrefs, onFirstLaunch, onTimeout)
     }
 
@@ -67,26 +71,15 @@ private fun SplashContent(isDarkTheme: Boolean, alpha: Float) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            .background(MaterialTheme.colorScheme.onPrimaryContainer),
         contentAlignment = Alignment.Center
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = stringResource(R.string.books),
-                fontSize = 72.sp,
-                modifier = Modifier.alpha(alpha)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = stringResource(R.string.geschichten_app),
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = if (isDarkTheme) TextLight else AccentPurple,
-                modifier = Modifier.alpha(alpha)
-            )
-        }
+        Image(
+            painter = painterResource(id = R.drawable.app_icon),
+            contentDescription = "App Logo",
+            modifier = Modifier
+                .size(200.dp)
+                .alpha(alpha)
+        )
     }
 }

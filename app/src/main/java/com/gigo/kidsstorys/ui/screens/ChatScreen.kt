@@ -377,7 +377,7 @@ fun ChatScreen(
                             placeholder = {
                                 Text(
                                     "Schreibe eine Nachricht...",
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                                 )
                             },
                             colors = TextFieldDefaults.colors(
@@ -387,7 +387,7 @@ fun ChatScreen(
                                 unfocusedIndicatorColor = Color.Transparent
                             ),
                             textStyle = MaterialTheme.typography.bodyLarge.copy(
-                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                                color = MaterialTheme.colorScheme.secondary.copy(alpha = 1.0f)
                             )
                         )
                         
@@ -497,7 +497,7 @@ fun ChatMessageItem(
                 ) {
                     Text(
                         text = message.content,
-                        color = Color.White.copy(alpha = 0.9f),
+                        color = Color.White.copy(alpha = 1.0f),
                         fontSize = 14.sp
                     )
                 }
@@ -736,7 +736,7 @@ private fun WelcomeContent() {
         Spacer(modifier = Modifier.height(12.dp))
         
         Text(
-            "Erzähl mir, was für eine Geschichte du erschaffen möchtest!\nIch helfe dir dabei, magische Abenteuer zu gestalten. ✨",
+            "\nErzähl mir, was für eine Geschichte du erschaffen möchtest!\n\nIch helfe dir dabei, magische Abenteuer zu gestalten. ✨",
             color = Color.White.copy(alpha = 0.8f),
             textAlign = TextAlign.Center
         )
