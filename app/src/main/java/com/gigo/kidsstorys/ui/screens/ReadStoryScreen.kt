@@ -34,6 +34,8 @@ import com.gigo.kidsstorys.ui.components.story.StoryTitle
 import com.gigo.kidsstorys.ui.components.topbar.StoryTopBar
 import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
 import com.gigo.kidsstorys.utils.rememberImagePicker
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.ui.input.pointer.pointerInput
 import java.io.File
 
 @Composable
@@ -143,7 +145,13 @@ fun ReadStoryScreen(
                     wrapText = wrapText,
                     cardAlpha = cardAlpha.value,
                     onDoubleClick = { showContentEditDialog = true },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onDoubleTap = { showContentEditDialog = true }
+                            )
+                        }
                 )
             }
         }
