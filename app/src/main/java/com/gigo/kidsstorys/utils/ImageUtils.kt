@@ -73,4 +73,21 @@ object ImageUtils {
             source
         }
     }
+
+    fun copyImageToAppStorage(context: Context, uri: Uri): File? {
+        return try {
+            val inputStream = context.contentResolver.openInputStream(uri)
+            val file = File(context.filesDir, "temp_story_image_${System.currentTimeMillis()}.jpg")
+            
+            inputStream?.use { input ->
+                file.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            }
+            file
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
 } 

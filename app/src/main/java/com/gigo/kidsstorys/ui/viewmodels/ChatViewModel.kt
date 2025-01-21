@@ -57,24 +57,37 @@ class ChatViewModel(
                                     message.lowercase().contains("erzähl") ||
                                     message.lowercase().contains("story")
                 
-                // Erstelle den passenden Prompt
-                val prompt = if (isStoryRequest) {
-                    PromptUtils.createStoryPrompt(thema = message)
-                } else {
-                    PromptUtils.createConversationPrompt(message)
-                }
-                
                 // Speichere User-Nachricht
                 val userMessage = ChatMessage(message, true)
                 chatMessageDao.insertMessage(userMessage.toEntity())
                 
-                // Sende Prompt an Gemini
-                val response = chat.sendMessage(prompt)
-                val responseText = response.text ?: "Entschuldigung, ich konnte keine Antwort generieren."
-                
-                // Speichere AI-Antwort
-                val aiMessage = ChatMessage(responseText, false)
-                chatMessageDao.insertMessage(aiMessage.toEntity())
+                if (isStoryRequest) {
+                    // Erst Titel generieren
+                    val titlePrompt = PromptUtils.createTitlePrompt(message)
+                    val titleResponse = chat.sendMessage(titlePrompt)
+                    val titleText = titleResponse.text ?: "Titel konnte nicht generiert werden."
+                    
+                    // Titel als separate Nachricht speichern
+                    val titleMessage = ChatMessage(titleText, false)
+                    chatMessageDao.insertMessage(titleMessage.toEntity())
+                    
+                    // Dann die Geschichte generieren
+                    val storyPrompt = PromptUtils.createStoryPrompt(thema = message)
+                    val storyResponse = chat.sendMessage(storyPrompt)
+                    val storyText = storyResponse.text ?: "Entschuldigung, ich konnte keine Geschichte generieren."
+                    
+                    // Geschichte als separate Nachricht speichern
+                    val storyMessage = ChatMessage(storyText, false)
+                    chatMessageDao.insertMessage(storyMessage.toEntity())
+                } else {
+                    // Normaler Konversations-Flow
+                    val prompt = PromptUtils.createConversationPrompt(message)
+                    val response = chat.sendMessage(prompt)
+                    val responseText = response.text ?: "Entschuldigung, ich konnte keine Antwort generieren."
+                    
+                    val aiMessage = ChatMessage(responseText, false)
+                    chatMessageDao.insertMessage(aiMessage.toEntity())
+                }
                 
             } catch (e: Exception) {
                 _error.value = e.message

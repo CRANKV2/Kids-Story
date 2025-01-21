@@ -71,10 +71,9 @@ fun AddStoryDialog(
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
-        uri?.let {
-            val tempFile = File(context.filesDir, "temp_story_image_${System.currentTimeMillis()}.jpg")
-            ImageUtils.processAndSaveImage(context, uri, tempFile)
-            selectedImagePath = tempFile.absolutePath
+        uri?.let { selectedUri ->
+            val file = ImageUtils.copyImageToAppStorage(context, selectedUri)
+            selectedImagePath = file?.absolutePath
         }
     }
 

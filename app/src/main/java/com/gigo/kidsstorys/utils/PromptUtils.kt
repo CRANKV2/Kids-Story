@@ -139,4 +139,11 @@ object PromptUtils {
             // Generiere jetzt die Geschichte:
         """.trimIndent()
     }
+
+    fun createTitlePrompt(thema: String): String {
+        return """
+            Generiere einen kurzen, kreativen Titel (maximal 5 Wörter) für eine Kindergeschichte mit folgendem Thema: $thema
+            Antworte NUR mit dem Titel, ohne zusätzlichen Text.
+        """.trimIndent()
+    }
 }
