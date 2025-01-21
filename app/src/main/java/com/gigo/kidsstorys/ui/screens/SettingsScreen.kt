@@ -84,7 +84,10 @@ import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
 import com.gigo.kidsstorys.utils.ImageUtils
 import kotlinx.coroutines.launch
 import java.io.File
-
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import com.gigo.kidsstorys.ui.components.SettingsButton
+import com.gigo.kidsstorys.ui.components.SettingsSection
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -143,7 +146,7 @@ fun SettingsScreen(
             isProcessingImage = true
             val backgroundFile = File(context.filesDir, "background_image.jpg")
             val success = ImageUtils.processAndSaveImage(
-                context, 
+                context,
                 uri,
                 backgroundFile  // Für Hintergrundbild immer diese Datei verwenden
             )
@@ -393,7 +396,7 @@ fun SettingsScreen(
                                 style = MaterialTheme.typography.titleMedium,
                                 color = Color.White
                             )
-                            
+
                             Button(
                                 onClick = { imagePickerLauncher.launch("image/*") },
                                 modifier = Modifier
@@ -436,10 +439,10 @@ fun SettingsScreen(
                                     style = MaterialTheme.typography.titleMedium,
                                     color = TextLight
                                 )
-                                
+
                                 Slider(
                                     value = backgroundAlpha,
-                                    onValueChange = { 
+                                    onValueChange = {
                                         backgroundAlpha = it
                                         settingsManager.backgroundAlpha = it
                                     },
@@ -519,7 +522,7 @@ fun SettingsScreen(
                                         color = Color.White.copy(alpha = 0.7f)
                                     )
                                 }
-                                
+
                                 Switch(
                                     checked = cardAlpha.value < 1.0f,
                                     onCheckedChange = { isTransparent ->
@@ -751,7 +754,7 @@ fun SettingsScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 // Problembehandlung-Sektion
                 Card(
@@ -789,7 +792,7 @@ fun SettingsScreen(
                                 .fillMaxWidth()
                                 .padding(bottom = 10.dp)
                         )
-                        
+
                         Text(
                             "Diese Funktionen können bei Problemen mit der App helfen. Das Löschen des Cache entfernt nur temporäre Dateien. Deine Geschichten, Bilder, der Hintergrund und alle Einstellungen bleiben dabei erhalten.",
                             style = MaterialTheme.typography.bodySmall,
@@ -863,6 +866,65 @@ fun SettingsScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .shadow(
+                            elevation = 8.dp * cardAlpha.value,
+                            spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                            ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .then(
+                            if (cardAlpha.value < 1.0f) {
+                                Modifier.border(
+                                    width = 1.dp,
+                                    color = AccentPurple.copy(alpha = 0.5f),
+                                    shape = RoundedCornerShape(16.dp)
+                                )
+                            } else Modifier
+                        ),
+                    color = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            "Onboarding",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color.White
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Button(
+                            onClick = {
+                                scope.launch {
+                                    settingsManager.resetOnboarding()
+                                    navController.navigate("onboarding") {
+                                        popUpTo(navController.graph.startDestinationId) {
+                                            inclusive = true
+                                        }
+                                    }
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = AccentPurple
+                            )
+                        ) {
+                            Text("Onboarding neu starten")
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
                 // Über die App Button
                 Button(
                     onClick = { navController.navigate("about") },
@@ -904,7 +966,8 @@ fun SettingsScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(8.dp))
+
             }
         }
     }
