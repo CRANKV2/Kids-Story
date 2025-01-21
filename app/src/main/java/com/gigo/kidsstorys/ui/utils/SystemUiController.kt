@@ -1,3 +1,5 @@
+package com.gigo.kidsstorys.ui.utils
+
 import android.os.Build
 import android.view.Window
 import android.view.WindowInsets
@@ -5,6 +7,7 @@ import android.view.WindowInsetsController
 import androidx.annotation.RequiresApi
 import androidx.core.view.WindowCompat
 
+@Suppress("DEPRECATION")
 class SystemUiController(private val window: Window) {
     var isSystemBarsVisible: Boolean = true
         @RequiresApi(Build.VERSION_CODES.R)

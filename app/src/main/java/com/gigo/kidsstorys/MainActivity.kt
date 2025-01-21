@@ -1,6 +1,6 @@
 package com.gigo.kidsstorys
 
-import SystemUiController
+import com.gigo.kidsstorys.ui.utils.SystemUiController
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowInsetsController

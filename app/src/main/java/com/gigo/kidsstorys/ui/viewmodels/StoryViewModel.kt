@@ -118,24 +118,6 @@ class StoryViewModel(
         }
     }
 
-    fun removeStoryImage(storyId: Int) {
-        viewModelScope.launch {
-            try {
-                val story = storyDao.getStoryById(storyId).first()
-                story?.let {
-                    // Lösche die Bilddatei
-                    it.imagePath?.let { path ->
-                        File(path).delete()
-                    }
-                    // Update Story ohne Bild
-                    val updatedStory = it.copy(imagePath = null)
-                    storyDao.updateStory(updatedStory)
-                }
-            } catch (e: Exception) {
-                Log.e("StoryViewModel", "Error removing story image", e)
-            }
-        }
-    }
 
     fun deleteStories(storyIds: List<Int>) {
         viewModelScope.launch {

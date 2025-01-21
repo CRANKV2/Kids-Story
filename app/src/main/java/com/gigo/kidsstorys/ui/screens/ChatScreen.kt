@@ -32,6 +32,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -118,7 +119,17 @@ fun ChatScreen(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = {
+                        focusManager.clearFocus()
+                    }
+                )
+            }
+    ) {
         // Hintergrundbild oder Fallback
         if (backgroundBitmap != null) {
             Image(
@@ -156,32 +167,22 @@ fun ChatScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(4.dp),
+                            .padding(horizontal = 8.dp, vertical = 4.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         IconButton(
-                            onClick = { navController.navigateUp() },
-                            modifier = Modifier
-                                .size(40.dp),
-                            content = {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .shadow(4.dp, CircleShape, spotColor = AccentPurple)
-                                        .background(AccentPurple, CircleShape)
-                                ) {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_arrow_back),
-                                        contentDescription = "Zurück",
-                                        tint = Color.White,
-                                        modifier = Modifier
-                                            .size(25.dp)
-                                            .align(Alignment.Center)
-                                    )
-                                }
+                            onClick = {
+                                focusManager.clearFocus()
+                                navController.popBackStack()
                             }
-                        )
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Zurück",
+                                tint = Color.White
+                            )
+                        }
 
                         Text(
                             "✨ DeMa ✨",

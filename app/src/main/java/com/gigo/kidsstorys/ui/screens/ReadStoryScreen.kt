@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gigo.kidsstorys.data.SettingsManager
@@ -35,6 +36,7 @@ import com.gigo.kidsstorys.ui.components.topbar.StoryTopBar
 import com.gigo.kidsstorys.ui.viewmodels.StoryViewModel
 import com.gigo.kidsstorys.utils.rememberImagePicker
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.ui.input.pointer.pointerInput
 import java.io.File
 
@@ -83,6 +85,8 @@ fun ReadStoryScreen(
     var currentTitle by remember(story) { mutableStateOf(story?.title ?: "") }
     var currentContent by remember(story) { mutableStateOf(story?.content ?: "") }
 
+    val focusManager = LocalFocusManager.current
+
     LaunchedEffect(storyId) {
         viewModel.loadStory(storyId)
     }
@@ -101,6 +105,13 @@ fun ReadStoryScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = {
+                        focusManager.clearFocus()
+                    }
+                )
+            }
     ) {
         // Hintergrundbild
         if (backgroundBitmap != null) {
@@ -120,7 +131,10 @@ fun ReadStoryScreen(
                     .padding(top = 8.dp)
             ) {
                 StoryTopBar(
-                    onBack = onBack,
+                    onBack = {
+                        focusManager.clearFocus()
+                        onBack()
+                    },
                     onEdit = { showEditDialog = true },
                     cardAlpha = cardAlpha.value
                 )
@@ -138,21 +152,23 @@ fun ReadStoryScreen(
                     onDoubleClick = { showTitleEditDialog = true }
                 )
 
-                StoryContent(
-                    content = currentStory.content,
-                    textColor = textColor,
-                    fontSize = fontSize.floatValue,
-                    wrapText = wrapText,
-                    cardAlpha = cardAlpha.value,
-                    onDoubleClick = { showContentEditDialog = true },
-                    modifier = Modifier
-                        .weight(1f)
-                        .pointerInput(Unit) {
-                            detectTapGestures(
-                                onDoubleTap = { showContentEditDialog = true }
-                            )
-                        }
-                )
+                SelectionContainer {
+                    StoryContent(
+                        content = currentStory.content,
+                        textColor = textColor,
+                        fontSize = fontSize.floatValue,
+                        wrapText = wrapText,
+                        cardAlpha = cardAlpha.value,
+                        onDoubleClick = { showContentEditDialog = true },
+                        modifier = Modifier
+                            .weight(1f)
+                            .pointerInput(Unit) {
+                                detectTapGestures(
+                                    onDoubleTap = { showContentEditDialog = true }
+                                )
+                            }
+                    )
+                }
             }
         }
     }
