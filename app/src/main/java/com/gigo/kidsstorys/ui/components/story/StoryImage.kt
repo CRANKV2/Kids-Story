@@ -52,7 +52,7 @@ fun StoryImage(
             ) {
                 Text(
                     "Bild zur Geschichte hinzufügen",
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 16.sp
                 )
             }
