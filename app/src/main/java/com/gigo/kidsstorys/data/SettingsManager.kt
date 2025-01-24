@@ -30,7 +30,7 @@ class SettingsManager private constructor(context: Context) {
         private const val KEY_COMPACT_VIEW = "compact_view"
         private const val KEY_BACKGROUND_ALPHA = "background_alpha"
         
-        private const val DEFAULT_CARD_ALPHA = 1.0f
+        private const val DEFAULT_CARD_ALPHA = 0.0f
         private const val DEFAULT_BACKGROUND_ALPHA = 0.8f
         private const val DEFAULT_FONT_SIZE = 14
         private const val DEFAULT_WRAP_TEXT = true
