@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.gigo.storyflow"
-    android:versionCode="2"
-    android:versionName="1.2.2"
+    android:versionCode="8"
+    android:versionName="1.2.5"
     android:installLocation="auto">
 
     <application
@@ -19,10 +19,10 @@
         tools:targetApi="34">
         <meta-data
             android:name="VERSION_NAME"
-            android:value="1.2.2" />
+            android:value="1.2.5" />
         <meta-data
             android:name="VERSION_CODE"
-            android:value="122" />
+            android:value="125" />
         <activity
             android:name="com.gigo.storyflow.MainActivity"
             android:theme="@style/Theme.StoryApp"

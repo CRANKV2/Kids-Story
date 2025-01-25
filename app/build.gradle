@@ -14,8 +14,8 @@ android {
         minSdk 24
         //noinspection OldTargetApi
         targetSdk 34
-        versionCode 122
-        versionName "1.2.2"
+        versionCode 125
+        versionName "1.2.5"
 
         def localProperties = new Properties()
         def localPropertiesFile = rootProject.file('local.properties')
