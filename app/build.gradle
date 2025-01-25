@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace 'com.gigo.kidsstorys'
+    namespace 'com.gigo.storyflow'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.gigo.kidsstorys"
+        applicationId "com.gigo.storyflow"
         minSdk 24
         //noinspection OldTargetApi
         targetSdk 34

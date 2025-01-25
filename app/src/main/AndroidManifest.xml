@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.gigo.kidsstorys"
+    package="com.gigo.storyflow"
     android:versionCode="2"
     android:versionName="1.2.2"
     android:installLocation="auto">
 
     <application
-        android:name=".KidsStorysApp"
+        android:name="com.gigo.storyflow.StoryFlowApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -24,7 +24,7 @@
             android:name="VERSION_CODE"
             android:value="122" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.gigo.storyflow.MainActivity"
             android:theme="@style/Theme.StoryApp"
             android:windowSoftInputMode="adjustResize"
             android:exported="true">
