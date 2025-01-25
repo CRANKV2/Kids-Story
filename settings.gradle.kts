@@ -16,5 +16,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "kidsstorys"
+rootProject.name = "storyflow"
 include(":app")
