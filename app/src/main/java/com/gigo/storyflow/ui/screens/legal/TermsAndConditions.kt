@@ -3,6 +3,7 @@ package com.gigo.storyflow.ui.screens.legal
 import android.content.Intent
 import android.os.Build
 import android.widget.Toast
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -37,8 +39,7 @@ import com.gigo.storyflow.ui.theme.TextLight
 
 @Composable
 fun TermsScreen(
-    navController: NavController,
-    cardAlpha: Float = 0.75f
+    navController: NavController
 ) {
     val context = LocalContext.current
 
@@ -164,11 +165,21 @@ fun TermsScreen(
             modifier = Modifier.fillMaxSize(),
             containerColor = Color.Transparent,
             topBar = {
-                AboutTopBar(
-                    navController = navController,
-                    cardAlpha = cardAlpha,
-                    title = "Rechtliche Hinweise"
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(
+                            width = 1.dp,
+                            color = Color.White.copy(alpha = 0.2f),
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                ) {
+                    AboutTopBar(
+                        navController = navController,
+                        cardAlpha = 0f,  // Komplett transparent
+                        title = "Rechtliche Hinweise"
+                    )
+                }
             }
         ) { paddingValues ->
             Column(
@@ -180,8 +191,14 @@ fun TermsScreen(
                     .verticalScroll(rememberScrollState())
             ) {
                 Surface(
-                    modifier = Modifier.fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.surface.copy(alpha = cardAlpha),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(
+                            width = 1.dp,
+                            color = Color.White.copy(alpha = 0.2f),
+                            shape = MaterialTheme.shapes.medium
+                        ),
+                    color = Color.Transparent,
                     shape = MaterialTheme.shapes.medium
                 ) {
                     Column(

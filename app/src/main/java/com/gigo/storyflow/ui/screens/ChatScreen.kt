@@ -1,5 +1,8 @@
 package com.gigo.storyflow.ui.screens
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.widget.Toast
@@ -517,7 +520,7 @@ fun ChatMessageItem(
             }
         }
 
-        // Erstes Popup (Speichern?)
+        // Erstes Popup (Optionen)
         if (showPopup && !isUserMessage) {
             Dialog(onDismissRequest = { showPopup = false }) {
                 Surface(
@@ -532,7 +535,7 @@ fun ChatMessageItem(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            "Geschichte speichern?",
+                            "Nachricht Optionen",
                             style = MaterialTheme.typography.titleMedium,
                             color = Color.White
                         )
@@ -541,19 +544,27 @@ fun ChatMessageItem(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
-                            TextButton(onClick = { showPopup = false }) {
-                                Text("Nein", color = Color.White)
+                            TextButton(
+                                onClick = {
+                                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                    val clip = ClipData.newPlainText("Story Flow Message", message.content)
+                                    clipboard.setPrimaryClip(clip)
+                                    Toast.makeText(context, "Text kopiert", Toast.LENGTH_SHORT).show()
+                                    showPopup = false
+                                }
+                            ) {
+                                Text("Kopieren", color = Color.White)
                             }
                             Button(
                                 onClick = {
                                     showPopup = false
-                                    showTitleDialog = true  // Öffne Titel-Dialog
+                                    showTitleDialog = true  // Öffne Titel-Dialog für Speichern
                                 },
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = AccentPurple
                                 )
                             ) {
-                                Text("Ja")
+                                Text("Speichern")
                             }
                         }
                     }
