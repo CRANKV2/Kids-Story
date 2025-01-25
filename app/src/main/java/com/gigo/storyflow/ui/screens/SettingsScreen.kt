@@ -926,10 +926,26 @@ fun SettingsScreen(
                     onClick = { navController.navigate("about") },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 16.dp)
+                        .shadow(
+                            elevation = 8.dp * cardAlpha.value,
+                            spotColor = AccentPurple.copy(alpha = cardAlpha.value),
+                            ambientColor = AccentPurple.copy(alpha = cardAlpha.value),
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .then(
+                            if (cardAlpha.value < 1.0f) {
+                                Modifier.border(
+                                    width = 1.dp,
+                                    color = AccentPurple.copy(alpha = 0.5f),
+                                    shape = RoundedCornerShape(16.dp)
+                                )
+                            } else Modifier
+                        ),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha.value)
-                    )
+                    ),
+                    shape = RoundedCornerShape(16.dp)
                 ) {
                     Text(
                         "Über die App",
@@ -937,6 +953,8 @@ fun SettingsScreen(
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
+
+                Spacer(modifier = Modifier.height(24.dp))
 
                 // App Version
                 Box(

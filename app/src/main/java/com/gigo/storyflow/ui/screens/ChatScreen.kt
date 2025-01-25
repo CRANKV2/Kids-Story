@@ -740,7 +740,7 @@ private fun WelcomeContent() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            "Hallo!\nIch bin DeMa 😊\n\nDein\nKI-Geschichtenhelfer!",
+            "Willkommen!\nIch bin DeMa 🤖\n\nIhr\nKI-Schreibassistent",
             style = MaterialTheme.typography.titleLarge,
             color = Color.White,
             textAlign = TextAlign.Center,
@@ -749,8 +749,9 @@ private fun WelcomeContent() {
         Spacer(modifier = Modifier.height(12.dp))
         
         Text(
-            "\nErzähl mir, was für eine Geschichte du erschaffen möchtest!\n\nIch helfe dir dabei, magische Abenteuer zu gestalten. ✨",
-            color = Color.White.copy(alpha = 0.85f),
+            "\nTeilen Sie Ihre Ideen für eine Geschichte mit mir.\n\nIch unterstütze Sie bei der Entwicklung faszinierender Erzählungen. 📝",
+            style = MaterialTheme.typography.bodyLarge,
+            color = Color.White,
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(16.dp))

@@ -54,27 +54,27 @@ fun OnboardingScreen(
     val pages = listOf(
         OnboardingPage(
             title = "Willkommen bei Story Flow",
-            description = "Entdecke eine magische Welt voller Geschichten! Hier kannst du kreative Kindergeschichten erschaffen, bearbeiten und sammeln. Lass deiner Fantasie freien Lauf! ✨",
+            description = "Entdecke eine faszinierende Welt des kreativen Schreibens! Hier kannst du einzigartige Geschichten erschaffen, bearbeiten und sammeln. Lass deiner Kreativität freien Lauf! ✨",
             image = R.drawable.ic_books,
             backgroundColor = Color(0xFF1A1A2E)
         ),
         OnboardingPage(
-            title = "Dein KI-Geschichtenhelfer",
-            description = "Triff DeMa, deinen persönlichen KI-Assistenten! DeMa hilft dir dabei, einzigartige Geschichten zu entwickeln, gibt kreative Vorschläge und unterstützt dich beim Schreiben. Gemeinsam erschafft ihr zauberhafte Abenteuer! 🤖✨",
+            title = "Professioneller KI-Assistent",
+            description = "DeMa ist ein fortschrittlicher KI-Assistent für kreatives Schreiben. Mit modernster Technologie unterstützt er Sie bei der Entwicklung einzigartiger Geschichten und bietet professionelle Schreibimpulse. 🤖",
             image = R.drawable.dema_ai_onboarding,
             backgroundColor = Color(0xFF1F1F35)
         ),
         OnboardingPage(
-            title = "Personalisiere deine App",
-            description = "Gestate deine Leseumgebung genau nach deinen Wünschen! Wähle Schriftgrößen, Farben und Layouts. Mit dem dunklen Design ist das Lesen besonders angenehm für die Augen. 🎨",
+            title = "Personalisierte Einstellungen",
+            description = "Gestalten Sie Ihre Schreibumgebung nach Ihren Vorlieben. Passen Sie Schriftgrößen, Farben und Layouts an Ihre Bedürfnisse an. Das durchdachte Design sorgt für optimalen Lesekomfort. 🎨",
             image = R.drawable.ic_customize,
             backgroundColor = Color(0xFF252542)
         ),
         OnboardingPage(
-            title = "Geschichten verwalten",
-            description = "Organisiere deine Geschichten einfach und übersichtlich. Bearbeite und speichere Sie ganz einfach. Füge Bilder hinzu und mache deine Geschichten noch lebendiger! 📚",
-            image = R.drawable.app_icon,
-            backgroundColor = Color(0xFF2A2A4D)
+            title = "Geschichtenverwaltung",
+            description = "Organisieren Sie Ihre Werke effizient. Mit unserer übersichtlichen Verwaltung behalten Sie alle Ihre Geschichten im Blick. Erstellen Sie Kategorien und finden Sie Ihre Texte schnell wieder. 📚",
+            image = R.drawable.ic_books,
+            backgroundColor = Color(0xFF2A2A4A)
         )
     )
 

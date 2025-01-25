@@ -7,6 +7,7 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,7 +18,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -84,6 +87,27 @@ fun AboutScreen(
                     AboutAppCard(cardAlpha = cardAlpha, angle = angle)
 
                     AboutDeveloperCard(cardAlpha = cardAlpha, angle = angle)
+
+                    OutlinedButton(
+                        onClick = { navController.navigate("terms") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = cardAlpha),
+                            contentColor = TextLight
+                        ),
+                        border = BorderStroke(
+                            width = 1.dp,
+                            color = TextLight.copy(alpha = 0.3f)
+                        )
+                    ) {
+                        Text(
+                            "Nutzungsbedingungen & Datenschutz",
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+                    }
 
                     Text(
                         "© 2024-2025 STRP",

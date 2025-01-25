@@ -13,6 +13,7 @@ import com.gigo.storyflow.ui.screens.ReadStoryScreen
 import com.gigo.storyflow.ui.screens.SettingsScreen
 import com.gigo.storyflow.ui.screens.SplashScreen
 import com.gigo.storyflow.ui.screens.StoryScreen
+import com.gigo.storyflow.ui.screens.legal.TermsScreen
 
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
@@ -81,6 +82,10 @@ fun AppNavigation(
             AboutScreen(
                 navController = navController
             )
+        }
+
+        composable("terms") {
+            TermsScreen(navController = navController)
         }
     }
 }
