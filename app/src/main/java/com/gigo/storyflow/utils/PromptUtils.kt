@@ -17,18 +17,17 @@ object PromptUtils {
 
     // Liste der Regeln für die Geschichten, die der KI-Assistent erzählt.
     private val storyRules = listOf(
-        "Erzähle IMMER eine vollständige Geschichte in EINER Nachricht.",
         "Keine Interaktionen oder Fragen an den Benutzer während der Geschichte.",
-        "Jede Geschichte soll mindestens 2 Minuten Lesezeit haben.",
+        "Jede Geschichte soll mindestens 2 Minuten Lesezeit haben ausser der Nutzer verlangt Explizit nach einer längeren.",
         "Die Geschichte muss einen klaren Anfang, Mittelteil und Schluss haben.",
         "Verwende beschreibende Details und direkte Rede.",
-        "Baue eine klare und positive Botschaft ein.",
-        "Eine Prise Humor ist erwünscht.",
-        "Beginne IMMER mit 'Es war einmal...' oder einer ähnlichen Einleitung.",
-        "Beende die Geschichte mit einer positiven Botschaft.",
+        "Passe den Stil an die Eingabe des Nutzers an.",
+        "Beginne DIREKT mit einer zum Thema passenden Einleitung.",
+        "Beende die Geschichte mit einer passenden Schlussfolgerung.",
         "KEINE Unterbrechungen oder Fragen während der Geschichte.",
-        "KEINE Meta-Kommentare wie 'Ist das nicht schön?' oder 'Was denkst du?'",
-        "Die Geschichte muss in sich abgeschlossen sein."
+        "KEINE Meta-Kommentare.",
+        "Die Geschichte muss in sich abgeschlossen sein.",
+        "Der Ton und Stil soll sich an erwachsene Leser richten."
     )
 
     /**
@@ -39,17 +38,19 @@ object PromptUtils {
      */
     fun createConversationPrompt(message: String): String {
         // Erweiterte Erkennung für Story-Anfragen.
-        val storyTriggers = listOf( // Liste der Schlüsselwörter, die eine Story-Anfrage auslösen.
+        val storyTriggers = listOf(
             "noch eine",
             "noch mal",
             "nochmal",
             "erzähl",
             "geschichte",
             "story",
-            "märchen",
             "weiter",
             "und jetzt",
-            "eine neue"
+            "eine neue",
+            "erzähle",
+            "schreib",
+            "generiere"
         )
 
         // Überprüft, ob die Nachricht des Benutzers eine Story-Anfrage enthält.
@@ -75,13 +76,13 @@ object PromptUtils {
                 // App-Metadaten
                 App: Story Flow
                 Autor: Francesco De Martino
-                Version: 1.0
+                Version: 1.3.0
                 
                 // Basis-Regeln
                 ${baseRules.joinToString("\n")}
                 
                 // Anweisung
-                Antworte freundlich und kindgerecht auf: $message
+                Antworte freundlich auf: $message
             """.trimIndent()
         }
     }
@@ -142,7 +143,8 @@ object PromptUtils {
 
     fun createTitlePrompt(thema: String): String {
         return """
-            Generiere einen kurzen, kreativen Titel (maximal 5 Wörter) für eine Kindergeschichte mit folgendem Thema: $thema
+            Generiere einen kurzen, kreativen Titel (maximal 5 Wörter) für eine Geschichte mit folgendem Thema: $thema
+            Der Titel soll sich an erwachsene Leser richten.
             Antworte NUR mit dem Titel, ohne zusätzlichen Text.
         """.trimIndent()
     }

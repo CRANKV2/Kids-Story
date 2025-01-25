@@ -47,7 +47,7 @@ fun TermsScreen(
             append("Story Flow - Nutzungsbedingungen\n\n")
         }
         append("1. Nutzungsalter\n")
-        append("Die Nutzung dieser App ist für Personen ab 12 Jahren vorgesehen.\n\n")
+        append("Die Nutzung dieser App ist für Personen ab 16 Jahren vorgesehen.\n\n")
         
         append("2. Nutzungsumfang\n")
         append("• Die App dient dem kreativen Schreiben mit KI-Unterstützung\n")
@@ -119,9 +119,9 @@ fun TermsScreen(
         append("Unsere App nutzt möglicherweise Analyse-Tools zur Erfassung standardmäßiger Nutzungsinformationen. Diese Tools sammeln keine persönlich identifizierbaren Informationen.\n\n")
         
         withStyle(SpanStyle(color = AccentPurple, fontWeight = FontWeight.Bold)) {
-            append("Kinderschutz\n\n")
+            append("Altersverifikation und Nutzung\n\n")
         }
-        append("Wir erfassen wissentlich keine Daten von Kindern unter 13 Jahren. Eltern und Erziehungsberechtigte sollten die Internet-Nutzung ihrer Kinder überwachen.\n\n")
+        append("Diese App richtet sich ausschließlich an erwachsene Nutzer ab 16 Jahren. Wir behalten uns vor, Konten zu sperren, die offensichtlich von minderjährigen Personen genutzt werden. Die generierten Inhalte sind für ein erwachsenes Publikum konzipiert.\n\n")
         
         withStyle(SpanStyle(color = AccentPurple, fontWeight = FontWeight.Bold)) {
             append("Push-Benachrichtigungen\n\n")
