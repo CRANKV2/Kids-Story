@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Kids Story\'s</string>
+    <string name="app_name">Story Flow</string>
     <string name="speichern">Speichern</string>
     <string name="abbrechen">Abbrechen</string>
     <string name="geschichte">Geschichte</string>
@@ -8,7 +8,7 @@
     <string name="bearbeiten">Bearbeiten ✏️</string>
     <string name="l_schen">Löschen 🗑️</string>
     <string name="books"> </string>
-    <string name="geschichten_app">Kids Story\'s</string>
+    <string name="geschichten_app">Story Flow</string>
     <string name="color_picker_check">✔</string>
     <string name="einstellungen">Einstellungen ⚙️</string>
     <string name="geschichte_bearbeiten"> Geschichte bearbeiten 📝</string>

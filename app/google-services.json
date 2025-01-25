@@ -1,15 +1,15 @@
 {
   "project_info": {
     "project_number": "814220420211",
-    "project_id": "kids-storys-app",
-    "storage_bucket": "kids-storys-app.firebasestorage.app"
+    "project_id": "story-flow-app",
+    "storage_bucket": "story-flow-app.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
         "mobilesdk_app_id": "1:814220420211:android:aa3a1d7e4f397fc8dab606",
         "android_client_info": {
-          "package_name": "com.gigo.kidsstorys"
+          "package_name": "com.gigo.storyflow"
         }
       },
       "oauth_client": [],
