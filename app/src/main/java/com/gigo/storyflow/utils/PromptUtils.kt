@@ -27,7 +27,11 @@ object PromptUtils {
         "KEINE Unterbrechungen oder Fragen während der Geschichte.",
         "KEINE Meta-Kommentare.",
         "Die Geschichte muss in sich abgeschlossen sein.",
-        "Der Ton und Stil soll sich an erwachsene Leser richten."
+        "Der Ton und Stil soll sich an erwachsene Leser richten.",
+        "Halte einen professionellen Schreibstil bei.",
+        "Vermeide vereinfachende oder kindliche Sprache.",
+        "Behandle komplexe Themen auf angemessene Weise.",
+        "Respektiere ethische und moralische Grenzen ohne übermäßige Vereinfachung."
     )
 
     /**
@@ -91,53 +95,19 @@ object PromptUtils {
      * Erstellt den Prompt für eine Geschichte.
      *
      * @param thema Das Thema der Geschichte.
-     * @param protagonist Der Protagonist der Geschichte.
-     * @param ort Der Ort der Geschichte.
-     * @param laenge Die Länge der Geschichte.
      * @return Der Prompt für die Geschichte.
      */
-    fun createStoryPrompt(
-        thema: String = "",
-        protagonist: String = "",
-        ort: String = "",
-        laenge: String = ""
-    ): String {
-        // Fügt optionale Parameter zum Prompt hinzu.
-        val optionalParams = buildString {
-            if (thema.isNotBlank()) append("Thema: $thema\n")
-            if (protagonist.isNotBlank()) append("Protagonist: $protagonist\n")
-            if (ort.isNotBlank()) append("Ort: $ort\n")
-            if (laenge.isNotBlank()) append("Länge: $laenge\n")
-        }
-
+    fun createStoryPrompt(thema: String): String {
         return """
-            // App-Metadaten
-            App: Story Flow
-            Autor: Francesco De Martino
-            Version: 1.0
-            
-            // WICHTIG: Erzähle eine vollständige Geschichte in EINER Nachricht!
-            // KEINE Einleitungen wie "Hier ist eine Geschichte..." oder "Natürlich, ich erzähle dir..."
-            // Beginne DIREKT mit "Es war einmal..." oder einer ähnlichen Story-Einleitung
-            
-            // Basis-Regeln
-            ${baseRules.joinToString("\n")}
-            
-            // Story-Regeln
+            Du bist ein professioneller Autor. Erstelle eine Geschichte zum Thema: $thema
+
+            Wichtige Regeln:
+            // KEINE Einleitungen wie "Hier ist eine Geschichte..." oder "Natürlich, hier ist..."
+            // Beginne DIREKT mit einer zum Kontext passenden, erwachsenengerechten Einleitung
+            // Halte dich an folgende Regeln:
             ${storyRules.joinToString("\n")}
             
-            // Parameter
-            $optionalParams
-            
-            // WICHTIGE ANWEISUNGEN:
-            - Starte DIREKT mit der Geschichte, ohne Kommentare davor
-            - KEINE Einleitungen oder Erklärungen ausser der user fragt EXPLIZIT danach
-            - KEINE Meta-Kommentare oder Fragen
-            - Mindestens 2 Minuten Lesezeit ausser der user fragt EXPLIZIT nach längere
-            - Geschichte muss in sich abgeschlossen sein
-            - NUR die Geschichte selbst, nichts davor oder danach
-            
-            // Generiere jetzt die Geschichte:
+            Generiere jetzt die Geschichte.
         """.trimIndent()
     }
 
