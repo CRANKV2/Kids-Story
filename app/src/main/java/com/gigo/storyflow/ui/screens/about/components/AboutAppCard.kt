@@ -41,13 +41,17 @@ fun AboutAppCard(
     angle: Float
 ) {
     val context = LocalContext.current
-    
+    val cardColor = Color(0xFF2D2D3A).copy(alpha = cardAlpha)
+    val gradientColors = listOf(AccentPurple, Color(0xFF00BCD4), Color(0xFF9C27B0), Color(0xFF00BCD4), AccentPurple)
+    val gradientStartOffset = calculateGradientOffset(angle)
+    val gradientEndOffset = calculateGradientOffset(angle + 180f)
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
-        // App Logo mit Animation und Schatten
+        // App Logo with Shadow
         Box(
             modifier = Modifier
                 .size(200.dp)
@@ -72,25 +76,13 @@ fun AboutAppCard(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             shape = RoundedCornerShape(24.dp),
-            color = Color(0xFF2D2D3A).copy(alpha = cardAlpha),
+            color = cardColor,
             border = BorderStroke(
                 width = 2.dp,
                 brush = Brush.linearGradient(
-                    colors = listOf(
-                        AccentPurple,
-                        Color(0xFF00BCD4),
-                        Color(0xFF9C27B0),
-                        Color(0xFF00BCD4),
-                        AccentPurple
-                    ),
-                    start = Offset(
-                        x = cos(angle * PI.toFloat() / 180) * 100f,
-                        y = sin(angle * PI.toFloat() / 180) * 100f
-                    ),
-                    end = Offset(
-                        x = cos((angle + 180f) * PI.toFloat() / 180) * 100f,
-                        y = sin((angle + 180f) * PI.toFloat() / 180) * 100f
-                    )
+                    colors = gradientColors,
+                    start = gradientStartOffset,
+                    end = gradientEndOffset
                 )
             )
         ) {
@@ -102,10 +94,8 @@ fun AboutAppCard(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    "Story Flow",
-                    style = MaterialTheme.typography.headlineLarge.copy(
-                        fontWeight = FontWeight.Bold
-                    ),
+                    text = "Story Flow",
+                    style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
                     color = TextLight
                 )
 
@@ -118,17 +108,22 @@ fun AboutAppCard(
                 }
 
                 Text(
-                    "Version ${packageInfo?.versionName ?: "unknown"}",
+                    text = "Version ${packageInfo?.versionName ?: "unknown"}",
                     style = MaterialTheme.typography.bodyLarge,
                     color = TextLight.copy(alpha = 0.7f)
                 )
 
                 Text(
-                    "Release: 10. Januar 2025",
+                    text = "Release: 10. Januar 2025",
                     style = MaterialTheme.typography.bodyMedium,
                     color = TextLight.copy(alpha = 0.7f)
                 )
             }
         }
     }
-} 
+}
+
+private fun calculateGradientOffset(angle: Float): Offset {
+    val radians = angle * PI.toFloat() / 180
+    return Offset(cos(radians) * 100f, sin(radians) * 100f)
+}
