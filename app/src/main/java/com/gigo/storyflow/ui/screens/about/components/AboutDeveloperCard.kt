@@ -28,12 +28,16 @@ fun AboutDeveloperCard(
     cardAlpha: Float,
     angle: Float
 ) {
+    val cardColor = AccentPurple.copy(alpha = cardAlpha)
+    val gradientStartOffset = calculateGradientOffset(angle + 90f)
+    val gradientEndOffset = calculateGradientOffset(angle + 270f)
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         shape = RoundedCornerShape(24.dp),
-        color = AccentPurple.copy(alpha = cardAlpha),
+        color = cardColor,
         border = BorderStroke(
             width = 2.dp,
             brush = Brush.linearGradient(
@@ -42,14 +46,8 @@ fun AboutDeveloperCard(
                     Color(0xFF2196F3),
                     Color(0xFFE91E63)
                 ),
-                start = Offset(
-                    x = cos((angle + 90f) * PI.toFloat() / 180) * 100f,
-                    y = sin((angle + 90f) * PI.toFloat() / 180) * 100f
-                ),
-                end = Offset(
-                    x = cos((angle + 270f) * PI.toFloat() / 180) * 100f,
-                    y = sin((angle + 270f) * PI.toFloat() / 180) * 100f
-                )
+                start = gradientStartOffset,
+                end = gradientEndOffset
             )
         )
     ) {
@@ -61,20 +59,22 @@ fun AboutDeveloperCard(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                "Entwickelt mit ❤️ von",
+                text = "Entwickelt mit ❤️ von",
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.White,
                 textAlign = TextAlign.Center
             )
-
             Text(
-                "Francesco De Martino",
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontWeight = FontWeight.Bold
-                ),
+                text = "Francesco De Martino",
+                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                 color = Color.White,
                 textAlign = TextAlign.Center
             )
         }
     }
-} 
+}
+
+private fun calculateGradientOffset(angle: Float): Offset {
+    val radians = angle * PI.toFloat() / 180
+    return Offset(cos(radians) * 100f, sin(radians) * 100f)
+}
