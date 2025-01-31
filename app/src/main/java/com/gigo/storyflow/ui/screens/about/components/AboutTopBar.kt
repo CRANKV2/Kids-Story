@@ -24,8 +24,10 @@ fun AboutTopBar(
     cardAlpha: Float,
     title: String = "Über die App"
 ) {
+    val appBarBackgroundColor = MaterialTheme.colorScheme.surface.copy(alpha = cardAlpha)
+
     Surface(
-        color = MaterialTheme.colorScheme.surface.copy(alpha = cardAlpha),
+        color = appBarBackgroundColor,
         modifier = Modifier.fillMaxWidth()
     ) {
         CenterAlignedTopAppBar(
@@ -33,9 +35,7 @@ fun AboutTopBar(
                 Text(
                     text = title,
                     color = Color.White,
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        fontWeight = FontWeight.Bold
-                    )
+                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
                 )
             },
             navigationIcon = {
@@ -52,4 +52,4 @@ fun AboutTopBar(
             )
         )
     }
-} 
+}
